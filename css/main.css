@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-size: 1.1em;
+    font-family: 'Instrument Sans', Geneva, Tahoma, sans-serif;
+    background-color: blanchedalmond;
+    color: sienna;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+}
+body.dark {
+    background-color: rgb(7, 12, 12);
+    color: blanchedalmond;
+}
+section {
+    margin-bottom: 60px;
+}
+h1 {
+    font-size:1.4em;
+}
+h1.headline {
+    margin: 0;
+}
+h2, h3 {
+   font-size: 1.4em;
+}
+h2.subhead {
+    margin: 6px 0 60px 0;
+}
+p {
+    line-height: 1.7em;
+}
+a {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+}
+a:hover {
+    opacity: 1 !important;
+}
+button {
+    border: none;
+    cursor: pointer;
+}
+nav {
+    position: fixed;
+    left: 60px;
+    top: 110px;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    z-index: 999;
+    padding: 20px;
+}
+nav>a {
+    margin: 6px 0;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: all 0.3s linear;
+    color: inherit;
+}
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+#intro, #everything, #info {
+    padding: 0 20px;
+}
+#featured h2 {
+    padding: 0 20px;
+}
+#info h2, #everything h2 {
+    padding: 0;
+}
+.everything-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+}
+.work-image {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio (9 / 16 = 0.5625) */
+    border-radius: 20px;
+    overflow: hidden;
+}
+.work-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(150%)
+}
+.work-image .work-info {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgb(255 235 205 / 30%);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 0.8em;
+    text-shadow: 0px 0px 0px black;
+}
+.intro {
+    width: 100%;
+}
+@media (min-width: 768px) {
+    section {
+        margin-bottom: 120px;
+    }
+    section h2 {
+        padding: 0 20px;
+    }
+    .intro {
+        max-width: 67%;
+        padding: 0 20px;
+    }
+    .work-image .work-info {
+        backdrop-filter: blur(16px);
+        font-size: 1em;
+    }
+    .work-image .work-info:hover {
+        backdrop-filter: blur(0px);
+        text-shadow: 0px 0px 10px black;
+    }
+}
