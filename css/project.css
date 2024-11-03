@@ -5,19 +5,9 @@ section img {
     width: 100%;
     margin-bottom: 60px;
 }
-nav {
-    left: 16px;
-    top: 16px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 4px 12px;
-    border-radius: 8px;
-    backdrop-filter: blur(4px);
-    border: 1px solid blanchedalmond;
-}
 .project-container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 120px 0px;
 }
 .project-container section {
     max-width: 900px;  
@@ -39,33 +29,5 @@ section.wide img {
     section img {
         width: 100%;
         margin-bottom: 120px;
-    }
-    nav {
-        position: fixed;
-        left: 60px;
-        top: 110px;
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-        z-index: 999;
-        padding: 20px;
-        background-color: transparent;
-        border: none;
-    }
-    nav>a {
-        margin: 6px 0;
-        background-color: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        transition: all 0.3s linear;
-        color: inherit;
-    }
-    .project-container {
-        padding: 120px 60px;
-    }
-    section.wide img {
-        border-radius: 20px;
-        overflow: hidden;
     }
 }

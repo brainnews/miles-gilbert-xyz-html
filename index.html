@@ -175,7 +175,7 @@
                 e.preventDefault(); // Prevent default anchor behavior
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
-                const yOffset = -120; // 30px offset
+                const yOffset = -60; // 30px offset
                 const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
                 window.scrollTo({top: y, behavior: 'smooth'});

@@ -11,7 +11,7 @@ body {
     margin: 0;
 }
 body.dark {
-    background-color: rgb(7, 12, 12);
+    background-color: #070c0c;
     color: blanchedalmond;
 }
 section {
@@ -47,7 +47,7 @@ button {
 nav {
     position: fixed;
     left: 60px;
-    top: 110px;
+    top: 40px;
     display: flex;
     flex-direction: column;
     width: fit-content;
@@ -66,7 +66,7 @@ nav>a {
 .container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 120px 0;
+    padding: 60px 0;
 }
 #intro, #everything, #info {
     padding: 0 20px;
@@ -163,11 +163,14 @@ nav>a {
     nav {
         position: fixed;
         left: 60px;
-        top: 110px;
+        top: 36px;
         display: flex;
         flex-direction: column;
         width: fit-content;
         z-index: 999;
         padding: 20px;
+        background-color: transparent;
+        border: none;
+        width: 180px;
     }
 }
