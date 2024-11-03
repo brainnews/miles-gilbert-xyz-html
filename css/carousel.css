@@ -127,3 +127,8 @@
         display: block;
     }
 }
+@media (min-width: 1300px) {
+    .carousel-container {
+        max-width: 1200px;
+    }
+}

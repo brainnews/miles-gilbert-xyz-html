@@ -174,3 +174,27 @@ nav>a {
         width: 180px;
     }
 }
+@media (min-width: 1300px) {
+    .container {
+        min-width: 1200px;
+    } 
+
+}
+
+.fade-in {
+    opacity: 0;
+    transition: all 0.7s ease;
+    filter: blur(16px);
+    transform: translateY(20px); /* Start slightly below */
+    border-radius: 20px;
+}
+.fade-in-animation {
+    opacity: 1;
+    transform: translateY(0px);
+    filter: blur(0px);
+    border-radius: inherit;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

@@ -29,5 +29,9 @@ section.wide img {
     section img {
         width: 100%;
         margin-bottom: 120px;
+        border-radius: 4px;
     }
 }
+
+/* Add this to your CSS file */
+
