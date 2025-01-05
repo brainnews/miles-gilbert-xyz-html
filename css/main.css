@@ -4,15 +4,11 @@
 body {
     font-size: 1.1em;
     font-family: 'Instrument Sans', Geneva, Tahoma, sans-serif;
-    background-color: blanchedalmond;
-    color: sienna;
+    background-color: #070c0c;
+    color: blanchedalmond;
     overflow-x: hidden;
     padding: 0;
     margin: 0;
-}
-body.dark {
-    background-color: #070c0c;
-    color: blanchedalmond;
 }
 section {
     margin-bottom: 60px;
@@ -26,8 +22,8 @@ h1.headline {
 h2, h3 {
    font-size: 1.4em;
 }
-h2.subhead {
-    margin: 6px 0 60px 0;
+p.subhead {
+    margin: 6px 0 23px 0;
 }
 p {
     line-height: 1.7em;
@@ -36,6 +32,8 @@ a {
     color: inherit;
     font-weight: bold;
     text-decoration: none;
+    transition: all 0.3s linear;
+    opacity: 0.8;
 }
 a:hover {
     opacity: 1 !important;
@@ -45,41 +43,59 @@ button {
     cursor: pointer;
 }
 nav {
-    position: fixed;
-    left: 60px;
-    top: 40px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    z-index: 999;
     padding: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
 }
 nav>a {
-    margin: 6px 0;
+    margin: 0px 12px 0px 0px;
     background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
     transition: all 0.3s linear;
     color: inherit;
+    display: flex;
+    align-items: center;
+}
+.list-unstyled {
+    list-style-type: none;
+    padding: 0;
+    margin: 30px 0 0 0;
+}
+.list-unstyled li {
+    margin: 4px 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.list-unstyled>a {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
+li .list-icon {
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
 }
 .container {
-    max-width: 900px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 60px 0;
+    padding: 20px 0 0 0;
 }
-#intro, #everything, #info {
+#info, #projects, #reel {
     padding: 0 20px;
 }
-#featured h2 {
-    padding: 0 20px;
-}
-#info h2, #everything h2 {
+#info h2, #projects h2 {
     padding: 0;
 }
 .everything-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 20px;
     width: 100%;
     margin: 0 auto;
@@ -98,25 +114,25 @@ nav>a {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(150%)
+    filter: saturate(150%);
+    transition: all 0.3s ease;
+}
+.work-image img:hover {
+    transform: scale(1.025);
 }
 .work-image .work-info {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 16 / 9;
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 10px;
+    left: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid rgb(255 235 205 / 30%);
-    border-radius: 20px;
+    border-radius: 10px;
     transition: all 0.3s ease;
     text-align: center;
     font-size: 0.8em;
-    text-shadow: 0px 0px 0px black;
+    padding: 4px 8px;
 }
 .intro {
     width: 100%;
@@ -130,27 +146,52 @@ nav>a {
 .intro-image {
     display: none;
 }
-
+.logo {
+    width: 40px;
+}
 .circular-image {
     width: 200px; /* Set a fixed width for the image */
     height: 200px; /* Set a fixed height for the image */
     border-radius: 50%; /* Make the image circular */
     object-fit: cover; /* Ensure the image covers the area */
 }
-@media (min-width: 768px) {
+.arch-image {
+    width: 200px; /* Set a fixed width for the image */
+    height: 200px; /* Set a fixed height for the image */
+    border-radius: 4px; /* Make the image circular */
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    object-fit: cover; /* Ensure the image covers the area */
+}
+/* Hide specific controls while keeping others */
+.minimal-controls::-webkit-media-controls-fullscreen-button {
+    display: block !important;
+}
+.minimal-controls::-webkit-media-controls-volume-slider {
+    display: block !important;
+}
+.minimal-controls::-webkit-media-controls-mute-button {
+    display: block !important;
+}
+.minimal-controls::-webkit-media-controls-download-button {
+    display: none !important;
+}
+@media (min-width: 1024px) {
     section {
         margin-bottom: 120px;
     }
     section h2 {
         padding: 0 20px;
     }
+    .container {
+        max-width: 900px;
+        padding-top: 54px;
+    }
+    .everything-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
     .work-image .work-info {
         backdrop-filter: blur(16px);
-        font-size: 1em;
-    }
-    .work-image .work-info:hover {
-        backdrop-filter: blur(0px);
-        text-shadow: 0px 0px 10px black;
     }
     .intro-text {
         width: 67%; /* Text takes up 67% of the width */
@@ -160,29 +201,61 @@ nav>a {
         display: flex; /* Center the image */
         justify-content: flex-end; /* Center the image horizontally */
     }
+    .logo {
+        width: 86px;
+    }
+    .fade-in-animation {
+        border-radius: 2px;
+    }
+    nav {
+        width: 900px;
+        margin: 40px auto 0;
+    }
+}
+@media (min-width: 1370px) {
+    .hide-on-desktop {
+        display: none !important;
+    }
+    nav {
+        background-color: none;
+        backdrop-filter: none;
+        box-shadow: none;
+        border: none;
+        display: flex;
+        margin: 6px 0;
+    }
+    nav>a {
+        margin-bottom: 6px;
+        background-color: transparent;
+        display: flex;
+        justify-content: flex-end;
+        transition: all 0.3s linear;
+        color: inherit;
+    }
+    .nav-link.hide {
+        display: block;
+    }
+    .logo {
+        margin-bottom: 6px;
+    }
     nav {
         position: fixed;
         left: 60px;
         top: 36px;
         display: flex;
         flex-direction: column;
+        align-items: end;
         width: fit-content;
         z-index: 999;
         padding: 20px;
         background-color: transparent;
         border: none;
-        width: 180px;
+        width: 200px;
     }
-}
-@media (min-width: 1300px) {
-    .container {
-        min-width: 1200px;
-    } 
-
 }
 
 .fade-in {
-    opacity: 0;
+    opacity: 0.2;
     transition: all 0.7s ease;
     filter: blur(16px);
     transform: translateY(20px); /* Start slightly below */
@@ -192,9 +265,27 @@ nav>a {
     opacity: 1;
     transform: translateY(0px);
     filter: blur(0px);
-    border-radius: inherit;
+    border-radius: 0px;
 }
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
+.arrow-down {
+    width: 10px;
+    height: 10px;
+    border: solid blanchedalmond;
+    border-width: 0 1px 1px 0;
+    transform: rotate(45deg);
+    display: inline-block;
+    animation: bounce 2s infinite;
+    position: relative;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      top: 0;
+    }
+    40% {
+      top: 15px;
+    }
+    60% {
+      top: 7px;
+    }
+  }
