@@ -5,7 +5,7 @@ class ProjectHero extends HTMLElement {
     }
 
     async connectedCallback() {
-        const jsonPath = this.getAttribute('data-json') || '/projects.json';
+        const jsonPath = this.getAttribute('data-json') || 'https://files.milesgilbert.xyz/js/projects.json';
         await this.loadProject(jsonPath);
         this.render();
     }
@@ -14,6 +14,7 @@ class ProjectHero extends HTMLElement {
         try {
             // Get the current URL slug
             const urlSlug = window.location.pathname.split('/', 4).pop();
+            console.log(urlSlug);
             
             // Fetch and parse the JSON file
             const response = await fetch(jsonPath);
