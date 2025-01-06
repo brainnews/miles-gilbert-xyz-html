@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const images = document.querySelectorAll('.fade-in');
     const nav = document.querySelector('nav');
-    nav.innerHTML = '<a class="nav-link" href="../../"><span class="material-symbols-outlined">arrow_back</span><img class="logo" src="../../images/wordmark.svg"></a>';
+    nav.innerHTML = '<a class="nav-link" href="../../"><span class="material-symbols-outlined">arrow_back</span><img class="logo" src="https://files.milesgilbert.xyz/images/wordmark.svg"></a>';
 
     const options = {
         root: null, // Use the viewport as the container

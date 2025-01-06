@@ -200,7 +200,7 @@ class ProjectNav extends HTMLElement {
     workImage.className = 'work-image';
 
     const img = document.createElement('img');
-    img.src = `https://www.milesgilbert.xyz/images/thumbs/${project.slug}.jpg`;
+    img.src = `https://files.milesgilbert.xyz/images/thumbs/${project.slug}.jpg`;
     img.alt = project.title;
 
     const workInfo = document.createElement('div');

@@ -1,6 +1,6 @@
 async function loadProjects() {
   try {
-    const response = await fetch('./js/projects.json');
+    const response = await fetch('https://files.milesgilbert.xyz/js/projects.json');
     if (!response.ok) {
       throw new Error('Failed to load projects');
     }
@@ -20,7 +20,7 @@ function createProjectElement(project) {
   workImage.className = 'work-image';
 
   const img = document.createElement('img');
-  img.src = `./images/thumbs/${project.slug}.jpg`;
+  img.src = `https://files.milesgilbert.xyz/images/thumbs/${project.slug}.jpg`;
   img.alt = project.title;
 
   const workInfo = document.createElement('div');
