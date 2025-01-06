@@ -14,6 +14,7 @@ section>h3 {
 .intro-content {
     display: flex;
     flex-direction: column;
+    padding: 0 20px;
 }
 .logo {
     margin-left: 6px;
@@ -130,6 +131,7 @@ video {
     .intro-content {
         flex-direction: row;
         justify-content: space-between;
+        padding: 0;
     }
     .project-notes {
         display: block;
