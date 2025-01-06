@@ -13,7 +13,7 @@ class ProjectHero extends HTMLElement {
     async loadProject(jsonPath) {
         try {
             // Get the current URL slug
-            const urlSlug = window.location.pathname.split('/', 4).pop();
+            const urlSlug = window.location.pathname.split('/').filter(Boolean).pop();
             console.log(urlSlug);
             
             // Fetch and parse the JSON file
