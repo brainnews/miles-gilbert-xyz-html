@@ -177,48 +177,6 @@ li .list-icon {
     display: none !important;
 }
 @media (min-width: 1024px) {
-    section {
-        margin-bottom: 120px;
-    }
-    section h2 {
-        padding: 0 20px;
-    }
-    .container {
-        max-width: 900px;
-        padding-top: 54px;
-    }
-    .everything-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .work-image .work-info {
-        backdrop-filter: blur(16px);
-    }
-    .intro-text {
-        width: 67%; /* Text takes up 67% of the width */
-    }
-    .intro-image {
-        width: 33%; /* Image container takes up 33% of the width */
-        display: flex; /* Center the image */
-        justify-content: flex-end; /* Center the image horizontally */
-    }
-    .logo {
-        width: 86px;
-    }
-    .fade-in-animation {
-        border-radius: 2px;
-    }
-    nav {
-        width: 900px;
-        margin: 40px auto 0;
-    }
-}
-@media (min-width: 1600px) {
-    .everything-container {
-        gap: 50px;
-    }
-    .container {
-        max-width: 1280px;
-    }
     .hide-on-desktop {
         display: none !important;
     }
@@ -257,6 +215,44 @@ li .list-icon {
         background-color: transparent;
         border: none;
         width: 200px;
+    }
+    section {
+        margin-bottom: 120px;
+    }
+    section h2 {
+        padding: 0 20px;
+    }
+    .container {
+        max-width: 900px;
+        padding-top: 54px;
+    }
+    .everything-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .work-image .work-info {
+        backdrop-filter: blur(16px);
+    }
+    .intro-text {
+        width: 67%; /* Text takes up 67% of the width */
+    }
+    .intro-image {
+        width: 33%; /* Image container takes up 33% of the width */
+        display: flex; /* Center the image */
+        justify-content: flex-end; /* Center the image horizontally */
+    }
+    .logo {
+        width: 86px;
+    }
+    .fade-in-animation {
+        border-radius: 2px;
+    }
+}
+@media (min-width: 1600px) {
+    .everything-container {
+        gap: 50px;
+    }
+    .container {
+        max-width: 1280px;
     }
 }
 

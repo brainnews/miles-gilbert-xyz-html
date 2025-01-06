@@ -92,7 +92,7 @@ video {
     margin-bottom: 120px;
     padding: 20px;
 }
-.project-container section:nth-child(2) {
+.project-container section.wide {
     display: none;
 }
 @media (min-width: 1024px) {
@@ -143,14 +143,17 @@ video {
         gap: 40px;
         margin-bottom: 120px;
     }
-    .project-container section:nth-child(2n) {
+    .project-container section.wide {
         display: block;
     }
 }
 
 @media (min-width: 1600px) {
     .container {
-        max-width: 1280px;
+        max-width: 100%;
+    }
+    .project-container section {
+        max-width: 1200px;
     }
 }
 
