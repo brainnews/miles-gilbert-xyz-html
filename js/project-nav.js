@@ -39,7 +39,7 @@ class ProjectNav extends HTMLElement {
 
       .related-projects-list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: 1fr 1fr;
         gap: 20px;
       }
 
@@ -129,6 +129,11 @@ class ProjectNav extends HTMLElement {
         border-radius: 4px;
         margin: 10px 0;
       }
+
+      @media (min-width: 1600px) {
+        .project-nav {
+          max-width: 1200px;
+        }
     `;
   }
 
