@@ -180,22 +180,6 @@ li .list-icon {
     .hide-on-desktop {
         display: none !important;
     }
-    nav {
-        background-color: none;
-        backdrop-filter: none;
-        box-shadow: none;
-        border: none;
-        display: flex;
-        margin: 6px 0;
-    }
-    nav>a {
-        margin-bottom: 6px;
-        background-color: transparent;
-        display: flex;
-        justify-content: flex-end;
-        transition: all 0.3s linear;
-        color: inherit;
-    }
     .nav-link.hide {
         display: block;
     }
@@ -215,6 +199,14 @@ li .list-icon {
         background-color: transparent;
         border: none;
         width: 200px;
+    }
+    nav>a {
+        margin-bottom: 6px;
+        background-color: transparent;
+        display: flex;
+        justify-content: flex-end;
+        transition: all 0.3s linear;
+        color: inherit;
     }
     section {
         margin-bottom: 120px;
