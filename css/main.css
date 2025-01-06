@@ -212,7 +212,13 @@ li .list-icon {
         margin: 40px auto 0;
     }
 }
-@media (min-width: 1370px) {
+@media (min-width: 1600px) {
+    .everything-container {
+        gap: 50px;
+    }
+    .container {
+        max-width: 1280px;
+    }
     .hide-on-desktop {
         display: none !important;
     }
