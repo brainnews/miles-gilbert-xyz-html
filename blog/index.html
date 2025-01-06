@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miles Gilbert – Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .post {
+            margin-bottom: 140px;
+            overflow: hidden;
+        }
+
+        .post a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .post img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .post img.loaded {
+            opacity: 1;
+        }
+
+        .post blockquote {
+            padding: 1.5rem;
+            border-left: 4px solid #e2e8f0;
+            margin: 0;
+        }
+
+        .post iframe {
+            width: 100%;
+            border: none;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loader.visible {
+            display: block;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #555;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" style="text-align: center; margin-bottom: 200px; font-size: 2rem;">Collected Media<br/><span style="font-size: 1rem;">a collection of digital objects discovered while travelling the internet</span></div>
+        <div id="posts"></div>
+        <div class="loader">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage;
+        const PER_PAGE = 10;
+        let loading = false;
+        let hasMore = true;
+
+        async function initialLoad() {
+            try {
+                const channel = await fetch('https://api.are.na/v2/channels/collected-media');
+                const channelData = await channel.json();
+                const pageCount = (Math.ceil(channelData.length / 10));
+                currentPage = pageCount;
+                loadMorePosts();
+            } catch (error) {
+                console.error('Error fetching from Are.na:', error);
+            }
+        }
+
+        async function fetchArenaPage() {
+            try {
+                const response = await fetch(`https://api.are.na/v2/channels/collected-media/contents?page=${currentPage}&per=${PER_PAGE}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const pageData = await response.json();
+                currentPage--;
+                return pageData;
+            } catch (error) {
+                console.error('Error fetching from Are.na:', error);
+                return null;
+            }
+        }
+
+        function createPostElement(post) {
+            const article = document.createElement('article');
+            article.className = 'post';
+            
+            const link = document.createElement('a');
+            link.href = post.source?.url || post.image?.original.url || '#';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+
+            if (post.embed) {
+                // Handle embedded content
+                const embedContainer = document.createElement('div');
+                embedContainer.innerHTML = post.embed.html;
+                link.appendChild(embedContainer);
+            } else if (post.content && post.content.trim()) {
+                // Handle text content
+                const blockquote = document.createElement('blockquote');
+                blockquote.textContent = post.content;
+                link.appendChild(blockquote);
+            } else if (post.image) {
+                // Handle images
+                const img = document.createElement('img');
+                img.src = post.image.display.url;
+                img.alt = post.title || 'Blog post image';
+                img.loading = 'lazy';
+                img.onload = () => img.classList.add('loaded');
+                link.appendChild(img);
+            }
+
+            article.appendChild(link);
+            return article;
+        }
+
+        async function loadMorePosts() {
+            if (loading || !hasMore) return;
+            
+            loading = true;
+            //document.querySelector('.loader').classList.add('visible');
+
+            const data = await fetchArenaPage(currentPage);
+            //reverse the order of the posts
+            data.contents.reverse();
+            if (!data || !data.contents || data.contents.length === 0) {
+                hasMore = false;
+                document.querySelector('.loader').classList.remove('visible');
+                return;
+            }
+            
+
+            const postsContainer = document.getElementById('posts');
+            data.contents.forEach(post => {
+                postsContainer.appendChild(createPostElement(post));
+            });
+
+            // Update hasMore based on whether we've reached the end
+            hasMore = data.contents.length === PER_PAGE;
+
+            loading = false;
+            document.querySelector('.loader').classList.remove('visible');
+        }
+
+        // Intersection Observer for infinite scrolling
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                console.log('Reached the bottom of the page');
+                loadMorePosts();
+            }
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0
+        });
+
+        // Start observing the loader
+        document.addEventListener('DOMContentLoaded', () => {
+            observer.observe(document.querySelector('.loader'));
+            initialLoad();
+        });
+    </script>
+</body>
+</html>
