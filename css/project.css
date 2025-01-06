@@ -92,7 +92,7 @@ video {
     margin-bottom: 120px;
     padding: 20px;
 }
-.project-container section.wide {
+.project-container section.wide:not(.colophon) {
     display: none;
 }
 @media (min-width: 1024px) {
@@ -118,6 +118,7 @@ video {
     }
     section.colophon {
         padding: 60px 0;
+        display: block !important;
     }
     .project-container {
         padding-top: 60px;
