@@ -386,19 +386,22 @@ class CustomVideoPlayer extends HTMLElement {
         const checkScroll = () => {
             const rect = this.getBoundingClientRect();
             const isOutOfView = rect.bottom < 80;
-            if (!noPip) {
-                if (isOutOfView && !video.paused) {
-                    container.classList.add('pip');
-                } else {
-                    container.classList.remove('pip');
-                }
-            } else {
-                if (isOutOfView) {
-                    this.pausePlayback();
-                } else {
-                    this.startPlayback();
-                }
+            if (isOutOfView && !video.paused) {
+                this.pausePlayback();
             }
+            // if (!noPip) {
+            //     if (isOutOfView && !video.paused) {
+            //         container.classList.add('pip');
+            //     } else {
+            //         container.classList.remove('pip');
+            //     }
+            // } else {
+            //     if (isOutOfView) {
+            //         this.pausePlayback();
+            //     } else {
+            //         this.startPlayback();
+            //     }
+            // }
         };
 
         // Handle autoplay
