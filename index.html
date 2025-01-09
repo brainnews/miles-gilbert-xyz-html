@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miles Gilbert - Creative Director, Creative Manager, and Developer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&display=swap">
@@ -33,6 +32,8 @@
                     <ul class="list-unstyled">
                         <a href="https://www.linkedin.com/in/milesmilesmiles/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/linkedin-icon.svg" alt="LinkedIn" class="list-icon">LinkedIn</li></a>
                         <a href="https://www.are.na/miles-gilbert/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/arena-icon.svg" alt="Are.na" class="list-icon">Are.na</li></a>
+                        <a href="https://www.milesgilbert.xyz/blog/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/tumblr-icon.png" alt="Tumblr*" class="list-icon">Tumblr<sup style="font-weight: 400;">*</sup></li></a>
+                        <p style="font-size: 10px;"><sup style="font-weight: 400;">*</sup>Tumblr is more of a state of mind at this point. My "image blog" runs on a custom platform powered by <a href="https://www.are.na.com" target="_blank">Are.na</a>.</p>
                         <!-- <a href="https://www.milesgilbert.xyz/resume" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/resume-icon.svg" alt="Resume" class="list-icon">Resume</li></a> -->
                     </ul>
                 </div>
@@ -70,7 +71,7 @@
                     }
                 });
             },
-            { threshold: 0.30 } // Trigger when 75% of the section is visible
+            { threshold: 0.301 } // Trigger when 75% of the section is visible
         );
 
         sections.forEach(section => observer.observe(section));
@@ -80,7 +81,7 @@
                 e.preventDefault(); // Prevent default anchor behavior
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
-                const yOffset = -60; // 30px offset
+                const yOffset = -50; // 30px offset
                 const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
                 window.scrollTo({top: y, behavior: 'smooth'});
