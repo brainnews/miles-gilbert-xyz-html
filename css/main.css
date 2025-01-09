@@ -247,7 +247,9 @@ li .list-icon {
         max-width: 1280px;
     }
 }
-
+p.eyebrow {
+    font-size: 0.8em;
+}
 .fade-in {
     opacity: 0.2;
     transition: all 0.7s ease;
@@ -259,7 +261,7 @@ li .list-icon {
     opacity: 1;
     transform: translateY(0px);
     filter: blur(0px);
-    border-radius: 0px;
+    border-radius: 10px;
 }
 .arrow-down {
     width: 10px;

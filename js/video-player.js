@@ -101,6 +101,8 @@ class CustomVideoPlayer extends HTMLElement {
                     width: 100%;
                     margin-bottom: 120px;
                     transition: all 0.3s ease;
+                    border-radius: 10px;
+                    overflow: hidden;
                 }
 
                 .video-container.pip {
