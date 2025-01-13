@@ -1,0 +1,77 @@
+{
+  "name": "Miles Gilbert",
+  "title": "Creative Director, Design Manager",
+  "summary": "Experienced creative director focusing on translating complex technical concepts into compelling and accessible experiences across physical and digital spaces for global technology companies such as IBM, HP, and Indeed. Proven track record of building and leading cross-functional teams within large organizations and bringing cohesiveness to technology brands.",
+  "contact": {
+    "email": "miles.gilbert@gmail.com",
+    "website": "milesgilbert.xyz",
+    "phone": "917-805-2747"
+  },
+  "experience": [
+    {
+      "company": "Indeed",
+      "title": "Creative Director",
+      "period": "2020 – Present",
+      "achievements": [
+        "Managed a team of 8 creatives while collaborating cross-functionally with marketing, product, and executive stakeholders",
+        "Led creative direction for the Indeed Job Market series of events, reimagining job fairs to center and uplift job seekers through accessible experiential design",
+        "Led creative direction for the Careers in Care: Off the Clock in person event, celebrating healthcare workers and amplifying Indeed's presence in the industry",
+        "Led creative strategy and direction for a complete refresh of Indeed's YouTube presence, leading to significant growth in subscribers and watch time",
+        "Prototyped and led the development and adoption of AI-powered tools to improve internal processes and reimagine how creative is made"
+      ]
+    },
+    {
+      "company": "R/GA Austin",
+      "title": "Associate Creative Director",
+      "period": "2018 – 2020",
+      "achievements": [
+        "Concepted and produced campaigns for Racetrac and Off the Eaten Path",
+        "Mentored junior creatives and maintained high design standards in a fast-paced setting",
+        "Drove new business initiatives through creative pitch development"
+      ]
+    },
+    {
+      "company": "T3",
+      "title": "Senior Art Director",
+      "period": "2016 – 2018",
+      "achievements": [
+        "Partnered with UX teams to improve the existing customer experience across Allstate's products",
+        "Developed new products to address the changing expectations of insurance customers",
+        "Mentored junior designers to create a collaborative and inclusive culture of design criticism and iterative experimentation"
+      ]
+    },
+    {
+      "company": "BBDO",
+      "title": "Senior Art Director",
+      "period": "2011 – 2016",
+      "achievements": [
+        "Partnered with multiple agencies to unify HP's brand identity across global markets",
+        "Transformed technical product features into compelling narratives for Mobil 1 Motorsports",
+        "Created innovative short-form content for Lowe's \"Fix in Six\" campaign"
+      ]
+    },
+    {
+      "company": "Ogilvy & Mather",
+      "title": "Senior Art Director",
+      "period": "2008 – 2011",
+      "achievements": [
+        "Led creative direction for the IBM Watson identity and campaign, creating an accessible narrative that effectively communicated IBM's capabilities to a mainstream audience",
+        "Collaborated directly with IBM researchers to translate complex machine-learning concepts into accessible visual experiences for enterprise customers",
+        "Created environmental designs for IBM's Smarter Planet campaign, ranging from human-scale to building-sized installations"
+      ]
+    }
+  ],
+  "education": {
+    "school": "Rhode Island School of Design",
+    "degree": "BFA, Graphic Design"
+  },
+  "skills": [
+    "Event Design & Creative Direction",
+    "Creative Management",
+    "Cross-functional Leadership",
+    "Technical Concept Visualization",
+    "Brand System Development",
+    "Environmental Design",
+    "Agency & Vendor Management"
+  ]
+}
