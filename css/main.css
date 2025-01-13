@@ -18,6 +18,7 @@ h1 {
 }
 h1.headline {
     margin: 0;
+    margin-bottom: 4px;
 }
 h2, h3 {
    font-size: 1.4em;
