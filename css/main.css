@@ -53,13 +53,18 @@ nav {
     align-items: center;
     margin-bottom: 40px;
 }
-nav>a {
+.nav-link {
     margin: 0px 12px 0px 0px;
     background-color: transparent;
-    transition: all 0.3s linear;
     color: inherit;
     display: flex;
     align-items: center;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+  }
+  
+.nav-link.active {
+    opacity: 1;
 }
 .flourish {
     display: none;
@@ -200,9 +205,6 @@ li .list-icon {
 @media (min-width: 1024px) {
     .hide-on-desktop {
         display: none !important;
-    }
-    .nav-link.hide {
-        display: block;
     }
     .logo {
         margin-bottom: 6px;
