@@ -21,6 +21,9 @@
         <a class="nav-link nav-link-hidden hide" href="#reel" data-target="reel">Reel</a>
         <a class="nav-link nav-link-hidden hide" href="#info" data-target="info">Info</a>
         <a class="nav-link nav-link-hidden hide" href="#projects" data-target="projects">Projects</a>
+        <div class="flourish top-flourish"></div>
+        <div class="flourish middle-flourish"></div>
+        <div class="flourish bottom-flourish"></div>
     </nav>
     <div class="container">
         <section id="reel" class="target-section">
@@ -41,15 +44,18 @@
                         <p style="font-size: 10px;"><sup style="font-weight: 400;">*</sup>Tumblr is more of a state of mind at this point. My "image blog" runs on a custom platform powered by <a href="https://www.are.na" target="_blank">Are.na</a>.</p>
                     </ul>
                 </div>
-                <div class="intro-image">
-                    <img src="https://files.milesgilbert.xyz/images/headshot.jpg" alt="Miles Gilbert" class="arch-image">
+                <div class="intro-image arch-image">
+                    <div class="thought-bubble">
+                        <div class="thought-bubble-content">
+                            Welcome to my website.
+                            AI.Miles coming soon...
+                        </div>
+                        <div class="thought-bubble-dot"></div>
+                    </div>
+                    <img src="https://files.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
                 </div>
             </div>
         </section>
-        <!-- <section id="featured" class="target-section">
-            <h2>Featured work</h2>
-            <image-carousel data-source="./js/projects.json"></image-carousel>
-        </section> -->
         <section id="projects" class="target-section">
             <h2>Projects</h2>
             <div id="everything-container" class="everything-container">
@@ -63,19 +69,25 @@
     <script>
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     const targetButton = document.querySelector(`.nav-link[data-target="${entry.target.id}"]`);
                     if (entry.isIntersecting) {
+                        if (entry.target.id === 'reel') {
+                            document.querySelector('.middle-flourish').style.bottom = '80px';
+                        }   else if (entry.target.id === 'info') {
+                            document.querySelector('.middle-flourish').style.bottom = '52px';
+                        }   else if (entry.target.id === 'projects') {
+                            document.querySelector('.middle-flourish').style.bottom = '26px';
+                        }
                         targetButton.style.opacity = '1';
                     } else {
                         targetButton.style.opacity = '0.3';
                     }
                 });
             },
-            { threshold: 0.301 } // Trigger when 75% of the section is visible
+            { threshold: 0.35 } // Trigger when 75% of the section is visible
         );
 
         sections.forEach(section => observer.observe(section));
@@ -87,6 +99,21 @@
                 const targetSection = document.getElementById(targetId);
                 const yOffset = -50; // 30px offset
                 const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+                switch (targetId) {
+                    case 'reel':
+                        //change css value bottom of flourish to 0px with animation
+                        document.querySelector('.middle-flourish').style.bottom = '80px';
+                        break;
+                    case 'info':
+                        document.querySelector('.middle-flourish').style.bottom = '52px';
+                        break;
+                    case 'projects':
+                        document.querySelector('.middle-flourish').style.bottom = '26px';
+                        break;
+                    default:
+                        break;
+                }
 
                 window.scrollTo({top: y, behavior: 'smooth'});
             });

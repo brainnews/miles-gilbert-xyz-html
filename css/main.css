@@ -61,6 +61,9 @@ nav>a {
     display: flex;
     align-items: center;
 }
+.flourish {
+    display: none;
+}
 .list-unstyled {
     list-style-type: none;
     padding: 0;
@@ -164,6 +167,7 @@ li .list-icon {
 }
 .intro-content {
     display: flex; /* Use flexbox for layout */
+    justify-content: space-between;
 }
 .intro-text {
     width: 100%;
@@ -178,14 +182,6 @@ li .list-icon {
     width: 200px; /* Set a fixed width for the image */
     height: 200px; /* Set a fixed height for the image */
     border-radius: 50%; /* Make the image circular */
-    object-fit: cover; /* Ensure the image covers the area */
-}
-.arch-image {
-    width: 200px; /* Set a fixed width for the image */
-    height: 200px; /* Set a fixed height for the image */
-    border-radius: 4px; /* Make the image circular */
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
     object-fit: cover; /* Ensure the image covers the area */
 }
 /* Hide specific controls while keeping others */
@@ -213,8 +209,8 @@ li .list-icon {
     }
     nav {
         position: fixed;
-        left: 60px;
-        top: 36px;
+        left: 0px;
+        top: 54px;
         display: flex;
         flex-direction: column;
         align-items: end;
@@ -224,6 +220,7 @@ li .list-icon {
         background-color: transparent;
         border: none;
         width: 200px;
+        border-right: 3px solid rgb(255, 245, 112, 1)
     }
     nav>a {
         margin-bottom: 6px;
@@ -232,6 +229,112 @@ li .list-icon {
         justify-content: flex-end;
         transition: all 0.3s linear;
         color: inherit;
+    }
+    .intro-image {
+        position: relative;
+        display: block;
+        height: fit-content;
+        background-color: white;
+        border-radius: 4px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        transition: all 0.3s ease-in;
+    }
+    .intro-image img {
+        width: 200px; /* Set a fixed width for the image */
+        height: 200px; /* Set a fixed height for the image */
+        border-radius: 4px; /* Make the image circular */
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        object-fit: cover; /* Ensure the image covers the area */
+        overflow: hidden;
+        margin-bottom: -10px;
+    }
+    .thought-bubble {
+        display: flex;
+        align-items: center;
+        border-radius: 30px;
+        background-color: #fff570;
+        position: absolute;
+        transition: all 0.3s ease-in;
+        z-index: 1;
+        top: 8px;
+        margin-right: 160px;
+        padding: 16px 20px;
+        text-align: left;
+        left: -160px;
+        color: #070c0c;
+    }
+    .thought-bubble-content {
+        font-size: 0.8em;
+    }
+    .thought-bubble-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #fff570;
+        position: absolute;
+        top: 74px;
+        left: 195px;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease-in;
+        z-index: 2;
+    }
+    .flourish {
+        display: block;
+        border: 3px solid #fff570;
+        border-radius: 50%;
+        position: absolute;
+        transition: all 0.3s ease-in;
+    }
+    .arch-flourish {
+        display: block;
+        border: 3px solid #fff570;
+        border-radius: 50%;
+        position: absolute;
+        transition: all 0.3s ease-in;
+    }
+    .arch-flourish-top-left {
+        width: 14px;
+        height: 14px;
+        top: -6px;
+        left: -3px;
+    }
+    .arch-flourish-top-right {
+        width: 14px;
+        height: 14px;
+        top: -6px;
+        right: -3px;
+    }
+    .arch-flourish-bottom-left {
+        width: 14px;
+        height: 14px;
+        bottom: -6px;
+        left: -3px;
+    }
+    .arch-flourish-bottom-right {
+        width: 14px;
+        height: 14px;
+        bottom: -6px;
+        right: -3px;
+    }
+    .middle-flourish {
+        width: 20px;
+        height: 20px;
+        bottom: 80px;
+        right: -20px;
+    }
+    .top-flourish {
+        width: 14px;
+        height: 14px;
+        top: -6px;
+        right: -3px;
+    }
+    .bottom-flourish {
+        width: 14px;
+        height: 14px;
+        bottom: -6px;
+        right: -3px;
     }
     section {
         margin-bottom: 120px;
@@ -251,11 +354,6 @@ li .list-icon {
     }
     .intro-text {
         width: 67%; /* Text takes up 67% of the width */
-    }
-    .intro-image {
-        width: 33%; /* Image container takes up 33% of the width */
-        display: flex; /* Center the image */
-        justify-content: flex-end; /* Center the image horizontally */
     }
     .logo {
         width: 86px;

@@ -1,14 +1,12 @@
 console.log(`%c
-dear fellow element inspector,
-U R cool ;)
-wanna chat about a project?
-let me know.
-- mg
+Hello element inspector,
+Isn't code the coolest??
+Let me know if you want to work together on a project.
+- MG (miles.gilbert@gmail.com)
 `, `
 color: #00ff00;
 background: #1a1a1a;
-font-family: monospace;
-font-size: 10px;
+font-size: 14px;
 `);
 
 const menuButton = document.getElementById('menuButton');
