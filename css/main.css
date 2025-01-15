@@ -170,6 +170,9 @@ li .list-icon {
 .intro {
     width: 100%;
 }
+.intro-sidebar {
+    width: min-content;
+}
 .intro-content {
     display: flex; /* Use flexbox for layout */
     justify-content: space-between;
@@ -237,10 +240,11 @@ li .list-icon {
         display: block;
         height: fit-content;
         background-color: white;
-        border-radius: 4px;
+        border-radius: 6px;
         border-top-left-radius: 50%;
         border-top-right-radius: 50%;
         transition: all 0.3s ease-in;
+        border: 6px solid #962aa5;
     }
     .intro-image img {
         width: 200px; /* Set a fixed width for the image */
@@ -285,9 +289,46 @@ li .list-icon {
     .flourish {
         display: block;
         border: 3px solid #fff570;
-        border-radius: 50%;
         position: absolute;
         transition: all 0.3s ease-in;
+    }
+    .portrait-ledge {
+        width: 110%;
+        height: 10px;
+        border-radius: 4px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        background-color: #fff570;
+        bottom: -10px;
+        left: 0px;
+        transform: translateX(-5%);
+    }
+    .ledge-flourish-left {
+        width: 14px;
+        height: 10px;
+        top: 7px;
+        left: 7px;
+        background-color: #c3b81f;
+        border-radius: 0 0 4px 4px;
+        border: none;
+    }
+    .ledge-flourish-right {
+        width: 14px;
+        height: 10px;
+        top: 7px;
+        right: 7px;
+        background-color: #c3b81f;
+        border-radius: 0 0 4px 4px;
+        border: none;
+    }
+    .ledge-plant-1 {
+        width: 10px;
+        height: 10px;
+        top: 7px;
+        left: 7px;
+        background-color: #c3b81f;
+        border-radius: 50%;
+        border: none;
     }
     .arch-flourish {
         display: block;
@@ -321,25 +362,42 @@ li .list-icon {
         right: -3px;
     }
     .middle-flourish {
+        border-radius: 50%;
         width: 20px;
         height: 20px;
-        bottom: 80px;
+        bottom: 62px;
         right: -20px;
     }
     .top-flourish {
+        border-radius: 50%;
         width: 14px;
         height: 14px;
         top: -6px;
         right: -3px;
     }
     .bottom-flourish {
+        border-radius: 50%;
         width: 14px;
         height: 14px;
         bottom: -6px;
         right: -3px;
     }
+    .fresh-label {
+        position: absolute;
+        top: -17px;
+        left: -10px;
+        background-color: #fff570;
+        padding: 8px 12px;
+        border-radius: 25px;
+        color: #070c0c;
+        z-index: 1;
+        font-weight: bold;
+        font-size: 14px;
+        transform: rotate(-22deg);
+    }
     section {
         margin-bottom: 120px;
+        position: relative;
     }
     section h2 {
         padding: 0 20px;

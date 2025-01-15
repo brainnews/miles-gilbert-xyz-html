@@ -27,6 +27,7 @@
     </nav>
     <div class="container">
         <section id="reel" class="target-section">
+            <div class="fresh-label">fresh work!</div>
             <custom-video-player src="https://files.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4" autoplay loop no-pip></custom-video-player>
         </section>
         <section id="info" class="intro target-section">
@@ -36,23 +37,30 @@
                     <h1 class="headline" style="font-weight: normal; margin-bottom: 22px;">Creative Director, Design Manager</h1>
                     <p class="subhead">I'm a creative director with a proven track record of making complex tech concepts feel approachable and engaging. Throughout my career, I've worked with major technology companies like IBM, HP, and Indeed, crafting brand experiences that resonate across both physical and digital environments.</p>
                     <p>Today, I help lead creative initiatives at Indeed, the world's #1 job site. Beyond directing video series and experiential campaigns, I drive innovation through technology—recently prototyping an AI-powered tool that streamlines our creative feedback process, and helping evaluate AI solutions that enhance our team's efficiency. My work focuses on modernizing both our creative output and our workflows to help people find and succeed in meaningful work.</p>
-                    <ul class="list-unstyled list-inline">
-                        <a href="https://www.linkedin.com/in/milesmilesmiles/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/linkedin-icon.svg" alt="LinkedIn" class="list-icon">LinkedIn</li></a>
-                        <a href="https://www.are.na/miles-gilbert/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/arena-icon.svg" alt="Are.na" class="list-icon">Are.na</li></a>
-                        <a href="https://www.milesgilbert.xyz/blog/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/tumblr-icon.png" alt="Tumblr*" class="list-icon">Tumblr<sup style="font-weight: 400;">*</sup></li></a>
-                        <a href="./resume"><li><img src="https://files.milesgilbert.xyz/images/resume-icon.svg" alt="Resume" class="list-icon">Resume</li></a>
-                        <p style="font-size: 10px;"><sup style="font-weight: 400;">*</sup>Tumblr is more of a state of mind at this point. My "image blog" runs on a custom platform powered by <a href="https://www.are.na" target="_blank">Are.na</a>.</p>
-                    </ul>
+                    
                 </div>
-                <div class="intro-image arch-image">
-                    <div class="thought-bubble">
+                <div class="intro-sidebar">
+                  <div class="intro-image arch-image">
+                      <div class="thought-bubble">
                         <div class="thought-bubble-content">
-                            Welcome to my website.
-                            More to come soon...
+                          Welcome to my website.
+                          More to come soon...
                         </div>
                         <div class="thought-bubble-dot"></div>
                     </div>
                     <img src="https://files.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
+                    <div class="flourish portrait-ledge">
+                      <div class="flourish ledge-flourish-left"></div>
+                      <div class="flourish ledge-flourish-right"></div>
+                    </div>
+                  </div>
+                  <ul class="list-unstyled">
+                    <a href="https://www.linkedin.com/in/milesmilesmiles/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/linkedin-icon.svg" alt="LinkedIn" class="list-icon">LinkedIn</li></a>
+                    <a href="https://www.are.na/miles-gilbert/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/arena-icon.svg" alt="Are.na" class="list-icon">Are.na</li></a>
+                    <a href="https://www.milesgilbert.xyz/blog/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/tumblr-icon.png" alt="Tumblr*" class="list-icon">Tumblr<sup style="font-weight: 400;">*</sup></li></a>
+                    <a href="./resume"><li><img src="https://files.milesgilbert.xyz/images/resume-icon.svg" alt="Resume" class="list-icon">Resume</li></a>
+                    <p style="font-size: 10px;"><sup style="font-weight: 400;">*</sup>Tumblr is more of a state of mind at this point. My "image blog" runs on a custom platform powered by <a href="https://www.are.na" target="_blank">Are.na</a>.</p>
+                  </ul>
                 </div>
             </div>
         </section>
@@ -137,12 +145,27 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const targetId = link.getAttribute('href').slice(1);
       const targetSection = document.getElementById(targetId);
+      const flourish = document.querySelector('.middle-flourish');
       if (targetSection) {
         const targetPosition = targetSection.offsetTop - TARGET_OFFSET;
         window.scrollTo({
           top: targetPosition,
           behavior: 'smooth'
         });
+        // Update flourish position based on current section
+        if (flourish) {
+          switch(targetId) {
+            case 'reel':
+              flourish.style.bottom = '62px';
+              break;
+            case 'info':
+              flourish.style.bottom = '40px';
+              break;
+            case 'projects':
+              flourish.style.bottom = '20px';
+              break;
+          }
+        }
       }
     });
   });

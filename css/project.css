@@ -104,8 +104,8 @@ video {
     nav {
         right: auto;
         bottom: auto;
-        left: 60px;
-        top: 40px;
+        left: 0px;
+        top: 54px;
         padding: 20px;
     }
     nav>a:first-child {
