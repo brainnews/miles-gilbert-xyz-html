@@ -43,6 +43,9 @@ button {
     border: none;
     cursor: pointer;
 }
+.logo {
+    margin-bottom: 6px;
+}
 nav {
     padding: 20px;
     z-index: 999;
@@ -170,12 +173,10 @@ li .list-icon {
 .intro {
     width: 100%;
 }
-.intro-sidebar {
-    width: min-content;
-}
 .intro-content {
     display: flex; /* Use flexbox for layout */
     justify-content: space-between;
+    flex-direction: column;
 }
 .intro-text {
     width: 100%;
@@ -205,12 +206,15 @@ li .list-icon {
 .minimal-controls::-webkit-media-controls-download-button {
     display: none !important;
 }
+.fresh-label {
+    display: none;
+}
 @media (min-width: 1024px) {
     .hide-on-desktop {
         display: none !important;
     }
     .logo {
-        margin-bottom: 6px;
+        margin-bottom: 40px;
     }
     nav {
         position: fixed;
@@ -245,6 +249,12 @@ li .list-icon {
         border-top-right-radius: 50%;
         transition: all 0.3s ease-in;
         border: 6px solid #962aa5;
+    }
+    .intro-content {
+        flex-direction: row;
+    }
+    .intro-sidebar {
+        width: min-content;
     }
     .intro-image img {
         width: 200px; /* Set a fixed width for the image */
@@ -383,6 +393,7 @@ li .list-icon {
         right: -3px;
     }
     .fresh-label {
+        display: block;
         position: absolute;
         top: -17px;
         left: -10px;
