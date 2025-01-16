@@ -21,9 +21,9 @@
         <a class="nav-link nav-link-hidden hide" href="#reel" data-target="reel">Reel</a>
         <a class="nav-link nav-link-hidden hide" href="#info" data-target="info">Info</a>
         <a class="nav-link nav-link-hidden hide" href="#projects" data-target="projects">Projects</a>
-        <div class="flourish top-flourish"></div>
+        <!-- <div class="flourish top-flourish"></div> -->
         <div class="flourish middle-flourish"></div>
-        <div class="flourish bottom-flourish"></div>
+        <!-- <div class="flourish bottom-flourish"></div> -->
     </nav>
     <div class="container">
         <section id="reel" class="target-section">
@@ -104,9 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
           
           // Update flourish position based on current section
           if (flourish) {
+            console.log('flourish 1');
             switch(section.id) {
               case 'reel':
-                flourish.style.bottom = '62px';
+                flourish.style.bottom = '63px';
                 break;
               case 'info':
                 flourish.style.bottom = '40px';
@@ -116,8 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             }
           }
-          
-          console.log(`${section.id} reached target position`);
           lastActiveSection = section;
         }
       }
@@ -152,20 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
           top: targetPosition,
           behavior: 'smooth'
         });
-        // Update flourish position based on current section
-        if (flourish) {
-          switch(targetId) {
-            case 'reel':
-              flourish.style.bottom = '62px';
-              break;
-            case 'info':
-              flourish.style.bottom = '40px';
-              break;
-            case 'projects':
-              flourish.style.bottom = '20px';
-              break;
-          }
-        }
+        updateSectionStates();
       }
     });
   });
