@@ -42,11 +42,7 @@
                 <div class="intro-sidebar">
                   <div class="intro-image arch-image">
                       <div class="thought-bubble">
-                        <div class="thought-bubble-content">
-                          Welcome to my website.
-                          More to come soon...
-                        </div>
-                        <div class="thought-bubble-dot"></div>
+                        <div class="texts-to-myself"></div>
                     </div>
                     <img src="https://files.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
                     <div class="flourish portrait-ledge">
@@ -72,143 +68,91 @@
         </section>
     </div>
     <script src="./js/video-player.js"></script>
+    <script src="./js/texts-to-myself.js"></script>
     <script src="./js/main.js"></script>
     <script type="module" src="./js/projects.js"></script>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const TARGET_OFFSET = 60; // Distance from top of viewport in pixels
-  const sections = document.querySelectorAll('.target-section');
-  const flourish = document.querySelector('.middle-flourish');
-  let lastActiveSection = null;
+      document.addEventListener('DOMContentLoaded', () => {
+        const TARGET_OFFSET = 60; // Distance from top of viewport in pixels
+        const sections = document.querySelectorAll('.target-section');
+        const flourish = document.querySelector('.middle-flourish');
+        let lastActiveSection = null;
 
-  // Function to update section states
-  const updateSectionStates = () => {
-    sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      // Check if section's top edge is at or has passed our target position
-      if (Math.abs(rect.top - TARGET_OFFSET) < 20) { // Using a small threshold for better detection
-        if (section !== lastActiveSection) {
-          // Only remove active class from previous link
-          if (lastActiveSection) {
-            const previousLink = document.querySelector(`a[href="#${lastActiveSection.id}"]`);
-            if (previousLink) {
-              previousLink.classList.remove('active');
+        // Function to update section states
+        const updateSectionStates = () => {
+          sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            // Check if section's top edge is at or has passed our target position
+            if (Math.abs(rect.top - TARGET_OFFSET) < 20) { // Using a small threshold for better detection
+              if (section !== lastActiveSection) {
+                // Only remove active class from previous link
+                if (lastActiveSection) {
+                  const previousLink = document.querySelector(`a[href="#${lastActiveSection.id}"]`);
+                  if (previousLink) {
+                    previousLink.classList.remove('active');
+                  }
+                }
+                
+                // Add active class to new corresponding link
+                const correspondingLink = document.querySelector(`a[href="#${section.id}"]`);
+                if (correspondingLink) {
+                  correspondingLink.classList.add('active');
+                }
+                
+                // Update flourish position based on current section
+                if (flourish) {
+                  console.log('flourish 1');
+                  switch(section.id) {
+                    case 'reel':
+                      flourish.style.bottom = '63px';
+                      break;
+                    case 'info':
+                      flourish.style.bottom = '40px';
+                      break;
+                    case 'projects':
+                      flourish.style.bottom = '20px';
+                      break;
+                  }
+                }
+                lastActiveSection = section;
+              }
             }
+          });
+        };
+        
+        // Throttle scroll handler for better performance
+        let ticking = false;
+        document.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              updateSectionStates();
+              ticking = false;
+            });
+            ticking = true;
           }
-          
-          // Add active class to new corresponding link
-          const correspondingLink = document.querySelector(`a[href="#${section.id}"]`);
-          if (correspondingLink) {
-            correspondingLink.classList.add('active');
-          }
-          
-          // Update flourish position based on current section
-          if (flourish) {
-            console.log('flourish 1');
-            switch(section.id) {
-              case 'reel':
-                flourish.style.bottom = '63px';
-                break;
-              case 'info':
-                flourish.style.bottom = '40px';
-                break;
-              case 'projects':
-                flourish.style.bottom = '20px';
-                break;
-            }
-          }
-          lastActiveSection = section;
-        }
-      }
-    });
-  };
-  
-  // Throttle scroll handler for better performance
-  let ticking = false;
-  document.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
+        }, { passive: true });
+        
+        // Initial check
         updateSectionStates();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-  
-  // Initial check
-  updateSectionStates();
-  
-  // Handle click events on navigation links
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').slice(1);
-      const targetSection = document.getElementById(targetId);
-      const flourish = document.querySelector('.middle-flourish');
-      if (targetSection) {
-        const targetPosition = targetSection.offsetTop - TARGET_OFFSET;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
+        
+        // Handle click events on navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').slice(1);
+            const targetSection = document.getElementById(targetId);
+            const flourish = document.querySelector('.middle-flourish');
+            if (targetSection) {
+              const targetPosition = targetSection.offsetTop - TARGET_OFFSET;
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+              updateSectionStates();
+            }
+          });
         });
-        updateSectionStates();
-      }
-    });
-  });
-});
-
-
-        // const sections = document.querySelectorAll('section');
-        // const navLinks = document.querySelectorAll('.nav-link');
-        // const observer = new IntersectionObserver(
-        //     (entries) => {
-        //         entries.forEach((entry) => {
-        //             const targetButton = document.querySelector(`.nav-link[data-target="${entry.target.id}"]`);
-        //             if (entry.isIntersecting) {
-        //                 if (entry.target.id === 'reel') {
-        //                     document.querySelector('.middle-flourish').style.bottom = '80px';
-        //                 }   else if (entry.target.id === 'info') {
-        //                     document.querySelector('.middle-flourish').style.bottom = '52px';
-        //                 }   else if (entry.target.id === 'projects') {
-        //                     document.querySelector('.middle-flourish').style.bottom = '26px';
-        //                 }
-        //                 targetButton.style.opacity = '1';
-        //             } else {
-        //                 targetButton.style.opacity = '0.3';
-        //             }
-        //         });
-        //     },
-        //     { threshold: 0.35 } // Trigger when 75% of the section is visible
-        // );
-
-        // sections.forEach(section => observer.observe(section));
-
-        // navLinks.forEach(link => {
-        //     link.addEventListener('click', function(e) {
-        //         e.preventDefault(); // Prevent default anchor behavior
-        //         const targetId = this.getAttribute('href').substring(1);
-        //         const targetSection = document.getElementById(targetId);
-        //         const yOffset = -50; // 30px offset
-        //         const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-        //         switch (targetId) {
-        //             case 'reel':
-        //                 //change css value bottom of flourish to 0px with animation
-        //                 document.querySelector('.middle-flourish').style.bottom = '80px';
-        //                 break;
-        //             case 'info':
-        //                 document.querySelector('.middle-flourish').style.bottom = '52px';
-        //                 break;
-        //             case 'projects':
-        //                 document.querySelector('.middle-flourish').style.bottom = '26px';
-        //                 break;
-        //             default:
-        //                 break;
-        //         }
-
-        //         window.scrollTo({top: y, behavior: 'smooth'});
-        //     });
-        // });
+      });
     </script>
 </body>
 </html>

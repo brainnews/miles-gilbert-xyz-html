@@ -209,6 +209,27 @@ li .list-icon {
 .fresh-label {
     display: none;
 }
+.thought-bubble::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: #fff570;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    bottom: -10px;
+    right: 0px;
+}
+    
+.texts {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    font-size: 0.8em;
+}
+
+.texts.active {
+    opacity: 1;
+}
 @media (min-width: 1024px) {
     .hide-on-desktop {
         display: none !important;
