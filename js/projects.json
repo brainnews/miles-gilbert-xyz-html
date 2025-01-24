@@ -446,5 +446,23 @@
     ],
     "featured": true,
     "visible": false
+  },
+  {
+    "title": "Careers in Care: Off the Clock",
+    "slug": "careers-in-care-off-the-clock",
+    "role": "Creative Director",
+    "client": "Indeed",
+    "year": "2024",
+    "tagline": "Supporting healthcare workers in their time of need",
+    "summary": "What began as Indeed's \"Careers in Care\" campaign transformed into an empowering in-person celebration for healthcare workers. The event, \"Careers in Care: Off the Clock,\" addressed critical challenges facing healthcare professionals: burnout, career development, and work-life balance. To support this vital workforce, we created an immersive experience featuring influential healthcare leaders and social media personalities sharing their career paths and insights. The event balanced professional development with wellness activities, offering yoga sessions and sound healing experiences. Through career guidance workshops and networking opportunities, we helped healthcare workers explore growth pathways while prioritizing their well-being. \"Off the Clock\" evolved from a campaign into a meaningful community gathering that acknowledged healthcare workers' dedication while providing practical tools for sustainable careers and personal fulfillment.",
+    "tags": [
+      "activation",
+      "events",
+      "collateral",
+      "print",
+      "vendor agency"
+    ],
+    "featured": false,
+    "visible": true
   }
 ]
