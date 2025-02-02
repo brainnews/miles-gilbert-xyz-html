@@ -22,6 +22,7 @@
         let time = 0;
         let rotation = 0;
         let baseSize; // Base size for scaling
+        let spawnCount = 37;
         
         // Matter.js variables
         let engine;
@@ -163,7 +164,7 @@
             noStroke();
             textSize(18);
             textAlign(LEFT, TOP);
-            text('CLICK TO ADD\nSPACE TO REMOVE\n\n' + particles.length + ' particles', baseSize, baseSize);
+            text('ADD ' + spawnCount + ' (CLICK)\nREDUCE (SPACE)\nEXIST (' + particles.length + ')', baseSize, baseSize);
 
         }
 
@@ -195,10 +196,19 @@
                 rect(x, y, size, size);
             }
         }
+        // create a function that detects mouse wheel movement to set the amount of particles to spawn
+        function mouseWheel(event) {
+            if (event.delta < 0) {
+                spawnCount += 7;
+            } else {
+                spawnCount -= 7;
+            }
+            spawnCount = constrain(spawnCount, 10, 100);
+        }
 
         function mousePressed() {
             // Create burst of physics particles
-            let spawnCount = floor(map(min(windowWidth, windowHeight), 0, 2000, 10, 30));
+            //let spawnCount = floor(map(min(windowWidth, windowHeight), 0, 2000, 10, 30));
             for (let i = 0; i < spawnCount; i++) {
                 particles.push(new PhysicsParticle(mouseX, mouseY));
             }
