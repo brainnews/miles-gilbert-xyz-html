@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MG | PLAYGROUND | POPCORN</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./../../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./../../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="f./../../avicon-16x16.png">
+    <link rel="manifest" href="./../../site.webmanifest">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
     <style>
@@ -155,12 +159,8 @@
             
             time += 0.02;
             rotation += 0.01;
-
-            // place background behind text
-            fill(0, 0, 0, 30);
-            rect(30, 30, 250, 150);
             // Display instructions
-            fill(255);
+            fill(200, 100, 255);
             noStroke();
             textSize(18);
             textAlign(LEFT, TOP);
@@ -205,14 +205,32 @@
             }
             spawnCount = constrain(spawnCount, 10, 100);
         }
+        
+        function touchStarted() {
+            if (event.touches.length === 2) {
+                resetParticles();
+            }
+        }
 
         function mousePressed() {
             // Create burst of physics particles
             //let spawnCount = floor(map(min(windowWidth, windowHeight), 0, 2000, 10, 30));
-            for (let i = 0; i < spawnCount; i++) {
-                particles.push(new PhysicsParticle(mouseX, mouseY));
+            createParticles(mouseX, mouseY);
+            return false;
+        }
+
+        function touchStarted() {
+            if (touches.length === 1) {
+                createParticles(touches[0].x, touches[0].y);
             }
             return false;
+        }
+
+        function createParticles(x, y) {
+            //let spawnCount = floor(map(min(windowWidth, windowHeight), 0, 2000, 10, 30));
+            for (let i = 0; i < spawnCount; i++) {
+                particles.push(new PhysicsParticle(x, y));
+            }
         }
 
         function keyPressed() {
