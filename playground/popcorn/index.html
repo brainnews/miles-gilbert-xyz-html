@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miles Gilbert | Playground</title>
+    <title>MG | PLAYGROUND | POPCORN</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
     <style>
@@ -31,7 +31,7 @@
 
         function calculateBaseSize() {
             // Calculate base size relative to screen dimensions
-            return min(windowWidth, windowHeight) * 0.03;
+            return min(windowWidth, windowHeight) * 0.04;
         }
 
         function setupPhysics() {
@@ -155,12 +155,16 @@
             time += 0.02;
             rotation += 0.01;
 
+            // place background behind text
+            fill(0, 0, 0, 30);
+            rect(30, 30, 250, 150);
             // Display instructions
             fill(255);
             noStroke();
-            textSize(baseSize * 0.8);
+            textSize(18);
             textAlign(LEFT, TOP);
-            text('Click to create particles\nPress SPACE to reset', baseSize, baseSize);
+            text('CLICK TO ADD\nSPACE TO REMOVE\n\n' + particles.length + ' particles', baseSize, baseSize);
+
         }
 
         function drawConcentricSquares(x, y, size) {
