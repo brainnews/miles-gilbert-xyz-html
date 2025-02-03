@@ -13,7 +13,8 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 6px;
+            padding: 0px;
+            touch-action: none;
         }
         .container {
             position: relative;
@@ -21,21 +22,28 @@
             height: 100vh;
             display: grid;
             grid-template-columns: 1fr;
-            grid-template-rows: 1fr 200px;
+            grid-template-rows: 1fr;
         }
         #screen {
             grid-area: 1 / 1 / 1 / 1;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 60px); /* Leave space for controls */
+            touch-action: none;
         }
         #controls {
-            grid-area: 2 / 1 / 2 / 1;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
             display: flex;
-            flex-direction: column;
             gap: 10px;
-            padding: 6px 0;
-            border-radius: 5px;
-            z-index: 9;
+            padding: 10px;
+            z-index: 1000;
+            touch-action: none;
+        }
+        #instructions {
+            display: none;
         }
         .buttons {
             display: flex;
@@ -48,14 +56,18 @@
             overflow: hidden;
         }
         button {
-            padding: 8px 16px 8px 12px;
+            padding: 12px 16px; /* Larger touch targets */
             border: none;
             border-radius: 4px;
             background: #4CAF50;
             color: white;
             cursor: pointer;
             font-family: Arial, sans-serif;
-            flex-grow: 1;
+            flex: 1;
+            min-height: 44px; /* Minimum touch target size */
+            font-size: 16px; /* Readable text size */
+            touch-action: manipulation; /* Optimize for touch */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
         }
         button.active {
             background: #2E7D32;
@@ -70,14 +82,12 @@
                 width: 800px;
                 height: 600px;
                 border-radius: 10px;
-                grid-template-rows: 1fr 100px;
             }
             #controls {
-                flex-direction: row;
-                font-family: Georgia, 'Times New Roman', Times, serif;
-                font-size: 0.8em;
-                justify-content: space-between;
-                align-items: center;
+                position: relative;
+                height: 50px;
+                margin-top: 10px;
+                padding: 0;
             }
         }
     </style>
@@ -86,15 +96,9 @@
     <div id="container" class="container">
         <div class="screen" id="screen"></div>
         <div id="controls">
-            <div class="buttons">
-                <button id="rockBtn">🪨 Place Rocks</button>
-                <button id="lilyBtn">🪷 Place Lilies</button>
-                <button id="resetBtn">🧹 Reset</button>
-            </div>
-            <div id="instructions">
-                Click/tap to add objects<br>
-                Tilt device or move mouse to create waves
-            </div>
+            <button id="rockBtn" class="control-btn">🪨 Rocks</button>
+            <button id="lilyBtn" class="control-btn">🪷 Lilies</button>
+            <button id="resetBtn" class="control-btn">🧹 Reset</button>
         </div>
     </div>
     <script>
@@ -209,6 +213,34 @@
                 pop();
             }
         }
+        function setupControls() {
+            const buttons = document.querySelectorAll('.control-btn');
+            
+            buttons.forEach(button => {
+                // Handle both click and touch events
+                ['click', 'touchstart'].forEach(eventType => {
+                    button.addEventListener(eventType, (e) => {
+                        e.preventDefault(); // Prevent default touch behavior
+                        
+                        // Remove active class from all buttons
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        
+                        if (button.id === 'rockBtn') {
+                            placeMode = 'rock';
+                            button.classList.add('active');
+                        } else if (button.id === 'lilyBtn') {
+                            placeMode = 'lily';
+                            button.classList.add('active');
+                        } else if (button.id === 'resetBtn') {
+                            rocks = [];
+                            lilies = [];
+                            current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+                            previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+                        }
+                    }, { passive: false });
+                });
+            });
+        }
 
         function setup() {
             let canvas;
@@ -234,23 +266,7 @@
             current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
             previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
             
-            // Setup UI controls
-            document.getElementById('rockBtn').onclick = () => {
-                placeMode = 'rock';
-                document.getElementById('rockBtn').classList.add('active');
-                document.getElementById('lilyBtn').classList.remove('active');
-            };
-            document.getElementById('lilyBtn').onclick = () => {
-                placeMode = 'lily';
-                document.getElementById('lilyBtn').classList.add('active');
-                document.getElementById('rockBtn').classList.remove('active');
-            };
-            document.getElementById('resetBtn').onclick = () => {
-                rocks = [];
-                lilies = [];
-                current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-                previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-            };
+            setupControls();
             
             // Set initial button state
             document.getElementById('rockBtn').classList.add('active');
@@ -269,7 +285,20 @@
                 window.addEventListener('devicemotion', handleMotion);
             }
         }
-
+         // Add touch event handling for the canvas
+         function touchStarted() {
+            if (touches.length > 0) {
+                let touch = touches[0];
+                if (touch.x > 0 && touch.x < width && touch.y > 0 && touch.y < height) {
+                    if (placeMode === 'rock') {
+                        rocks.push({ x: touch.x, y: touch.y, size: random(40, 80) });
+                    } else if (placeMode === 'lily') {
+                        lilies.push(new WaterLily(touch.x, touch.y));
+                    }
+                }
+            }
+            return false; // Prevent default
+        }
         function handleMotion(event) {
             tiltAngle.x = event.accelerationIncludingGravity.x * 2;
             tiltAngle.y = event.accelerationIncludingGravity.y * 2;
