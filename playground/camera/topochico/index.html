@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topo Chico Rock Physics</title>
+    <title>MG | PLAYGROUND</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./../../../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./../../../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./../../../avicon-16x16.png">
+    <link rel="manifest" href="./../../../site.webmanifest">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <style>
         body {
@@ -45,11 +49,19 @@
         let cap;
         let isMobile = false;
         let permissionGranted = false;
-
+        let baseSize;
+        //get browser dimensions and determine which is larger
+        const browserWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const browserHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        if (browserWidth < browserHeight) {
+            baseSize = browserWidth / 10;
+        } else {
+            baseSize = browserHeight / 10;
+        }
         class Rock {
             constructor(x, y) {
                 this.pos = createVector(x, y);
-                this.size = random(10, 30);
+                this.size = random(baseSize * 0.5, baseSize * 1.5);
                 this.color = color(
                     random(180, 220),
                     random(170, 190),
@@ -69,7 +81,7 @@
                 this.pos = createVector(width/2, height/2);
                 this.vel = createVector(0, 0);
                 this.acc = createVector(0, 0);
-                this.size = 40;
+                this.size = baseSize * 1;
                 this.bounceForce = 0.8;
             }
 
@@ -112,9 +124,9 @@
                 
                 // Red text
                 fill(255, 0, 0);
-                textSize(8);
+                textSize(baseSize * 0.2);
                 textAlign(CENTER, CENTER);
-                text("TOPO\nCHICO", this.pos.x, this.pos.y);
+                text("TOPO\n    CHICO", this.pos.x-(baseSize * 0.08), this.pos.y);
             }
 
             addForce(force) {
@@ -182,6 +194,14 @@
 
         function windowResized() {
             resizeCanvas(windowWidth, windowHeight);
+            //get browser dimensions and determine which is larger
+            const browserWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            const browserHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (browserWidth < browserHeight) {
+                baseSize = browserWidth / 10;
+            } else {
+                baseSize = browserHeight / 10;
+            }
         }
     </script>
 </body>
