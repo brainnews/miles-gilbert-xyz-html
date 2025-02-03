@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theater Dreams</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+        }
+        #instructions {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+            pointer-events: none;
+        }
+        #score {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        Help the dreamer reach the spotlight!<br>
+        Desktop: Arrow keys or WASD to move<br>
+        Mobile: Tilt device to move
+    </div>
+    <div id="score">Dreams: 0</div>
+    <script>
+        let seats = [];
+        let player = {
+            x: 0,
+            y: 0,
+            size: 20,
+            speed: 5,
+            dreams: 0
+        };
+        let spotlight = {
+            x: 0,
+            y: 0,
+            size: 100
+        };
+        let isMobile = false;
+        let seatSize;
+        let startTime;
+        let spotlightMoveInterval;
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            
+            // Check if device has accelerometer
+            isMobile = window.DeviceMotionEvent !== undefined;
+            
+            // Create grid of seats
+            const rows = 12;
+            const cols = 16;
+            seatSize = min(width / cols, height / rows);
+            
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    seats.push({
+                        x: (x * seatSize) + (width - cols * seatSize) / 2,
+                        y: (y * seatSize) + (height - rows * seatSize) / 2,
+                        size: seatSize * 0.8,
+                        brightness: 0
+                    });
+                }
+            }
+            
+            // Initialize player position
+            player.x = width / 2;
+            player.y = height - 100;
+            player.size = seatSize * 0.5;
+            
+            // Initialize spotlight
+            moveSpotlight();
+            spotlightMoveInterval = setInterval(moveSpotlight, 5000);
+            
+            startTime = millis();
+
+            // Set up device motion handler for mobile
+            if (isMobile) {
+                window.addEventListener('devicemotion', (event) => {
+                    const accelerationX = event.accelerationIncludingGravity.x;
+                    const accelerationY = event.accelerationIncludingGravity.y;
+                    
+                    player.x = constrain(player.x - accelerationX * 5, 0, width);
+                    player.y = constrain(player.y + accelerationY * 5, 0, height);
+                });
+            }
+        }
+
+        function moveSpotlight() {
+            // Move spotlight to a new random position
+            spotlight.x = random(width * 0.2, width * 0.8);
+            spotlight.y = random(height * 0.2, height * 0.8);
+        }
+
+        function draw() {
+            background(0);
+            
+            // Draw seats with lighting effect
+            seats.forEach(seat => {
+                const distanceToSpotlight = dist(spotlight.x, spotlight.y, 
+                    seat.x + seat.size/2, seat.y + seat.size/2);
+                const maxDistance = spotlight.size * 2;
+                let brightness = map(distanceToSpotlight, 0, maxDistance, 100, 0);
+                brightness = constrain(brightness, 0, 100);
+                
+                // Smooth brightness transitions
+                seat.brightness = lerp(seat.brightness, brightness, 0.1);
+                
+                // Draw seat
+                fill(seat.brightness);
+                noStroke();
+                rect(seat.x, seat.y, seat.size, seat.size, seat.size * 0.2);
+            });
+            
+            // Draw spotlight glow
+            let spotlightAlpha = map(sin(frameCount * 0.05), -1, 1, 50, 100);
+            fill(255, 255, 200, spotlightAlpha);
+            noStroke();
+            circle(spotlight.x, spotlight.y, spotlight.size);
+            
+            // Handle desktop movement
+            if (!isMobile) {
+                if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) player.x -= player.speed;
+                if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) player.x += player.speed;
+                if (keyIsDown(UP_ARROW) || keyIsDown(87)) player.y -= player.speed;
+                if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) player.y += player.speed;
+            }
+            
+            // Constrain player position
+            player.x = constrain(player.x, 0, width);
+            player.y = constrain(player.y, 0, height);
+            
+            // Check if player is in spotlight
+            let distanceToSpotlight = dist(player.x, player.y, spotlight.x, spotlight.y);
+            if (distanceToSpotlight < spotlight.size / 2) {
+                player.dreams++;
+                document.getElementById('score').innerText = `Dreams: ${player.dreams}`;
+                moveSpotlight();
+            }
+            
+            // Draw player with glowing effect
+            let playerGlow = map(sin(frameCount * 0.1), -1, 1, 40, 80);
+            fill(255, 255, 255, playerGlow);
+            noStroke();
+            circle(player.x, player.y, player.size * 1.5);
+            fill(255);
+            circle(player.x, player.y, player.size);
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            setup();
+        }
+
+        // Request device motion permission on iOS
+        function touchStarted() {
+            if (isMobile && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                        if (response == 'granted') {
+                            document.getElementById('instructions').innerHTML = 'Tilt device to move<br>Reach the spotlight!';
+                        }
+                    })
+                    .catch(console.error);
+            }
+        }
+
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            clearInterval(spotlightMoveInterval);
+        });
+    </script>
+</body>
+</html>

@@ -7,40 +7,55 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
             overflow: hidden;
-            background: #000;
+            background: azure;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 6px;
         }
-        #instructions {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            color: white;
-            font-family: Arial, sans-serif;
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            pointer-events: none;
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 200px;
+        }
+        #screen {
+            grid-area: 1 / 1 / 1 / 1;
+            width: 100%;
+            height: 100%;
         }
         #controls {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+            grid-area: 2 / 1 / 2 / 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 6px 0;
+            border-radius: 5px;
+            z-index: 9;
+        }
+        .buttons {
             display: flex;
             gap: 10px;
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 5px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        canvas {
+            border-radius: 6px;
+            overflow: hidden;
         }
         button {
-            padding: 8px 16px;
+            padding: 8px 16px 8px 12px;
             border: none;
             border-radius: 4px;
             background: #4CAF50;
             color: white;
             cursor: pointer;
             font-family: Arial, sans-serif;
+            flex-grow: 1;
         }
         button.active {
             background: #2E7D32;
@@ -48,28 +63,51 @@
         button:hover {
             opacity: 0.9;
         }
+
+        /* desktop */
+        @media screen and (min-width: 900px) {
+            .container {
+                width: 800px;
+                height: 600px;
+                border-radius: 10px;
+                grid-template-rows: 1fr 100px;
+            }
+            #controls {
+                flex-direction: row;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-size: 0.8em;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="controls">
-        <button id="rockBtn">Place Rocks</button>
-        <button id="lilyBtn">Place Lilies</button>
-        <button id="resetBtn">Reset</button>
-    </div>
-    <div id="instructions">
-        Click/tap to add objects<br>
-        Tilt device or move mouse to create waves
+    <div id="container" class="container">
+        <div class="screen" id="screen"></div>
+        <div id="controls">
+            <div class="buttons">
+                <button id="rockBtn">🪨 Place Rocks</button>
+                <button id="lilyBtn">🪷 Place Lilies</button>
+                <button id="resetBtn">🧹 Reset</button>
+            </div>
+            <div id="instructions">
+                Click/tap to add objects<br>
+                Tilt device or move mouse to create waves
+            </div>
+        </div>
     </div>
     <script>
         let cols;
         let rows;
         let current;
         let previous;
-        let             dampening = 0.992;
+        let dampening = 0.892;
         let rocks = [];
         let lilies = [];
         let tiltAngle = { x: 0, y: 0 };
         let placeMode = 'rock'; // 'rock' or 'lily'
+        let isMobile = false;
 
         class WaterLily {
             constructor(x, y) {
@@ -173,7 +211,20 @@
         }
 
         function setup() {
-            createCanvas(windowWidth, windowHeight);
+            let canvas;
+            let screen = document.getElementById('screen');
+            // detect mobile device and adjust canvas size
+            if (typeof window.orientation !== 'undefined') {
+                if (window.orientation === 90 || window.orientation === -90) {
+                    canvas = createCanvas(600, windowHeight);
+                } else {
+                    canvas = createCanvas(screen.offsetWidth + 100, screen.offsetHeight);
+                }
+            } else {
+                canvas = createCanvas(800, 600);
+            }
+            canvas.parent("screen");
+            //canvas.getContext('2d', { willReadFrequently: true });
             pixelDensity(1);
             // Reduce resolution - each cell represents 4x4 pixels
             cols = Math.floor(width/4);
@@ -350,13 +401,13 @@
             current = temp;
         }
 
-        function windowResized() {
-            resizeCanvas(windowWidth, windowHeight);
-            cols = width;
-            rows = height;
-            current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-            previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-        }
+        // function windowResized() {
+        //     resizeCanvas(windowWidth, windowHeight);
+        //     cols = width;
+        //     rows = height;
+        //     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+        //     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+        // }
     </script>
 </body>
 </html>
