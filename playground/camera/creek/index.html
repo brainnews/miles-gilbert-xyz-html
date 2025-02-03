@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>River Flow</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #87CEEB;
+        }
+        #instructions {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        Desktop: Move mouse to influence flow
+        <br>
+        Mobile: Tilt device to control flow
+        <br>
+        Touch/Click to add rocks
+        <br>
+        Spacebar or Reset button to clear rocks
+    </div>
+    <button id="resetButton" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+           padding: 10px 20px; 
+           background: rgba(255,255,255,0.8); 
+           border: none; 
+           border-radius: 20px; 
+           font-family: Arial; 
+           cursor: pointer;
+           box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        Reset Rocks
+    </button>
+    <script>
+        let particles = [];
+        let rocks = [];
+        let rotationX = 0;
+        let rotationY = 0;
+        let isPhone = false;
+
+        function setup() {
+            // Add reset button functionality
+            document.getElementById('resetButton').addEventListener('click', () => {
+                rocks = [];
+            });
+            createCanvas(windowWidth, windowHeight);
+            // Check if device has accelerometer
+            isPhone = window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function';
+            
+            // Initialize particles
+            for (let i = 0; i < 200; i++) {
+                particles.push(new Particle());
+            }
+
+            // Request accelerometer permission on iOS
+            if (isPhone) {
+                document.body.addEventListener('click', async () => {
+                    try {
+                        const permission = await DeviceOrientationEvent.requestPermission();
+                        if (permission === 'granted') {
+                            window.addEventListener('deviceorientation', (event) => {
+                                rotationX = event.beta * 0.1;
+                                rotationY = event.gamma * 0.1;
+                            });
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }, { once: true });
+            }
+        }
+
+        function draw() {
+            background(135, 206, 235, 100);
+            
+            // Update flow direction based on mouse or accelerometer
+            let flowX = isPhone ? rotationY : (mouseX - width/2) * 0.1;
+            let flowY = isPhone ? rotationX : (mouseY - height/2) * 0.1;
+
+            // Update and display particles
+            for (let particle of particles) {
+                particle.update(flowX, flowY);
+                particle.display();
+            }
+
+            // Display rocks
+            for (let rock of rocks) {
+                rock.display();
+            }
+        }
+
+        function mousePressed() {
+            rocks.push(new Rock(mouseX, mouseY));
+        }
+
+        function touchStarted() {
+            // Prevent adding rocks when touching the reset button
+            if (event.target.id !== 'resetButton') {
+                rocks.push(new Rock(touches[0].x, touches[0].y));
+            }
+            return false;
+        }
+
+        function keyPressed() {
+            if (key === ' ') {
+                rocks = [];
+            }
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+                this.y = random(height);
+            }
+
+            reset() {
+                this.x = random(width);
+                this.y = 0;
+                this.speed = random(2, 5);
+                this.size = random(3, 8);
+                this.color = color(random(200, 255), random(200, 255), 255, 150);
+            }
+
+            update(flowX, flowY) {
+                this.x += flowX * 0.5 + this.speed;
+                this.y += flowY * 0.5 + this.speed;
+
+                // Check collision with rocks
+                for (let rock of rocks) {
+                    let d = dist(this.x, this.y, rock.x, rock.y);
+                    if (d < rock.size/2 + this.size) {
+                        // Bounce off rocks
+                        let angle = atan2(this.y - rock.y, this.x - rock.x);
+                        this.x = rock.x + cos(angle) * (rock.size/2 + this.size);
+                        this.y = rock.y + sin(angle) * (rock.size/2 + this.size);
+                        this.speed *= 0.8;
+                    }
+                }
+
+                if (this.x > width || this.x < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+
+            display() {
+                noStroke();
+                fill(this.color);
+                circle(this.x, this.y, this.size);
+            }
+        }
+
+        class Rock {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = random(30, 60);
+                this.color = color(random(100, 150), random(100, 150), random(80, 120));
+            }
+
+            display() {
+                noStroke();
+                fill(this.color);
+                circle(this.x, this.y, this.size);
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html>

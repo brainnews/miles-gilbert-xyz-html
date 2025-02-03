@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Bark Patterns</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            max-width: 90vw;
+        }
+        button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #555;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+            border: 2px solid transparent;
+        }
+        .color-btn.active {
+            border-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button onclick="resetPattern()">Reset</button>
+        <button onclick="toggleMonochrome()">Monochrome</button>
+        <button 
+            class="color-btn" 
+            onclick="setColorPalette('birch')"
+            style="background: linear-gradient(45deg, #E8D5C4, #867070)">
+        </button>
+        <button 
+            class="color-btn" 
+            onclick="setColorPalette('redwood')"
+            style="background: linear-gradient(45deg, #A75D5D, #3F0D12)">
+        </button>
+        <button 
+            class="color-btn" 
+            onclick="setColorPalette('pine')"
+            style="background: linear-gradient(45deg, #596E79, #1D2D44)">
+        </button>
+        <button 
+            class="color-btn" 
+            onclick="setColorPalette('maple')"
+            style="background: linear-gradient(45deg, #D57E7E, #A75D5D)">
+        </button>
+        <button 
+            class="color-btn" 
+            onclick="setColorPalette('rainbow')"
+            style="background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff)">
+        </button>
+    </div>
+
+    <script>
+        let particles = [];
+        let noiseScale = 0.01;
+        let isMonochrome = false;
+        let rotationX = 0;
+        let rotationY = 0;
+        let currentPalette = 'birch';
+
+        const colorPalettes = {
+            birch: {
+                colors: [
+                    [232, 213, 196],
+                    [134, 112, 112],
+                    [201, 173, 167],
+                    [152, 129, 123]
+                ],
+                background: 30
+            },
+            redwood: {
+                colors: [
+                    [167, 93, 93],
+                    [63, 13, 18],
+                    [142, 45, 45],
+                    [98, 52, 52]
+                ],
+                background: 20
+            },
+            pine: {
+                colors: [
+                    [89, 110, 121],
+                    [29, 45, 68],
+                    [71, 85, 91],
+                    [52, 65, 70]
+                ],
+                background: 15
+            },
+            maple: {
+                colors: [
+                    [213, 126, 126],
+                    [167, 93, 93],
+                    [188, 109, 109],
+                    [142, 85, 85]
+                ],
+                background: 25
+            },
+            rainbow: {
+                colors: [
+                    [255, 0, 0],
+                    [255, 165, 0],
+                    [0, 255, 0],
+                    [0, 0, 255],
+                    [238, 130, 238]
+                ],
+                background: 10
+            }
+        };
+
+        class Particle {
+            constructor(x, y) {
+                this.pos = createVector(x, y);
+                this.vel = createVector(0, 0);
+                this.acc = createVector(0, 0);
+                this.maxSpeed = 2;
+                this.age = 0;
+                this.lifespan = random(100, 200);
+                this.setColor();
+            }
+
+            setColor() {
+                if (isMonochrome) {
+                    this.color = color(200, 100);
+                } else {
+                    const palette = colorPalettes[currentPalette].colors;
+                    const selectedColor = random(palette);
+                    this.color = color(...selectedColor, 100);
+                }
+            }
+
+            update() {
+                let angle = noise(
+                    this.pos.x * noiseScale,
+                    this.pos.y * noiseScale
+                ) * TWO_PI * 4;
+                
+                this.acc.x = cos(angle) * 0.1;
+                this.acc.y = sin(angle) * 0.1;
+                
+                this.acc.x += rotationY * 0.01;
+                this.acc.y += rotationX * 0.01;
+                
+                this.vel.add(this.acc);
+                this.vel.limit(this.maxSpeed);
+                this.pos.add(this.vel);
+                this.acc.mult(0);
+                this.age++;
+            }
+
+            display() {
+                stroke(this.color);
+                strokeWeight(2);
+                point(this.pos.x, this.pos.y);
+            }
+
+            isDead() {
+                return this.age >= this.lifespan;
+            }
+        }
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(colorPalettes[currentPalette].background);
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', (event) => {
+                    rotationX = event.beta || 0;
+                    rotationY = event.gamma || 0;
+                });
+            }
+            updateColorButtons();
+        }
+
+        function draw() {
+            background(colorPalettes[currentPalette].background, 10);
+            
+            if (mouseIsPressed) {
+                for (let i = 0; i < 5; i++) {
+                    particles.push(new Particle(mouseX, mouseY));
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].display();
+                if (particles[i].isDead()) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            while (particles.length > 1000) {
+                particles.splice(0, 1);
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            background(colorPalettes[currentPalette].background);
+        }
+
+        function resetPattern() {
+            particles = [];
+            background(colorPalettes[currentPalette].background);
+        }
+
+        function toggleMonochrome() {
+            isMonochrome = !isMonochrome;
+            particles.forEach(p => p.setColor());
+        }
+
+        function setColorPalette(palette) {
+            currentPalette = palette;
+            updateColorButtons();
+            particles.forEach(p => p.setColor());
+        }
+
+        function updateColorButtons() {
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(currentPalette)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function touchStarted() {
+            return false;
+        }
+
+        function touchMoved() {
+            return false;
+        }
+    </script>
+</body>
+</html>

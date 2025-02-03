@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Berry Branches</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #2c4a1d;
+            touch-action: none;
+            overflow: hidden;
+        }
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        Tap/Click to add branches<br>
+        Move device/mouse to animate
+    </div>
+    <script>
+        let branches = [];
+        let berries = [];
+        let hasAccelerometer = false;
+
+        class Branch {
+            constructor(x, y, angle) {
+                this.x = x;
+                this.y = y;
+                this.angle = angle;
+                this.length = random(30, 60);
+                this.berries = [];
+                this.generateBerries();
+            }
+
+            generateBerries() {
+                let numBerries = floor(random(3, 8));
+                for (let i = 0; i < numBerries; i++) {
+                    this.berries.push({
+                        x: random(0, this.length),
+                        y: random(-5, 5),
+                        size: random(4, 8),
+                        phase: random(TWO_PI)
+                    });
+                }
+            }
+
+            draw(windX, windY) {
+                push();
+                translate(this.x, this.y);
+                rotate(this.angle + (noise(frameCount * 0.01 + this.x) - 0.5) * 0.1 + windX * 0.1);
+                
+                // Draw branch
+                stroke(101, 67, 33);
+                strokeWeight(2);
+                line(0, 0, this.length, 0);
+                
+                // Draw berries
+                noStroke();
+                fill(255, 40, 40);
+                this.berries.forEach(berry => {
+                    let berryX = berry.x;
+                    let berryY = berry.y + sin(frameCount * 0.05 + berry.phase + windY) * 2;
+                    circle(berryX, berryY, berry.size);
+                });
+                
+                pop();
+            }
+        }
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            
+            // Check for accelerometer
+            if (typeof DeviceMotionEvent !== 'undefined' && 
+                typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                        if (response == 'granted') {
+                            window.addEventListener('devicemotion', (e) => {
+                                hasAccelerometer = true;
+                            });
+                        }
+                    })
+                    .catch(console.error);
+            } else if (window.DeviceMotionEvent) {
+                hasAccelerometer = true;
+            }
+        }
+
+        function draw() {
+            background(44, 74, 29);
+            
+            let windX = 0;
+            let windY = 0;
+            
+            if (hasAccelerometer) {
+                // Use device tilt
+                windX = rotationY * 0.1;
+                windY = rotationX * 0.1;
+            } else {
+                // Use mouse position
+                windX = (mouseX - width/2) / width;
+                windY = (mouseY - height/2) / height;
+            }
+            
+            branches.forEach(branch => branch.draw(windX, windY));
+        }
+
+        function mousePressed() {
+            // Add new branch at mouse position
+            let angle = random(-PI/4, PI/4);
+            branches.push(new Branch(mouseX, mouseY, angle));
+            
+            // Limit number of branches for performance
+            if (branches.length > 50) {
+                branches.shift();
+            }
+        }
+
+        function touchStarted() {
+            // Handle touch events same as mouse
+            mousePressed();
+            return false;
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html>

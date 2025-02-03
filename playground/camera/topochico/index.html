@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topo Chico Rock Physics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #mobile-status {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <p>Desktop: Click to add rocks<br>Space to reset cap</p>
+        <p>Mobile: Tilt to move<br>Tap to add rocks</p>
+    </div>
+    <div id="mobile-status"></div>
+    <script>
+        let rocks = [];
+        let cap;
+        let isMobile = false;
+        let permissionGranted = false;
+
+        class Rock {
+            constructor(x, y) {
+                this.pos = createVector(x, y);
+                this.size = random(10, 30);
+                this.color = color(
+                    random(180, 220),
+                    random(170, 190),
+                    random(160, 180)
+                );
+            }
+
+            display() {
+                fill(this.color);
+                noStroke();
+                ellipse(this.pos.x, this.pos.y, this.size);
+            }
+        }
+
+        class BottleCap {
+            constructor() {
+                this.pos = createVector(width/2, height/2);
+                this.vel = createVector(0, 0);
+                this.acc = createVector(0, 0);
+                this.size = 40;
+                this.bounceForce = 0.8;
+            }
+
+            update() {
+                if (isMobile && permissionGranted) {
+                    this.acc.x = constrain(rotationY * 0.1, -2, 2);
+                    this.acc.y = constrain(rotationX * 0.1, -2, 2);
+                }
+
+                this.vel.add(this.acc);
+                this.vel.mult(0.98); // friction
+                this.pos.add(this.vel);
+
+                // Bounce off walls
+                if (this.pos.x < this.size/2 || this.pos.x > width - this.size/2) {
+                    this.vel.x *= -this.bounceForce;
+                    this.pos.x = constrain(this.pos.x, this.size/2, width - this.size/2);
+                }
+                if (this.pos.y < this.size/2 || this.pos.y > height - this.size/2) {
+                    this.vel.y *= -this.bounceForce;
+                    this.pos.y = constrain(this.pos.y, this.size/2, height - this.size/2);
+                }
+
+                // Collision with rocks
+                rocks.forEach(rock => {
+                    let d = dist(this.pos.x, this.pos.y, rock.pos.x, rock.pos.y);
+                    if (d < (this.size + rock.size)/2) {
+                        let angle = atan2(this.pos.y - rock.pos.y, this.pos.x - rock.pos.x);
+                        this.vel.x = cos(angle) * 5;
+                        this.vel.y = sin(angle) * 5;
+                    }
+                });
+            }
+
+            display() {
+                // Yellow circle
+                fill(255, 215, 0);
+                noStroke();
+                ellipse(this.pos.x, this.pos.y, this.size);
+                
+                // Red text
+                fill(255, 0, 0);
+                textSize(8);
+                textAlign(CENTER, CENTER);
+                text("TOPO\nCHICO", this.pos.x, this.pos.y);
+            }
+
+            addForce(force) {
+                this.vel.add(force);
+            }
+        }
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            cap = new BottleCap();
+            
+            // Check if device has accelerometer
+            if (typeof DeviceMotionEvent !== 'undefined' && 
+                typeof DeviceMotionEvent.requestPermission === 'function') {
+                isMobile = true;
+                document.body.addEventListener('click', requestAccess);
+                document.getElementById('mobile-status').innerHTML = 'Tap screen to enable motion controls';
+            }
+        }
+
+        function requestAccess() {
+            DeviceMotionEvent.requestPermission()
+                .then(response => {
+                    if (response === 'granted') {
+                        permissionGranted = true;
+                        document.getElementById('mobile-status').innerHTML = 'Motion controls enabled';
+                    }
+                })
+                .catch(console.error);
+        }
+
+        function draw() {
+            background(240);
+            
+            // Update and display rocks
+            rocks.forEach(rock => rock.display());
+            
+            // Handle desktop controls
+            if (!isMobile) {
+                if (keyIsDown(LEFT_ARROW)) cap.acc.x = -0.5;
+                else if (keyIsDown(RIGHT_ARROW)) cap.acc.x = 0.5;
+                else cap.acc.x = 0;
+                
+                if (keyIsDown(UP_ARROW)) cap.acc.y = -0.5;
+                else if (keyIsDown(DOWN_ARROW)) cap.acc.y = 0.5;
+                else cap.acc.y = 0;
+            }
+            
+            cap.update();
+            cap.display();
+        }
+
+        function mousePressed() {
+            if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+                rocks.push(new Rock(mouseX, mouseY));
+            }
+        }
+
+        function keyPressed() {
+            if (keyCode === 32) { // Spacebar
+                cap.pos = createVector(width/2, height/2);
+                cap.vel = createVector(0, 0);
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html>

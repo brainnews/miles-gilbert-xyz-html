@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lichen Growth</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #2c2c2c;
+            touch-action: none;
+            overflow: hidden;
+        }
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button onclick="resetSketch()">Reset</button>
+        <button onclick="togglePause()">Pause/Play</button>
+    </div>
+    <script>
+        let particles = [];
+        let paused = false;
+        let rotationX = 0;
+        let rotationY = 0;
+        let branches = [];
+        const maxParticles = 2000;
+        
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            angleMode(DEGREES);
+            // Create initial branch
+            branches.push({
+                x: width/2,
+                y: height/2,
+                angle: random(360)
+            });
+            
+            // Request accelerometer permissions on mobile
+            if (typeof DeviceOrientationEvent !== 'undefined' && 
+                typeof DeviceOrientationEvent.requestPermission === 'function') {
+                document.addEventListener('click', requestAccess);
+            }
+        }
+
+        function requestAccess() {
+            DeviceOrientationEvent.requestPermission()
+                .then(response => {
+                    if (response == 'granted') {
+                        window.addEventListener('deviceorientation', (e) => {
+                            rotationX = e.beta;
+                            rotationY = e.gamma;
+                        });
+                    }
+                })
+                .catch(console.error);
+        }
+
+        function draw() {
+            if (paused) return;
+            
+            background(44, 44, 44, 10);
+            
+            // Update rotation based on mouse or device tilt
+            let targetX = rotationX;
+            let targetY = rotationY;
+            
+            if (mouseIsPressed) {
+                targetX = (mouseY - height/2) * 0.1;
+                targetY = (mouseX - width/2) * 0.1;
+            }
+            
+            // Add new particles
+            if (particles.length < maxParticles && frameCount % 2 === 0) {
+                let branch = random(branches);
+                particles.push({
+                    x: branch.x,
+                    y: branch.y,
+                    size: random(2, 6),
+                    angle: branch.angle + random(-30, 30),
+                    speed: random(0.5, 2),
+                    life: 255,
+                    color: color(
+                        random(150, 200),
+                        random(200, 255),
+                        random(150, 200),
+                        200
+                    )
+                });
+            }
+            
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                
+                // Update position
+                let angleInfluence = noise(p.x * 0.01, p.y * 0.01, frameCount * 0.01) * 360;
+                p.angle += (targetY * 0.1) + sin(angleInfluence) * 2;
+                
+                p.x += cos(p.angle) * p.speed;
+                p.y += sin(p.angle) * p.speed;
+                
+                // Draw particle
+                noStroke();
+                fill(p.color);
+                ellipse(p.x, p.y, p.size);
+                
+                // Create new branches occasionally
+                if (random() < 0.001 && branches.length < 10) {
+                    branches.push({
+                        x: p.x,
+                        y: p.y,
+                        angle: p.angle
+                    });
+                }
+                
+                // Remove particles that are off screen
+                if (p.x < 0 || p.x > width || p.y < 0 || p.y > height) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+
+        function resetSketch() {
+            particles = [];
+            branches = [{
+                x: width/2,
+                y: height/2,
+                angle: random(360)
+            }];
+        }
+
+        function togglePause() {
+            paused = !paused;
+        }
+
+        // Prevent default touch behavior
+        document.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
