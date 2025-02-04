@@ -27,12 +27,10 @@
         #screen {
             grid-area: 1 / 1 / 1 / 1;
             width: 100%;
-            height: calc(100% - 60px); /* Leave space for controls */
             touch-action: none;
         }
         #controls {
             position: fixed;
-            bottom: 0;
             left: 0;
             right: 0;
             height: 60px;
@@ -50,10 +48,6 @@
             gap: 10px;
             justify-content: space-between;
             align-items: center;
-        }
-        canvas {
-            border-radius: 6px;
-            overflow: hidden;
         }
         button {
             padding: 12px 16px; /* Larger touch targets */
@@ -75,12 +69,15 @@
         button:hover {
             opacity: 0.9;
         }
+        .painting-reference {
+            display: none;
+        }
 
         /* desktop */
         @media screen and (min-width: 900px) {
             .container {
-                width: 800px;
-                height: 600px;
+                width: 600px;
+                height: 460px;
                 border-radius: 10px;
             }
             #controls {
@@ -88,6 +85,31 @@
                 height: 50px;
                 margin-top: 10px;
                 padding: 0;
+                bottom: 0;
+            }
+            .painting-reference {
+                display: block;
+                position: absolute;
+                top: 40px;
+                left: -160px;
+                transform: rotate(-5deg);
+                background-color: wheat;
+                border-radius: 6px;
+                padding: 6px;
+                box-shadow: 2px 2px 0px 1px rgb(0 0 0 / 23%);
+            }
+            .painting-reference img {
+                width: 180px;
+            }
+            .painting-reference .sticker {
+                position: absolute;
+                top: -26px;
+                left: 78px;
+                width: 40px;
+                height: 40px;
+                background-color: rgba(43, 121, 255);
+                border-radius: 6px;
+                pointer-events: none;
             }
         }
     </style>
@@ -100,13 +122,17 @@
             <button id="lilyBtn" class="control-btn">🪷 Lilies</button>
             <button id="resetBtn" class="control-btn">🧹 Reset</button>
         </div>
+        <div class="painting-reference">
+            <div class="sticker"></div>
+            <img src="painting.webp" alt="Mossy Pond with Lilies">
+        </div>
     </div>
     <script>
         let cols;
         let rows;
         let current;
         let previous;
-        let dampening = 0.892;
+        let dampening = 0.899;
         let rocks = [];
         let lilies = [];
         let tiltAngle = { x: 0, y: 0 };
@@ -253,7 +279,7 @@
                     canvas = createCanvas(screen.offsetWidth + 100, screen.offsetHeight);
                 }
             } else {
-                canvas = createCanvas(800, 600);
+                canvas = createCanvas(600, 460);
             }
             canvas.parent("screen");
             //canvas.getContext('2d', { willReadFrequently: true });
