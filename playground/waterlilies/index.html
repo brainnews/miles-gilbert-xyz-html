@@ -7,11 +7,12 @@
     <!-- import css -->
     <link href="https://fonts.googleapis.com/css2?family=Jersey+25&family=Workbench&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
     <div id="container" class="container">
         <div class="label">
-            <div>Claude Monet Simulator 95 © LifeComputer Software 1995</div>
+            <div>Claude Monet Simulator '95</div>
         </div>
         <div class="screen" id="screen"></div>
         <div id="controls">
@@ -19,17 +20,23 @@
                 <button id="rockBtn" class="control-btn" alt="Rock">🪨</button>
                 <button id="lilyBtn" class="control-btn" alt="Lily">🪷</button>
                 <button id="fishBtn" class="control-btn" alt="Fish">🐟</button>
+                <button id="resetBtn" class="control-btn" alt="Reset">🔄</button>
             </div>
             <div class="control-row">
-                <button id="resetBtn" class="control-btn" alt="Reset">🔄</button>
-                <!-- <button id="printBtn" class="control-btn" alt="Print">🖨️</button> -->
+                <button id="showPortfolio" class="control-btn" alt="Portfolio">📓</button>
+                <button id="printBtn" class="control-btn" alt="Print">🖨️</button>
             </div>
         </div>
         <div class="painting-reference">
             <div class="sticker"></div>
-            <img src="painting.webp" alt="Mossy Pond with Lilies">
+            <img id="referenceImage" src="painting.webp" alt="Mossy Pond with Lilies">
+        </div>
+        <div id="portfolio" class="hidden">
+            <button id="clearPortfolio" class="control-btn small" alt="Clear Portfolio">Clear Portfolio</button>
+            <div id="portfolio-container"></div>
         </div>
     </div>
-    <script src="main.js"></script>
 </body>
+<script src="main.js"></script>
+<script src="printer.js"></script>
 </html>

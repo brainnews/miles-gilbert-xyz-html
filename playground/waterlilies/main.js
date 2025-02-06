@@ -393,6 +393,14 @@ function setupControls() {
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     createClickSound();
+                } else if (button.id === 'showPortfolio') {
+                    document.getElementById('portfolio').classList.toggle('hidden');
+                    // if the portfolio div is hidden, add the active class to the button
+                    if (document.getElementById('portfolio').classList.contains('hidden')) {
+                        button.classList.remove('active');
+                    } else {
+                        button.classList.add('active');
+                    }
                 }
             }, { passive: false });
         });
@@ -450,7 +458,7 @@ function setup() {
     }
 }
     // Add touch event handling for the canvas
-    function touchStarted() {
+function touchStarted() {
     if (touches.length > 0) {
         let touch = touches[0];
         if (touch.x > 0 && touch.x < width && touch.y > 0 && touch.y < height) {
@@ -627,3 +635,19 @@ function draw() {
     previous = current;
     current = temp;
 }
+
+// add event listener for mouse click and touch to show div with id "portfolio" when button with id "showPortfolio" is clicked
+// document.getElementById("showPortfolio").addEventListener("click", function() {
+//     // check if the portfolio div has class "hidden"
+//     if (document.getElementById("portfolio").classList.contains("hidden")) {
+//         // if it does, remove the class "hidden"
+//         document.getElementById("portfolio").classList.remove("hidden");
+//         // add active class to showPortfolio
+//         document.getElementById("showPortfolio").classList.add("active");
+//     } else {
+//         // if it doesn't, add the class "hidden"
+//         document.getElementById("portfolio").classList.add("hidden");
+//         // remove active class from showPortfolio
+//         document.getElementById("showPortfolio").classList.remove("active");
+//     }
+// });
