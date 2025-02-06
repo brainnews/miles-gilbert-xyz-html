@@ -1,0 +1,166 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: azure;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0px;
+    touch-action: none;
+}
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    gap: 0px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+.label {
+    display: none;
+}
+#screen {
+    grid-area: 1 / 1 / 1 / 1;
+    width: 100%;
+    touch-action: none;
+}
+#controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    z-index: 1000;
+    touch-action: none;
+}
+.control-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+#instructions {
+    display: none;
+}
+.buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+button {
+    padding: 12px 16px; /* Larger touch targets */
+    border-radius: 4px;
+    background: #c5c5c5;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    flex: 1;
+    min-height: 44px; /* Minimum touch target size */
+    font-size: 16px; /* Readable text size */
+    touch-action: manipulation; /* Optimize for touch */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
+    border: 1px solid #888;
+    box-shadow: 0 2px 0px 0px rgb(0 0 0 / 23%);
+}
+button.active, button:active {
+    background: #fbeded;
+    box-shadow: 0 1px 0px 0px rgb(0 0 0 / 23%);
+    transform: translateY(1px)
+}
+button:hover {
+    background: #fbeded;
+}
+.painting-reference {
+    display: none;
+}
+
+/* desktop */
+@media screen and (min-width: 900px) {
+    .container {
+        width: 600px;
+        height: fit-content;
+        border-radius: 10px;
+    }
+    .label {
+        position: absolute;
+        top: -25px;
+        right: 0;
+        background-color: #bdc1e3;
+        border-radius: 6px;
+        padding: 12px 12px 12px 14px;
+        box-shadow: 0 4px 0px 0px rgb(0 0 0 / 23%);
+        font-family: 'Workbench', sans-serif;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        z-index: 999;
+        color: #2b79ff;
+        text-shadow: -1px 1px 0px #ffe2e7;
+        font-size: 16px;
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 1px solid #888;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 13px;
+        color: #000;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+    #controls {
+        position: relative;
+        padding: 10px 6px;
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 1px solid #888;
+        border-top: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-top: -4px;
+    }
+    .painting-reference {
+        display: block;
+        position: absolute;
+        top: 40px;
+        left: -170px;
+        transform: rotate(-3deg);
+        background-color: wheat;
+        border-radius: 6px;
+        padding: 6px;
+        box-shadow: 2px 2px 0px 1px rgb(0 0 0 / 23%);
+    }
+    .painting-reference img {
+        width: 180px;
+    }
+    .painting-reference .sticker {
+        position: absolute;
+        top: -26px;
+        left: 78px;
+        pointer-events: none;
+        height: 50px;
+        width: 34px;
+    }
+    /* make an octagon */
+    .sticker::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #2B79FF;
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+}
