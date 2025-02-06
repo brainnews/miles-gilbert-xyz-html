@@ -9,6 +9,73 @@ let fish = [];
 let tiltAngle = { x: 0, y: 0 };
 let placeMode = 'rock'; // 'rock' or 'lily'
 let isMobile = false;
+let splashSound;
+let bubbleSound;
+let audioContext;
+let splashBuffer;
+
+async function loadSounds() {
+    try {
+        const response = await fetch('splash1.wav');
+        const arrayBuffer = await response.arrayBuffer();
+        splashBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    } catch (error) {
+        console.error('Error loading sound:', error);
+    }
+}
+
+function createSplashSound() {
+    if (!splashBuffer) return;
+    
+    const source = audioContext.createBufferSource();
+    const gainNode = audioContext.createGain();
+    
+    source.buffer = splashBuffer;
+    source.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Random slight pitch variation for variety
+    source.playbackRate.value = 0.9 + Math.random() * 0.2;
+    
+    gainNode.gain.setValueAtTime(0.7, audioContext.currentTime);
+    source.start();
+}
+
+function createClickSound() {
+    const clickOsc = audioContext.createOscillator();
+    const clickGain = audioContext.createGain();
+    const noiseNode = audioContext.createBufferSource();
+    const noiseGain = audioContext.createGain();
+    
+    const bufferSize = audioContext.sampleRate * 0.1;
+    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    
+    noiseNode.buffer = buffer;
+    noiseNode.connect(noiseGain);
+    clickOsc.connect(clickGain);
+    noiseGain.connect(audioContext.destination);
+    clickGain.connect(audioContext.destination);
+    
+    const time = audioContext.currentTime;
+    
+    clickOsc.frequency.setValueAtTime(2000, time);
+    clickGain.gain.setValueAtTime(0, time);
+    clickGain.gain.linearRampToValueAtTime(0.3, time + 0.005);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
+    
+    noiseGain.gain.setValueAtTime(0, time);
+    noiseGain.gain.linearRampToValueAtTime(0.15, time + 0.001);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+    
+    clickOsc.start(time);
+    clickOsc.stop(time + 0.03);
+    noiseNode.start(time);
+    noiseNode.stop(time + 0.05);
+}
 
 class Fish {
     constructor(x, y) {
@@ -216,6 +283,83 @@ class WaterLily {
         pop();
     }
 }
+function initAudio() {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Create splash sound
+    const splashOsc = audioContext.createOscillator();
+    const splashGain = audioContext.createGain();
+    splashOsc.connect(splashGain);
+    splashGain.connect(audioContext.destination);
+    
+    splashSound = {
+        play: () => {
+            const time = audioContext.currentTime;
+            
+            // Reset oscillator and gain
+            splashOsc.frequency.setValueAtTime(400, time);
+            splashGain.gain.setValueAtTime(0, time);
+            
+            // Frequency sweep down
+            splashOsc.frequency.exponentialRampToValueAtTime(100, time + 0.1);
+            
+            // Quick attack, longer decay
+            splashGain.gain.linearRampToValueAtTime(0.3, time + 0.02);
+            splashGain.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
+            
+            splashOsc.start(time);
+            splashOsc.stop(time + 0.3);
+        }
+    };
+    
+    // Create bubble sound
+    const bubbleOsc = audioContext.createOscillator();
+    const bubbleGain = audioContext.createGain();
+    bubbleOsc.connect(bubbleGain);
+    bubbleGain.connect(audioContext.destination);
+    
+    // Create mechanical click sound
+    const clickOsc = audioContext.createOscillator();
+    const clickGain = audioContext.createGain();
+    const noiseNode = audioContext.createBufferSource();
+    const noiseGain = audioContext.createGain();
+    
+    // Create noise buffer for the mechanical click
+    const bufferSize = audioContext.sampleRate * 0.1; // 100ms buffer
+    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    
+    noiseNode.buffer = buffer;
+    noiseNode.connect(noiseGain);
+    clickOsc.connect(clickGain);
+    noiseGain.connect(audioContext.destination);
+    clickGain.connect(audioContext.destination);
+    
+    bubbleSound = {
+        play: () => {
+            const time = audioContext.currentTime;
+            
+            // High-frequency click
+            clickOsc.frequency.setValueAtTime(2000, time);
+            clickGain.gain.setValueAtTime(0, time);
+            clickGain.gain.linearRampToValueAtTime(0.3, time + 0.005);
+            clickGain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
+            
+            // Mechanical noise component
+            noiseGain.gain.setValueAtTime(0, time);
+            noiseGain.gain.linearRampToValueAtTime(0.15, time + 0.001);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+            
+            clickOsc.start(time);
+            clickOsc.stop(time + 0.03);
+            noiseNode.start(time);
+            noiseNode.stop(time + 0.05);
+        }
+    };
+}
 function setupControls() {
     const buttons = document.querySelectorAll('.control-btn');
     
@@ -224,23 +368,31 @@ function setupControls() {
             button.addEventListener(eventType, (e) => {
                 e.preventDefault();
                 
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
                 buttons.forEach(btn => btn.classList.remove('active'));
                 
                 if (button.id === 'rockBtn') {
                     placeMode = 'rock';
                     button.classList.add('active');
+                    createClickSound();
                 } else if (button.id === 'lilyBtn') {
                     placeMode = 'lily';
                     button.classList.add('active');
+                    createClickSound();
                 } else if (button.id === 'fishBtn') {
                     placeMode = 'fish';
                     button.classList.add('active');
+                    createClickSound();
                 } else if (button.id === 'resetBtn') {
                     rocks = [];
                     lilies = [];
                     fish = [];
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+                    createClickSound();
                 }
             }, { passive: false });
         });
@@ -271,6 +423,13 @@ function setup() {
     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
     
+    // Load sounds
+    loadSounds();
+    
+    // Initialize audio
+    initAudio();
+    
+    // Setup controls
     setupControls();
     
     // Set initial button state
@@ -335,17 +494,34 @@ function touchMoved(event) {
 }
 
 function mousePressed() {
+    // Check if click is on a button
+    const buttons = document.querySelectorAll('.control-btn');
+    const clickedButton = Array.from(buttons).some(button => {
+        const rect = button.getBoundingClientRect();
+        return (
+            mouseX >= rect.left && 
+            mouseX <= rect.right && 
+            mouseY >= rect.top && 
+            mouseY <= rect.bottom
+        );
+    });
+
+    if (clickedButton) return false;
+    
     if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return false;
     
     switch(placeMode) {
         case 'rock':
             rocks.push({ x: mouseX, y: mouseY, size: random(40, 80) });
+            createSplashSound();
             break;
         case 'lily':
             lilies.push(new WaterLily(mouseX, mouseY));
+            createSplashSound();
             break;
         case 'fish':
             fish.push(new Fish(mouseX, mouseY));
+            createSplashSound();
             break;
     }
     return false;
