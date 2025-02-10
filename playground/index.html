@@ -42,15 +42,19 @@
             justify-content: flex-end;
             padding: 1rem 1.4rem;
             border: none !important;
+            background-color: transparent !important;
         }
         .grid-item {
-            border-radius: 4px;
+            border-radius: 30px;
             margin-bottom: 2rem;
-            border: 1px solid #888;
+            background-color: #f3f3f3;
         }
         .project-image {
             overflow: hidden;
-            border-radius: 4px 4px 0 0;
+            border-radius: 30px 30px 0 0;
+            max-height: 350px;
+            display: flex;
+            align-items: center;
         }
         .project-image img {
             width: 100%;
@@ -64,7 +68,7 @@
 </head>
 <body>
     <div class="playground-container">
-        <div class="intro grid-item">
+        <div class="grid-item intro">
             <h1>Miles Gilbert</h1>
             <p>Experiments, toys, and explorations</p>
         </div>
@@ -84,6 +88,15 @@
             <div class="project-description">
                 <h2>Popcorn</h2>
                 <p>A popcorn simulator</p>
+            </div>
+        </a>
+        <a class="project grid-item" href="camera/">
+            <div class="project-image">
+                <img src="./camera/topochico/image.png" alt="Project thumbnail">
+            </div>
+            <div class="project-description">
+                <h2>Creative Camera</h2>
+                <p>An experimental camera that develops photos into interactive experiences using AI</p>
             </div>
         </a>
     </div>

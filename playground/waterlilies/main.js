@@ -635,19 +635,3 @@ function draw() {
     previous = current;
     current = temp;
 }
-
-// add event listener for mouse click and touch to show div with id "portfolio" when button with id "showPortfolio" is clicked
-// document.getElementById("showPortfolio").addEventListener("click", function() {
-//     // check if the portfolio div has class "hidden"
-//     if (document.getElementById("portfolio").classList.contains("hidden")) {
-//         // if it does, remove the class "hidden"
-//         document.getElementById("portfolio").classList.remove("hidden");
-//         // add active class to showPortfolio
-//         document.getElementById("showPortfolio").classList.add("active");
-//     } else {
-//         // if it doesn't, add the class "hidden"
-//         document.getElementById("portfolio").classList.add("hidden");
-//         // remove active class from showPortfolio
-//         document.getElementById("showPortfolio").classList.remove("active");
-//     }
-// });

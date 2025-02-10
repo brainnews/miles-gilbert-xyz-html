@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addTouchAndClickHandler(printBtn, async (e) => {
     try {
       printBtn.disabled = true;
-      printBtn.textContent = 'Please wait...';
+      printBtn.textContent = 'Capturing...';
 
       const canvas = document.getElementById('defaultCanvas0');
       if (!canvas) {
@@ -170,8 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error analyzing image:', error);
       alert('There was an error analyzing your artwork. Please try again.');
     } finally {
-      printBtn.disabled = false;
-      printBtn.textContent = '🖨️';
+      setTimeout(() => {
+        printBtn.disabled = false;
+        printBtn.textContent = '👍';
+        setTimeout(() => {
+          printBtn.textContent = '📸';
+        }, 1000);
+      }, 1000);
     }
   });
 });
