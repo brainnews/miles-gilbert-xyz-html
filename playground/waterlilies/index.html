@@ -13,6 +13,7 @@
     <div id="container" class="container">
         <div class="label">
             <div>Simulateur Claude Monet '95</div>
+            <button id="aboutBtn" class="control-btn circle" alt="About">i</button>
         </div>
         <div class="screen" id="screen"></div>
         <div id="controls">
@@ -39,8 +40,15 @@
             <div id="portfolio-container"></div>
             <button id="clearPortfolio" class="control-btn small" alt="Clear Portfolio">🗑 Supprimer tout</button>
         </div>
+        <div id="about" class="hidden">
+            <h2>A propos</h2>
+            <p>Simulateur Claude Monet '95</p>
+            <p>© 2025 <a href="https://miles-gilbert.xyz">Miles Gilbert</a>. Tous droits réservés.</p>
+            <button id="closeAboutBtn" class="control-btn small" alt="Close About" style="flex: none; margin-top: 40px;">Fermer</button>
+        </div>
     </div>
 </body>
 <script src="main.js"></script>
 <script src="printer.js"></script>
+<script src="ui.js"></script>
 </html>
