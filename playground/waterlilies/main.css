@@ -221,7 +221,7 @@ button.circle {
         height: fit-content;
         border-radius: 10px;
         grid-template-rows: 30px 460px 1fr;
-        border: 1px solid #888;
+        border: 1px solid #e8e8e8;
         overflow: hidden;
     }
     .label {
