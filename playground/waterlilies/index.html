@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simulateur Claude Monet 95</title>
+    <title>Simulateur d'étang '95 : édition Claude Monet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <!-- import css -->
@@ -12,7 +12,7 @@
 <body>
     <div id="container" class="container">
         <div class="label">
-            <div>Simulateur Claude Monet '95</div>
+            <div>Simulateur d'étang '95 : édition Claude Monet</div>
             <button id="aboutBtn" class="control-btn circle" alt="About">i</button>
         </div>
         <div class="screen" id="screen"></div>
@@ -42,7 +42,106 @@
         </div>
         <div id="about" class="hidden">
             <h2>A propos</h2>
-            <p>Simulateur Claude Monet '95</p>
+            <svg class="monet-portrait-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="width: 200px; height: 200px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <!-- Previous head and face elements remain the same until clothing section -->
+                    <!-- Background -->
+                    <rect width="640" height="640" fill="none"/>
+                    
+                    <!-- Hat - adjusted for head turn -->
+                    <g fill="#1a1a2e">
+                      <rect x="180" y="80" width="280" height="60"/>
+                      <rect x="160" y="120" width="340" height="40"/>
+                      <rect x="160" y="100" width="320" height="40"/>
+                      <!-- Hat angle detail -->
+                      <rect x="460" y="100" width="40" height="60"/>
+                    </g>
+                    
+                    <!-- Face - adjusted for turn -->
+                    <g fill="#e8d0c0">
+                      <rect x="220" y="160" width="220" height="160"/>
+                      <rect x="240" y="320" width="180" height="40"/>
+                      <!-- Left side face shape - reduced -->
+                      <rect x="200" y="180" width="30" height="120"/>
+                      <!-- Right side face shape - extended -->
+                      <rect x="420" y="180" width="60" height="120"/>
+                      <!-- Added shading for turn -->
+                      <rect x="440" y="200" width="20" height="80" fill="#d8c0b0"/>
+                    </g>
+                    
+                    <!-- Eyes - kept forward facing -->
+                    <g fill="#2a2a3a">
+                      <rect x="280" y="200" width="40" height="30"/>
+                      <rect x="370" y="200" width="40" height="30"/>
+                      <!-- Eyebrows adjusted -->
+                      <rect x="270" y="180" width="60" height="10"/>
+                      <rect x="360" y="180" width="60" height="10"/>
+                    </g>
+                    
+                    <!-- Nose - adjusted for turn -->
+                    <g fill="#d8c0b0">
+                      <rect x="340" y="220" width="20" height="60"/>
+                      <rect x="330" y="260" width="40" height="20"/>
+                      <!-- Added nose shadow -->
+                      <rect x="360" y="230" width="10" height="40" fill="#c8b0a0"/>
+                    </g>
+                    
+                    <!-- Beard - adjusted for turn -->
+                    <g fill="#362f2d">
+                      <rect x="220" y="280" width="220" height="160"/>
+                      <rect x="240" y="440" width="180" height="40"/>
+                      <!-- Left side beard - reduced -->
+                      <rect x="200" y="300" width="30" height="120"/>
+                      <!-- Right side beard - extended -->
+                      <rect x="420" y="300" width="60" height="120"/>
+                      <!-- Added beard shadow -->
+                      <rect x="440" y="320" width="20" height="80" fill="#261f1d"/>
+                    </g>
+                    
+                    <!-- White Shirt Collar -->
+                    <g fill="#ffffff">
+                      <rect x="280" y="400" width="100" height="60"/>
+                      <!-- Collar shape -->
+                      <rect x="260" y="400" width="30" height="40"/>
+                      <rect x="370" y="400" width="30" height="40"/>
+                    </g>
+                    
+                    <!-- Jacket - now open -->
+                    <g fill="#2a2a3a">
+                      <!-- Left side of jacket -->
+                      <rect x="180" y="400" width="100" height="200"/>
+                      <!-- Right side of jacket -->
+                      <rect x="360" y="400" width="120" height="200"/>
+                      <!-- Jacket bottom -->
+                      <rect x="160" y="520" width="360" height="80"/>
+                      <!-- Jacket shadows -->
+                      <rect x="460" y="440" width="40" height="80" fill="#1a1a24"/>
+                      <!-- Inner jacket shadow -->
+                      <rect x="280" y="460" width="100" height="140" fill="#1a1a24" opacity="0.3"/>
+                    </g>
+                    
+                    <!-- Highlights -->
+                    <g fill="#ffffff" opacity="0.2">
+                      <rect x="260" y="160" width="40" height="20"/>
+                      <rect x="220" y="200" width="20" height="40"/>
+                      <!-- Hat highlight adjusted -->
+                      <rect x="200" y="100" width="40" height="20"/>
+                      <!-- Jacket highlights -->
+                      <rect x="200" y="420" width="20" height="60"/>
+                    </g>
+                    
+                    <!-- Shadows - enhanced for turn -->
+                    <g fill="#000000" opacity="0.15">
+                      <rect x="380" y="240" width="40" height="40"/>
+                      <rect x="420" y="280" width="40" height="40"/>
+                      <!-- Hat shadow adjusted -->
+                      <rect x="400" y="100" width="80" height="20"/>
+                      <!-- Jacket shadows -->
+                      <rect x="440" y="420" width="20" height="100"/>
+                    </g>
+                  </svg>
+            </svg>
+            <p>Simulateur d'étang '95 : édition Claude Monet</p>
             <p>© 2025 <a href="https://miles-gilbert.xyz">Miles Gilbert</a>. Tous droits réservés.</p>
             <button id="closeAboutBtn" class="control-btn small" alt="Close About" style="flex: none; margin-top: 40px;">Fermer</button>
         </div>

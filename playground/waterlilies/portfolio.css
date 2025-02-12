@@ -11,11 +11,17 @@
     margin-bottom: 20px;
 }
 .portfolio-entry {
-    background: white;
+    background: #f8f8f8;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.portfolio-entry:hover {
+    transform: translate(0px, -3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .portfolio-content {
@@ -28,9 +34,12 @@
 .portfolio-thumbnail {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 4px;
+    border-radius: 6px;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #e8e8e8;
+    border: 2px solid #3F51B5;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .portfolio-thumbnail img {
@@ -38,6 +47,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transform: scale(1.03);
 }
 
 .portfolio-info {

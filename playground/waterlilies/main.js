@@ -405,14 +405,6 @@ function setupControls() {
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     createClickSound();
-                } else if (button.id === 'showPortfolio') {
-                    document.getElementById('portfolio').classList.toggle('hidden');
-                    // if the portfolio div is hidden, add the active class to the button
-                    if (document.getElementById('portfolio').classList.contains('hidden')) {
-                        button.classList.remove('active');
-                    } else {
-                        button.classList.add('active');
-                    }
                 }
             }, { passive: false });
         });
