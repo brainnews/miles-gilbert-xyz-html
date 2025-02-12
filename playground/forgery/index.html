@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Maker with Paint Mixer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .tools {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+        }
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .color-btn.active {
+            border-color: #000;
+        }
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+        .portfolio {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            width: 100%;
+        }
+        .saved-drawings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .drawing-item {
+            position: relative;
+        }
+        .drawing-item button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        .canvas-area {
+            flex: 2;
+            min-width: 400px;
+        }
+        .mixer-area {
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tools">
+            <h2>Tools</h2>
+            <div class="color-palette">
+                <div class="color-btn active" style="background-color: #000000" data-color="#000000"></div>
+                <div class="color-btn" style="background-color: #ffffff" data-color="#ffffff"></div>
+                <div class="color-btn" style="background-color: #ff0000" data-color="#ff0000"></div>
+                <div class="color-btn" style="background-color: #00ff00" data-color="#00ff00"></div>
+                <div class="color-btn" style="background-color: #0000ff" data-color="#0000ff"></div>
+                <div class="color-btn" style="background-color: #ffff00" data-color="#ffff00"></div>
+                <div class="color-btn" style="background-color: #ff00ff" data-color="#ff00ff"></div>
+                <div class="color-btn" style="background-color: #00ffff" data-color="#00ffff"></div>
+            </div>
+            <button class="action-btn" id="eraser">Eraser</button>
+            <button class="action-btn" id="undo">Undo</button>
+            <button class="action-btn" id="clear">Clear Canvas</button>
+            <button class="action-btn" id="save">Save Drawing</button>
+        </div>
+        
+        <div class="canvas-area">
+            <div id="canvas-container"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="mixer-area">
+            <h2>Color Mixer</h2>
+            <paint-palette></paint-palette>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="portfolio">
+            <h2>Your Portfolio</h2>
+            <div class="saved-drawings" id="saved-drawings"></div>
+        </div>
+    </div>
+
+    <script src="paint-palette.js"></script>
+    <script>
+        class PixelArtMaker {
+            constructor() {
+                this.pixelSize = 10; // Doubled resolution (was 20)
+                this.canvasSize = 400;
+                this.grid = [];
+                this.currentColor = '#000000';
+                this.isEraser = false;
+                this.undoStack = [];
+                this.drawingStarted = false;
+
+                this.setupCanvas();
+                this.setupControls();
+                this.initGrid();
+                this.loadPortfolio();
+            }
+
+            setupCanvas() {
+                this.canvas = createCanvas(this.canvasSize, this.canvasSize);
+                this.canvas.parent('canvas-container');
+                noLoop();
+            }
+
+            setupControls() {
+                document.querySelectorAll('.color-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const activeBtn = document.querySelector('.color-btn.active');
+                        if (activeBtn) {
+                            activeBtn.classList.remove('active');
+                        }
+                        btn.classList.add('active');
+                        this.currentColor = btn.dataset.color;
+                        this.isEraser = false;
+                    });
+                });
+
+                document.getElementById('eraser').addEventListener('click', () => {
+                    const activeBtn = document.querySelector('.color-btn.active');
+                    if (activeBtn) {
+                        activeBtn.classList.remove('active');
+                    }
+                    this.isEraser = true;
+                });
+
+                document.getElementById('undo').addEventListener('click', () => this.undo());
+                document.getElementById('clear').addEventListener('click', () => {
+                    this.saveState();
+                    this.clearCanvas();
+                });
+                document.getElementById('save').addEventListener('click', () => this.saveDrawing());
+
+                // Listen for color selection from paint palette
+                document.querySelector('paint-palette').addEventListener('colorselected', (event) => {
+                    const color = event.detail.color;
+                    this.setCustomColor(color);
+                });
+            }
+
+            setCustomColor(color) {
+                const activeBtn = document.querySelector('.color-btn.active');
+                if (activeBtn) {
+                    activeBtn.classList.remove('active');
+                }
+                this.currentColor = color;
+                this.isEraser = false;
+
+                // Create or update custom color button
+                let customBtn = document.querySelector('.color-btn.custom');
+                if (!customBtn) {
+                    customBtn = document.createElement('div');
+                    customBtn.className = 'color-btn custom';
+                    document.querySelector('.color-palette').appendChild(customBtn);
+                }
+                customBtn.style.backgroundColor = color;
+                customBtn.dataset.color = color;
+                customBtn.classList.add('active');
+
+                // Add click handler to custom color button
+                customBtn.onclick = () => {
+                    const activeBtn = document.querySelector('.color-btn.active');
+                    if (activeBtn) {
+                        activeBtn.classList.remove('active');
+                    }
+                    customBtn.classList.add('active');
+                    this.currentColor = color;
+                    this.isEraser = false;
+                };
+            }
+
+            initGrid() {
+                this.grid = [];
+                for (let i = 0; i < this.canvasSize/this.pixelSize; i++) {
+                    this.grid[i] = [];
+                    for (let j = 0; j < this.canvasSize/this.pixelSize; j++) {
+                        this.grid[i][j] = '#ffffff';
+                    }
+                }
+                this.drawGrid();
+            }
+
+            clearCanvas() {
+                this.initGrid();
+            }
+
+            drawGrid() {
+                background(255);
+                for (let i = 0; i < this.grid.length; i++) {
+                    for (let j = 0; j < this.grid[i].length; j++) {
+                        fill(this.grid[i][j]);
+                        stroke(220);
+                        rect(i * this.pixelSize, j * this.pixelSize, this.pixelSize, this.pixelSize);
+                    }
+                }
+            }
+
+            mousePressed() {
+                if (mouseX >= 0 && mouseX < this.canvasSize && mouseY >= 0 && mouseY < this.canvasSize) {
+                    this.drawingStarted = true;
+                    this.saveState();
+                    this.draw();
+                }
+            }
+
+            mouseDragged() {
+                if (mouseX >= 0 && mouseX < this.canvasSize && mouseY >= 0 && mouseY < this.canvasSize) {
+                    this.draw();
+                }
+            }
+
+            mouseReleased() {
+                this.drawingStarted = false;
+            }
+
+            draw() {
+                if (mouseX >= 0 && mouseX < this.canvasSize && mouseY >= 0 && mouseY < this.canvasSize) {
+                    const i = floor(mouseX / this.pixelSize);
+                    const j = floor(mouseY / this.pixelSize);
+                    this.grid[i][j] = this.isEraser ? '#ffffff' : this.currentColor;
+                    this.drawGrid();
+                }
+            }
+
+            saveState() {
+                this.undoStack.push(this.grid.map(row => [...row]));
+                if (this.undoStack.length > 50) this.undoStack.shift();
+            }
+
+            undo() {
+                if (this.undoStack.length > 0) {
+                    this.grid = this.undoStack.pop();
+                    this.drawGrid();
+                }
+            }
+
+            saveDrawing() {
+                const drawings = JSON.parse(localStorage.getItem('pixelDrawings') || '[]');
+                const drawing = {
+                    id: Date.now(),
+                    grid: this.grid,
+                    date: new Date().toLocaleDateString()
+                };
+                drawings.push(drawing);
+                localStorage.setItem('pixelDrawings', JSON.stringify(drawings));
+                this.loadPortfolio();
+            }
+
+            loadPortfolio() {
+                const drawings = JSON.parse(localStorage.getItem('pixelDrawings') || '[]');
+                const container = document.getElementById('saved-drawings');
+                container.innerHTML = '';
+                
+                drawings.forEach(drawing => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = this.canvasSize;
+                    canvas.height = this.canvasSize;
+                    canvas.style.width = '200px';
+                    canvas.style.height = '200px';
+                    
+                    const ctx = canvas.getContext('2d');
+                    drawing.grid.forEach((row, i) => {
+                        row.forEach((color, j) => {
+                            ctx.fillStyle = color;
+                            ctx.fillRect(i * this.pixelSize, j * this.pixelSize, this.pixelSize, this.pixelSize);
+                            ctx.strokeStyle = '#ddd';
+                            ctx.strokeRect(i * this.pixelSize, j * this.pixelSize, this.pixelSize, this.pixelSize);
+                        });
+                    });
+
+                    const div = document.createElement('div');
+                    div.className = 'drawing-item';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.onclick = () => this.deleteDrawing(drawing.id);
+                    
+                    div.appendChild(canvas);
+                    div.appendChild(deleteBtn);
+                    container.appendChild(div);
+                });
+            }
+
+            deleteDrawing(id) {
+                const drawings = JSON.parse(localStorage.getItem('pixelDrawings') || '[]');
+                const filteredDrawings = drawings.filter(d => d.id !== id);
+                localStorage.setItem('pixelDrawings', JSON.stringify(filteredDrawings));
+                this.loadPortfolio();
+            }
+        }
+
+        // Initialize the app when window loads
+        window.onload = function() {
+            new PixelArtMaker();
+        };
+    </script>
+</body>
+</html>

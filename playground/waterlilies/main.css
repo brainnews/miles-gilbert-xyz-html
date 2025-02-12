@@ -78,6 +78,7 @@ button {
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
     border: 1px solid #888;
     box-shadow: 0 2px 0px 0px rgb(0 0 0 / 23%);
+    transition: all 0.1s ease-in-out;
 }
 button.small {
     padding: 8px 12px; /* Smaller touch targets */
@@ -161,14 +162,13 @@ button:hover {
 #portfolio {
     grid-area: 1 / 1 / 1 / 1;
     width: 100%;
-    height: 460px;
+    height: 100%;
     overflow-y: scroll;
     touch-action: none;
     background-color: antiquewhite;
     z-index: 800;
-    border: 1px solid #888;
     box-sizing: border-box;
-    padding: 60px 50px;
+    padding: 20px;
     font-family: Georgia, 'Times New Roman', Times, serif;
     line-height: 1.2em;
     position: relative;
@@ -176,22 +176,23 @@ button:hover {
 #portfolio::-webkit-scrollbar {
     display: none;
 }
+.hide-on-mobile {
+    display: none !important;
+}
 /* desktop */
 @media screen and (min-width: 900px) {
     .container {
         width: 600px;
         height: fit-content;
         border-radius: 10px;
+        grid-template-rows: 30px 460px 1fr;
+        border: 1px solid #888;
     }
     .label {
-        position: absolute;
-        top: -25px;
-        right: 0;
-        bottom: inherit;
+        position: inherit;
         background-color: #bdc1e3;
         border-radius: 6px;
         padding: 12px;
-        box-shadow: 0 4px 0px 0px rgb(0 0 0 / 23%);
         width: 100%;
         box-sizing: border-box;
         display: flex;
@@ -202,19 +203,26 @@ button:hover {
         z-index: 999;
         color: #2b79ff;
         background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
-        border: 1px solid #888;
-        height: 22px;
-        display: flex;
-        align-items: center;
         font-size: 13px;
         color: #000;
+        grid-area: 1 / 1 / 1 / 1;
+        bottom: inherit;
+        left: inherit;
+        right: inherit;
+        top: inherit;
+        opacity: 1;
+        border-bottom: 1px solid #888;
+    }
+    #screen {
+        grid-area: 2 / 1 / 2 / 1;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
     }
     #controls {
         position: relative;
         padding: 10px 6px;
         background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
-        border: 1px solid #888;
-        border-top: none;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -223,14 +231,25 @@ button:hover {
         border-radius: 6px;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        margin-top: -4px;
+        grid-area: 3 / 1 / 3 / 1;
         bottom: inherit;
+        left: inherit;
+        right: inherit;
+        top: inherit;
+        border-top: 1px solid #888;
+    }
+    #portfolio {
+        grid-area: 2 / 1 / 4 / 1;
+        max-height: 75vh;
     }
     .control-row {
         display: flex;
         flex-direction: row;
         gap: 10px;
         width: 100%;
+    }
+    .control-row:not(:last-child) {
+        margin-bottom: 10px;
     }
     .painting-reference {
         display: block;
@@ -265,5 +284,9 @@ button:hover {
         height: 100%;
         background-color: #2B79FF;
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    .hide-on-mobile {
+        display: inline !important;
+
     }
 }

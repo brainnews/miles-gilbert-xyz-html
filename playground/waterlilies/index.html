@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Claude Monet Simulator 95</title>
+    <title>Simulateur Claude Monet 95</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <!-- import css -->
@@ -12,7 +12,7 @@
 <body>
     <div id="container" class="container">
         <div class="label">
-            <div>Claude Monet Simulator '95</div>
+            <div>Simulateur Claude Monet '95</div>
         </div>
         <div class="screen" id="screen"></div>
         <div id="controls">
@@ -23,17 +23,21 @@
                 <button id="resetBtn" class="control-btn" alt="Reset">🔄</button>
             </div>
             <div class="control-row">
-                <button id="showPortfolio" class="control-btn" alt="Portfolio">📓</button>
-                <button id="printBtn" class="control-btn" alt="Print">📸</button>
+                <button id="showPortfolio" class="control-btn small" alt="Portfolio">📓 <span class="hide-on-mobile">Compositions</span></button>
+                <button id="printBtn" class="control-btn small" alt="Print">📸 <span class="hide-on-mobile">Enregistrer la composition</span></button>
             </div>
         </div>
-        <div class="painting-reference">
+        <!-- <div class="painting-reference">
             <div class="sticker"></div>
             <img id="referenceImage" src="painting.webp" alt="Mossy Pond with Lilies">
-        </div>
+        </div> -->
         <div id="portfolio" class="hidden">
-            <button id="clearPortfolio" class="control-btn small" alt="Clear Portfolio">Clear Portfolio</button>
+            <div class="portfolio-header">
+                <h2>📓 Compositions</h2>
+                <button id="closePortfolioBtn" class="control-btn small" alt="Close Portfolio" style="flex: none;">🗙 Fermer</button>
+            </div>
             <div id="portfolio-container"></div>
+            <button id="clearPortfolio" class="control-btn small" alt="Clear Portfolio">🗑 Supprimer tout</button>
         </div>
     </div>
 </body>

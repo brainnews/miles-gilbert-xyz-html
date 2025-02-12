@@ -162,7 +162,7 @@ class Fish {
         rotate(this.angle);
         
         // Draw fish body with transparency
-        let c = color(red(this.color), green(this.color), blue(this.color), 80); // 180/255 opacity
+        let c = color(red(this.color), green(this.color), blue(this.color), 100); // 180/255 opacity
         fill(c);
         noStroke();
         
@@ -193,46 +193,64 @@ class WaterLily {
         this.rotation = random(TWO_PI);
         this.vx = 0;
         this.vy = 0;
-        // Add hasFlower property that stays constant
         this.hasFlower = random() < 0.5;
+        
+        // New properties for fish interaction
+        this.fishForceX = 0;
+        this.fishForceY = 0;
+        this.rotationVelocity = 0;
     }
 
     update(rippleForce) {
-        // Very gentle ripple force scaling
-        let amplifiedForceX = rippleForce.x * 0.1;
-        let amplifiedForceY = rippleForce.y * 0.1;
+        // Fish interaction forces
+        this.fishForceX *= 0.95; // Decay fish force
+        this.fishForceY *= 0.95;
+        this.rotationVelocity *= 0.5;
         
-        // Move lily pad based on water ripples with minimal sensitivity
-        this.vx = lerp(this.vx, amplifiedForceX, 0.05);
-        this.vy = lerp(this.vy, amplifiedForceY, 0.05);
+        // Check for nearby fish
+        for (let f of fish) {
+            let d = dist(this.x, this.y, f.x, f.y);
+            if (d < this.size * 1) { // Interaction radius
+                // Calculate normalized direction from fish to lily
+                let dx = (this.x - f.x) / d;
+                let dy = (this.y - f.y) / d;
+                
+                // Force strength based on distance and fish velocity
+                let strength = map(d, 0, this.size * 2, 0.5, 0) * f.velocity;
+                
+                // Add force from fish
+                this.fishForceX += dx * strength / 2;
+                this.fishForceY += dy * strength / 2;
+                
+                // Add rotational force based on fish's relative position
+                let angle = atan2(dy, dx);
+                let rotationForce = sin(angle - this.rotation) * strength * 0.02;
+                this.rotationVelocity += rotationForce;
+            }
+        }
+
+        // Combine ripple and fish forces
+        let totalForceX = rippleForce.x * 0.1 + this.fishForceX;
+        let totalForceY = rippleForce.y * 0.1 + this.fishForceY;
         
-        // Very strong damping for minimal movement
-        this.vx *= 0.92;
-        this.vy *= 0.92;
+        // Update velocities with combined forces
+        this.vx = lerp(this.vx, totalForceX, 0.1);
+        this.vy = lerp(this.vy, totalForceY, 0.1);
         
+        // Apply damping
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+        
+        // Update position
         this.x += this.vx;
         this.y += this.vy;
         
-        // Minimal rotation
-        this.rotation += (this.vx + this.vy) * 0.01;
+        // Update rotation with combined ripple and fish effects
+        this.rotation += this.rotationVelocity + (this.vx + this.vy) * 0.02;
         
-        // Quick return to original position
-        this.x = lerp(this.x, this.targetX, 0.04);
-        this.y = lerp(this.y, this.targetY, 0.04);
-        
-        // Keep within bounds
-        this.x = constrain(this.x, 0, width);
-        this.y = constrain(this.y, 0, height);
-        
-        this.x += this.vx;
-        this.y += this.vy;
-        
-        // More pronounced rotation based on ripple movement
-        this.rotation += (this.vx + this.vy) * 0.05;
-        
-        // Slower return to original position for more drifting
-        this.x = lerp(this.x, this.targetX, 0.002);
-        this.y = lerp(this.y, this.targetY, 0.002);
+        // Return to target position
+        this.x = lerp(this.x, this.targetX, 0.02);
+        this.y = lerp(this.y, this.targetY, 0.02);
         
         // Keep within bounds
         this.x = constrain(this.x, 0, width);
@@ -244,10 +262,8 @@ class WaterLily {
         translate(this.x, this.y);
         rotate(this.rotation);
         
-        // Draw lily pad with pixelated retro style
         noStroke();
         
-        // Main pad shape - simplified and chunky
         // Base shadow
         fill(34, 80, 34, 200);
         rect(-this.size/2 + 4, -this.size*0.4 + 4, this.size/4, this.size*0.4, 2);
@@ -262,20 +278,16 @@ class WaterLily {
         fill(162, 201, 39, 180);
         rect(-this.size/2 + 2, -this.size*0.4 + 2, this.size/8, this.size*0.2, 1);
         
-        // Draw retro-style flower with chunky pixels
         if (this.hasFlower) {
-            // Flower base - larger pixels
             fill(219, 112, 147, 200);
             rect(-12, -12, 8, 8);
             rect(4, -12, 8, 8);
             rect(-12, 4, 8, 8);
             rect(4, 4, 8, 8);
             
-            // Brighter center
             fill(255, 182, 193, 230);
             rect(-6, -6, 12, 12);
             
-            // Yellow center pixel
             fill(255, 223, 51, 250);
             rect(-4, -4, 8, 8);
         }
@@ -393,14 +405,6 @@ function setupControls() {
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     createClickSound();
-                } else if (button.id === 'showPortfolio') {
-                    document.getElementById('portfolio').classList.toggle('hidden');
-                    // if the portfolio div is hidden, add the active class to the button
-                    if (document.getElementById('portfolio').classList.contains('hidden')) {
-                        button.classList.remove('active');
-                    } else {
-                        button.classList.add('active');
-                    }
                 }
             }, { passive: false });
         });
@@ -544,7 +548,7 @@ function updateCreatures() {
 }
 
 function draw() {
-    background(0);
+    background(232);
     loadPixels();
     
     // Apply tilt effect
@@ -601,6 +605,9 @@ function draw() {
                             pixels[index + 0] = baseR;
                             pixels[index + 1] = baseG;
                             pixels[index + 2] = baseB;
+                            // Calculate transparency based on ripple intensity
+                            //let alpha = map(abs(rippleIntensity), 0, 100, 100, 200);
+                            pixels[index + 3] = 200;
                         }
                         pixels[index + 3] = 255;
                     }

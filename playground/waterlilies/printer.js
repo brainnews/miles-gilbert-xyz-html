@@ -1,4 +1,4 @@
-// Function to resize an image (unchanged)
+// Function to resize an image
 async function resizeImage(imageDataUrl, maxWidth = 256, maxHeight = 256) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -31,74 +31,170 @@ async function resizeImage(imageDataUrl, maxWidth = 256, maxHeight = 256) {
   });
 }
 
-// Function to save artwork to portfolio
-function saveToPortfolio(studentImage) {
+// Function to save canvas state to portfolio
+async function saveToPortfolio() {
   try {
     const portfolio = JSON.parse(localStorage.getItem('artPortfolio') || '[]');
-    // Add new entry
-    const newEntry = {
+    
+    // Capture thumbnail of current state
+    const canvas = document.getElementById('defaultCanvas0');
+    const thumbnailDataUrl = await resizeImage(canvas.toDataURL(), 150, 150);
+
+    // Create a state object with the current placement of all elements
+    const newState = {
       id: Date.now(),
       date: new Date().toISOString(),
-      image: studentImage
+      thumbnail: thumbnailDataUrl,
+      rocks: rocks.map(rock => ({
+        x: rock.x,
+        y: rock.y,
+        size: rock.size
+      })),
+      lilies: lilies.map(lily => ({
+        x: lily.x,
+        y: lily.y,
+        size: lily.size,
+        rotation: lily.rotation,
+        hasFlower: lily.hasFlower,
+        targetX: lily.targetX,
+        targetY: lily.targetY
+      })),
+      fish: fish.map(fish => ({
+        x: fish.x,
+        y: fish.y,
+        size: fish.size,
+        angle: fish.angle,
+        velocity: fish.velocity,
+        color: fish.color.toString()
+      }))
     };
     
     // Add to beginning of array (most recent first)
-    portfolio.unshift(newEntry);
+    portfolio.unshift(newState);
     
-    // Keep only the most recent 50 entries to manage localStorage size
+    // Keep only the most recent 50 states
     const trimmedPortfolio = portfolio.slice(0, 50);
     
     // Check if we can store this data
     const dataString = JSON.stringify(trimmedPortfolio);
-    if (dataString.length > 4.5 * 1024 * 1024) { // 4.5MB safety limit
+    if (dataString.length > 4.5 * 1024 * 1024) {
       throw new Error('Portfolio storage is full. Please clear some old entries.');
     }
     
     localStorage.setItem('artPortfolio', dataString);
+    
+    // Update the portfolio display
+    updatePortfolioDisplay();
+    
   } catch (error) {
     console.error('Error saving to portfolio:', error);
     alert('There was an error saving to your portfolio. ' + error.message);
   }
 }
 
-// Function to display portfolio
-// Function to clear the portfolio
-function clearPortfolio() {
-  if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
-    localStorage.removeItem('artPortfolio');
-    // hide portfolio
-    document.getElementById('portfolio-container').innerHTML = '';
+// Function to load a state from portfolio
+function loadState(state) {
+  try {
+    // Clear current state
+    rocks = [];
+    lilies = [];
+    fish = [];
+    
+    // Load rocks
+    state.rocks.forEach(rockData => {
+      rocks.push({
+        x: rockData.x,
+        y: rockData.y,
+        size: rockData.size
+      });
+    });
+    
+    // Load lilies
+    state.lilies.forEach(lilyData => {
+      const lily = new WaterLily(lilyData.x, lilyData.y);
+      lily.size = lilyData.size;
+      lily.rotation = lilyData.rotation;
+      lily.hasFlower = lilyData.hasFlower;
+      lily.targetX = lilyData.targetX;
+      lily.targetY = lilyData.targetY;
+      lilies.push(lily);
+    });
+    
+    // Load fish
+    state.fish.forEach(fishData => {
+      const newFish = new Fish(fishData.x, fishData.y);
+      newFish.size = fishData.size;
+      newFish.angle = fishData.angle;
+      newFish.velocity = fishData.velocity;
+      newFish.color = color(fishData.color);
+      fish.push(newFish);
+    });
+    
+    // Reset water simulation
+    current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+    previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+    
+    // Hide portfolio after loading
     document.getElementById('portfolio').classList.add('hidden');
     document.getElementById('showPortfolio').classList.remove('active');
+    document.getElementById('screen').classList.remove('hidden');
+    
+  } catch (error) {
+    console.error('Error loading state:', error);
+    alert('There was an error loading the saved state. ' + error.message);
   }
 }
 
-// add event listener to clearPortfolio button
-document.getElementById('clearPortfolio').addEventListener('click', clearPortfolio);
-
+// Function to display portfolio
 function updatePortfolioDisplay() {
   const portfolioDiv = document.getElementById('portfolio-container');
   if (!portfolioDiv) return;
 
   const portfolio = JSON.parse(localStorage.getItem('artPortfolio') || '[]');
   
-  if (portfolio.length === 0) return;
+  if (portfolio.length === 0) {
+    portfolioDiv.innerHTML = '<div class="portfolio-empty">No saved states yet. Create something beautiful and save it!</div>';
+    return;
+  }
 
   portfolioDiv.innerHTML = '';
 
-  // Show all entries in the portfolio in reverse order
-  portfolio.forEach(entry => {
+  // Show all entries in the portfolio
+  portfolio.forEach(state => {
     const entryElement = document.createElement('div');
     entryElement.className = 'portfolio-entry';
     entryElement.innerHTML = `
-      <div class="portfolio-image">
-        <img src="${entry.image}" alt="Artwork from ${new Date(entry.date).toLocaleDateString()}" />
+      <div class="portfolio-content">
+        <div class="portfolio-thumbnail">
+          <img src="${state.thumbnail}" alt="State thumbnail" />
+        </div>
+        <div class="portfolio-info">
+          <p class="portfolio-date">${new Date(state.date).toLocaleDateString()}</p>
+          <p class="portfolio-stats">
+            ${state.rocks.length} rocks, 
+            ${state.lilies.length} lilies, 
+            ${state.fish.length} fish
+          </p>
+        </div>
+        <div class="portfolio-actions">
+          <button class="load-btn small">Load</button>
+          <button class="delete-btn small">Delete</button>
+        </div>
       </div>
-      <p class="portfolio-date">${new Date(entry.date).toLocaleDateString()}</p>
     `;
-     // Add the new entry at the beginning of the portfolio
-     portfolioDiv.appendChild(entryElement);
-  })
+
+    // Add event listeners
+    entryElement.querySelector('.load-btn').addEventListener('click', () => loadState(state));
+    entryElement.querySelector('.delete-btn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete this saved state?')) {
+        const updatedPortfolio = portfolio.filter(item => item.id !== state.id);
+        localStorage.setItem('artPortfolio', JSON.stringify(updatedPortfolio));
+        updatePortfolioDisplay();
+      }
+    });
+
+    portfolioDiv.appendChild(entryElement);
+  });
 }
 
 // Handle both click and touch events
@@ -133,6 +229,7 @@ function addTouchAndClickHandler(element, handler) {
   });
 }
 
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   const printBtn = document.querySelector('#printBtn');
   if (!printBtn) {
@@ -146,29 +243,14 @@ document.addEventListener('DOMContentLoaded', () => {
   addTouchAndClickHandler(printBtn, async (e) => {
     try {
       printBtn.disabled = true;
-      printBtn.textContent = 'Capturing...';
-
-      const canvas = document.getElementById('defaultCanvas0');
-      if (!canvas) {
-        throw new Error('Canvas element not found');
-      }
-
-      const referenceImage = document.getElementById('referenceImage');
-      if (!referenceImage) {
-        throw new Error('Reference image not found');
-      }
-
-      const studentImageBase64 = await resizeImage(canvas.toDataURL());
+      printBtn.textContent = 'Saving...';
       
-      // Save to portfolio
-      saveToPortfolio(studentImageBase64);
-      
-      // update portfolio display
-      updatePortfolioDisplay();
+      // Save the current state
+      saveToPortfolio();
 
     } catch (error) {
-      console.error('Error analyzing image:', error);
-      alert('There was an error analyzing your artwork. Please try again.');
+      console.error('Error saving state:', error);
+      alert('There was an error saving your artwork. Please try again.');
     } finally {
       setTimeout(() => {
         printBtn.disabled = false;
@@ -178,5 +260,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
       }, 1000);
     }
+  });
+
+  // Add event listener for clearing portfolio
+  document.getElementById('clearPortfolio').addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
+      localStorage.removeItem('artPortfolio');
+      updatePortfolioDisplay();
+    }
+  });
+
+  // Add event listener for closing portfolio
+  document.getElementById('closePortfolioBtn').addEventListener('click', () => {
+    document.getElementById('portfolio').classList.add('hidden');
+    document.getElementById('screen').classList.remove('hidden');
+  });
+
+  // Add event listener for opening portfolio
+  document.getElementById('showPortfolio').addEventListener('click', () => {
+    document.getElementById('portfolio').classList.remove('hidden');
+    document.getElementById('screen').classList.add('hidden');
   });
 });
