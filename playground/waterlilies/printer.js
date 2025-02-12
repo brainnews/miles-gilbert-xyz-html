@@ -254,9 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       setTimeout(() => {
         printBtn.disabled = false;
-        printBtn.textContent = '👍';
+        printBtn.textContent = '👍 Enregistrée';
         setTimeout(() => {
-          printBtn.textContent = '📸';
+          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer la composition</span>';
         }, 1000);
       }, 1000);
     }
