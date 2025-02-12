@@ -38,7 +38,7 @@ async function saveToPortfolio() {
     
     // Capture thumbnail of current state
     const canvas = document.getElementById('defaultCanvas0');
-    const thumbnailDataUrl = await resizeImage(canvas.toDataURL(), 150, 150);
+    const thumbnailDataUrl = await resizeImage(canvas.toDataURL(), 200, 200);
 
     // Create a state object with the current placement of all elements
     const newState = {
@@ -177,8 +177,8 @@ function updatePortfolioDisplay() {
           </p>
         </div>
         <div class="portfolio-actions">
-          <button class="load-btn small">Load</button>
-          <button class="delete-btn small">Delete</button>
+          <button class="load-btn control-btn small">Load</button>
+          <button class="delete-btn control-btn small">Delete</button>
         </div>
       </div>
     `;
@@ -186,6 +186,21 @@ function updatePortfolioDisplay() {
     // Add event listeners
     entryElement.querySelector('.load-btn').addEventListener('click', () => loadState(state));
     entryElement.querySelector('.delete-btn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete this saved state?')) {
+        const updatedPortfolio = portfolio.filter(item => item.id !== state.id);
+        localStorage.setItem('artPortfolio', JSON.stringify(updatedPortfolio));
+        updatePortfolioDisplay();
+      }
+    });
+
+    // add touch event listeners
+    entryElement.querySelector('.load-btn').addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Prevent default touch behavior
+      loadState(state);
+    });
+
+    entryElement.querySelector('.delete-btn').addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Prevent default touch behavior
       if (confirm('Are you sure you want to delete this saved state?')) {
         const updatedPortfolio = portfolio.filter(item => item.id !== state.id);
         localStorage.setItem('artPortfolio', JSON.stringify(updatedPortfolio));
@@ -240,10 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize portfolio display
   updatePortfolioDisplay();
 
-  addTouchAndClickHandler(printBtn, async (e) => {
+  // Add event listener for printing
+  printBtn.addEventListener('click', async (e) => {
     try {
       printBtn.disabled = true;
-      printBtn.textContent = 'Saving...';
+      printBtn.textContent = '⏳';
       
       // Save the current state
       saveToPortfolio();
@@ -254,16 +270,47 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       setTimeout(() => {
         printBtn.disabled = false;
-        printBtn.textContent = '👍 Enregistrée';
+        printBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
         setTimeout(() => {
-          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer la composition</span>';
+          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
         }, 1000);
       }, 1000);
     }
   });
 
+  printBtn.addEventListener('touchstart', async (e) => {
+    try {
+      printBtn.disabled = true;
+      printBtn.textContent = '⏳';
+      
+      // Save the current state
+      saveToPortfolio();
+
+    } catch (error) {
+      console.error('Error saving state:', error);
+      alert('There was an error saving your artwork. Please try again.');
+    } finally {
+      setTimeout(() => {
+        printBtn.disabled = false;
+        printBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
+        setTimeout(() => {
+          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
+        }, 1000);
+      }, 1000);
+    }
+  });
+
+  const clearPortfolioBtn = document.getElementById('clearPortfolio');
   // Add event listener for clearing portfolio
-  document.getElementById('clearPortfolio').addEventListener('click', () => {
+  clearPortfolioBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
+      localStorage.removeItem('artPortfolio');
+      updatePortfolioDisplay();
+    }
+  });
+
+  clearPortfolioBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default touch behavior
     if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
       localStorage.removeItem('artPortfolio');
       updatePortfolioDisplay();

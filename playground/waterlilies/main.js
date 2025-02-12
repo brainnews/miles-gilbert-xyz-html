@@ -374,7 +374,8 @@ function initAudio() {
 }
 function setupControls() {
     const buttons = document.querySelectorAll('.control-btn');
-    
+    const screenElement = document.getElementById('screen');
+
     buttons.forEach(button => {
         ['click', 'touchstart'].forEach(eventType => {
             button.addEventListener(eventType, (e) => {
@@ -399,12 +400,13 @@ function setupControls() {
                     button.classList.add('active');
                     createClickSound();
                 } else if (button.id === 'resetBtn') {
+                    screenElement.style.filter = 'blur(10px)';
                     rocks = [];
                     lilies = [];
                     fish = [];
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
-                    createClickSound();
+                    setTimeout(() => screenElement.style.filter = 'none', 500);
                 }
             }, { passive: false });
         });
@@ -446,25 +448,26 @@ function setup() {
     
     // Set initial button state
     document.getElementById('rockBtn').classList.add('active');
-    
-    // Setup device motion
-    if (typeof DeviceMotionEvent !== 'undefined' && 
-        typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission()
-            .then(response => {
-                if (response == 'granted') {
-                    window.addEventListener('devicemotion', handleMotion);
-                }
-            })
-            .catch(console.error);
-    } else {
-        window.addEventListener('devicemotion', handleMotion);
-    }
 }
-    // Add touch event handling for the canvas
+// Add touch event handling for the canvas
 function touchStarted() {
     if (touches.length > 0) {
         let touch = touches[0];
+        // check if touch is on a button
+        const buttons = document.querySelectorAll('.control-btn');
+        const clickedButton = Array.from(buttons).some(button => {
+            const rect = button.getBoundingClientRect();
+            return (
+                touch.x >= rect.left && 
+                touch.x <= rect.right && 
+                touch.y >= rect.top && 
+                touch.y <= rect.bottom
+            );
+        });
+        
+        if (clickedButton) return false;
+        
+        // check if touch is on canvas
         if (touch.x > 0 && touch.x < width && touch.y > 0 && touch.y < height) {
             if (placeMode === 'rock') {
                 rocks.push({ x: touch.x, y: touch.y, size: random(40, 80) });
@@ -476,10 +479,6 @@ function touchStarted() {
         }
     }
     return false; // Prevent default
-}
-function handleMotion(event) {
-    tiltAngle.x = event.accelerationIncludingGravity.x * 2;
-    tiltAngle.y = event.accelerationIncludingGravity.y * 2;
 }
 
 function mouseMoved() {

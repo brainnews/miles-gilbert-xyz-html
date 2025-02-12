@@ -35,6 +35,13 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 12px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    padding: 0 10px;
 }
 #screen {
     grid-area: 1 / 1 / 1 / 1;
@@ -94,12 +101,12 @@ button.small {
     font-size: 14px; /* Readable text size */
 }
 button.active, button:active {
-    background: #2c2fdf;
+    background: #b3b2b2;
     box-shadow: 0 1px 0px 0px rgb(0 0 0 / 23%);
     transform: translateY(1px)
 }
 button:hover {
-    background: #2c2fdf;
+    background: #b3b2b2;
     color: #fff;
 }
 button.circle {
@@ -230,14 +237,8 @@ button.circle {
         background-color: #bdc1e3;
         border-radius: 6px;
         padding: 12px;
-        width: 100%;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-        z-index: 999;
         color: #2b79ff;
         background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
         font-size: 13px;

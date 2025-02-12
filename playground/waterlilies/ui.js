@@ -1,23 +1,55 @@
-// Add event listener for closing portfolio
-document.getElementById('closePortfolioBtn').addEventListener('click', () => {
-    document.getElementById('portfolio').classList.add('hidden');
-    document.getElementById('screen').classList.remove('hidden');
+// Buttons
+const closePortfolioBtn = document.getElementById('closePortfolioBtn');
+const showPortfolioBtn = document.getElementById('showPortfolio');
+const showAboutBtn = document.getElementById('aboutBtn');
+const closeAboutBtn = document.getElementById('closeAboutBtn');
+
+// Containers
+const screen = document.getElementById('screen');
+const portfolio = document.getElementById('portfolio');
+const about = document.getElementById('about');
+
+closePortfolioBtn.addEventListener('click', () => {
+    portfolio.classList.add('hidden');
+    screen.classList.remove('hidden');
 });
 
-// Add event listener for opening portfolio
-document.getElementById('showPortfolio').addEventListener('click', () => {
-    document.getElementById('portfolio').classList.remove('hidden');
-    document.getElementById('screen').classList.add('hidden');
+showPortfolioBtn.addEventListener('click', () => {
+    portfolio.classList.remove('hidden');
+    screen.classList.add('hidden');
 });
 
-// add event listener for closing about
-document.getElementById('closeAboutBtn').addEventListener('click', () => {
-    document.getElementById('about').classList.add('hidden');
-    document.getElementById('screen').classList.remove('hidden');
+closeAboutBtn.addEventListener('click', () => {
+    about.classList.add('hidden');
+    screen.classList.remove('hidden');
 });
 
-// add event listener for opening about
-document.getElementById('aboutBtn').addEventListener('click', () => {
-    document.getElementById('about').classList.remove('hidden');
-    document.getElementById('screen').classList.add('hidden');
+showAboutBtn.addEventListener('click', () => {
+    about.classList.remove('hidden');
+    screen.classList.add('hidden');
+});
+
+// Touch events
+closePortfolioBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default touch behavior
+    portfolio.classList.add('hidden');
+    screen.classList.remove('hidden');
+});
+
+showPortfolioBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default touch behavior
+    portfolio.classList.remove('hidden');
+    screen.classList.add('hidden');
+});
+
+closeAboutBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default touch behavior
+    about.classList.add('hidden');
+    screen.classList.remove('hidden');
+});
+
+showAboutBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default touch behavior
+    about.classList.remove('hidden');
+    screen.classList.add('hidden');
 });
