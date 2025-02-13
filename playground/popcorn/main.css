@@ -70,7 +70,7 @@ button.control-btn {
 }
 #reduceBtn {
     position: absolute;
-    bottom: 10px;
+    bottom: 50px;
     z-index: 999;
     left: 50%;
     transform: translate(-50%, -50%);
