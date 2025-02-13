@@ -178,7 +178,7 @@ function updatePortfolioDisplay() {
         </div>
         <div class="portfolio-actions">
           <button class="load-btn control-btn small">Load</button>
-          <button class="delete-btn control-btn small">Delete</button>
+          <button class="control-btn small delete-btn">Delete</button>
         </div>
       </div>
     `;

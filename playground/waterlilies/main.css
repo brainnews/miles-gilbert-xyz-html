@@ -107,7 +107,6 @@ button.active, button:active {
 }
 button:hover {
     background: #b3b2b2;
-    color: #fff;
 }
 button.circle {
     min-width: 20px;
