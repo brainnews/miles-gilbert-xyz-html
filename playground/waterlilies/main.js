@@ -93,6 +93,8 @@ class Fish {
             '#95E1D3'  // Mint
         ]));
         this.lastRippleTime = 0;
+        this.carryingPollen = false;
+        this.pollenSourceLily = null;
     }
 
     update() {
@@ -136,16 +138,40 @@ class Fish {
         if (this.y < 0) this.y = height;
         if (this.y > height) this.y = 0;
         
-        // Avoid lilies and rocks
+        // Interact with lilies for pollination
         for (let lily of lilies) {
             let d = dist(this.x, this.y, lily.x, lily.y);
             if (d < lily.size) {
+                // Check for pollination interactions
+                if (lily.hasFlower && !this.carryingPollen && lily !== this.pollenSourceLily) {
+                    this.carryingPollen = true;
+                    this.pollenSourceLily = lily;
+                } else if (this.carryingPollen && lily !== this.pollenSourceLily) {
+                    // Try to pollinate
+                    if (lily.hasFlower) {
+                        // 1% chance to spawn new lily
+                        if (random(1) < 0.01) {
+                            let newX = lily.x + random(-20, 20);
+                            let newY = lily.y + random(-20, 20);
+                            lilies.push(new WaterLily(newX, newY));
+                        }
+                    } else {
+                        // 1.5% chance to spawn flower on target lily
+                        if (random(1) < 0.015) {
+                            lily.hasFlower = true;
+                        }
+                    }
+                    this.carryingPollen = false;
+                    this.pollenSourceLily = null;
+                }
+                
                 // Steer away from lily
                 let angle = atan2(this.y - lily.y, this.x - lily.x);
                 this.angle = lerp(this.angle, angle, 0.2);
             }
         }
         
+        // Avoid rocks
         for (let rock of rocks) {
             let d = dist(this.x, this.y, rock.x, rock.y);
             if (d < rock.size) {
@@ -187,6 +213,8 @@ class WaterLily {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.originalX = x;  // Store original position
+        this.originalY = y;
         this.targetX = x;
         this.targetY = y;
         this.size = random(60, 100);
@@ -195,49 +223,105 @@ class WaterLily {
         this.vy = 0;
         this.hasFlower = random() < 0.5;
         
-        // New properties for fish interaction
         this.fishForceX = 0;
         this.fishForceY = 0;
         this.rotationVelocity = 0;
+        
+        // Lifecycle properties
+        this.lastReproductionTime = frameCount;
+        this.age = 0;
+        this.maturityAge = 1200;
+        this.energy = 100;
+        this.maxAge = random(7200, 14400);
+        this.decompositionStage = 0;
+        this.decompositionTime = 0;
+        this.shouldRemove = false;
     }
 
     update(rippleForce) {
-        // Fish interaction forces
-        this.fishForceX *= 0.95; // Decay fish force
-        this.fishForceY *= 0.95;
+        this.age++;
+        
+        // Energy management
+        if (this.energy > 0) {
+            this.energy -= 0.02;
+            if (this.hasFlower && this.age < this.maxAge * 0.7) {
+                this.energy += 0.03;
+            }
+        } else if (this.hasFlower) {
+            this.hasFlower = false;
+        }
+
+        // Age-based decomposition
+        if (this.age > this.maxAge * 0.7 && this.decompositionStage === 0) {
+            this.decompositionStage = 1;
+        } else if (this.age > this.maxAge && this.decompositionStage === 1) {
+            this.decompositionStage = 2;
+            this.decompositionTime = frameCount;
+        }
+
+        // Mark for removal after decomposition period
+        if (this.decompositionStage === 2 && frameCount - this.decompositionTime > 300) {
+            this.shouldRemove = true;
+            let gridX = Math.floor(this.x / 4);
+            let gridY = Math.floor(this.y / 4);
+            if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+                previous[gridX][gridY] = 100;
+            }
+            return;
+        }
+        
+        // Fish interaction forces - reduced strength
+        this.fishForceX *= 0.9;  // Faster decay of fish forces
+        this.fishForceY *= 0.9;
         this.rotationVelocity *= 0.5;
         
-        // Check for nearby fish
+        // Check for nearby fish with reduced impact
         for (let f of fish) {
             let d = dist(this.x, this.y, f.x, f.y);
-            if (d < this.size * 1) { // Interaction radius
-                // Calculate normalized direction from fish to lily
+            if (d < this.size * 1) {
                 let dx = (this.x - f.x) / d;
                 let dy = (this.y - f.y) / d;
+                let forceMultiplier = map(this.decompositionStage, 0, 2, 0.3, 0.1); // Reduced force multiplier
+                let strength = map(d, 0, this.size * 2, 0.2, 0) * f.velocity * forceMultiplier; // Reduced base strength
                 
-                // Force strength based on distance and fish velocity
-                let strength = map(d, 0, this.size * 2, 0.5, 0) * f.velocity;
-                
-                // Add force from fish
-                this.fishForceX += dx * strength / 2;
-                this.fishForceY += dy * strength / 2;
-                
-                // Add rotational force based on fish's relative position
+                this.fishForceX += dx * strength * 2;
+                this.fishForceY += dy * strength * 2;
                 let angle = atan2(dy, dx);
-                let rotationForce = sin(angle - this.rotation) * strength * 0.02;
+                let rotationForce = sin(angle - this.rotation) * strength * 0.01; // Reduced rotation
                 this.rotationVelocity += rotationForce;
             }
         }
 
-        // Combine ripple and fish forces
-        let totalForceX = rippleForce.x * 0.1 + this.fishForceX;
-        let totalForceY = rippleForce.y * 0.1 + this.fishForceY;
+        // Check for lily interactions
+        if (!this.shouldRemove) {
+            for (let lily of lilies) {
+                if (lily !== this && !lily.shouldRemove) {
+                    let d = dist(this.x, this.y, lily.x, lily.y);
+                    if (d < (this.size + lily.size) / 2) {
+                        // Reduced flower transfer probability (from 2% to 0.5%)
+                        if (this.hasFlower && !lily.hasFlower && random(1) < 0.005) {
+                            lily.hasFlower = true;
+                            lily.energy = min(lily.energy + 20, 100);
+                        }
+                        
+                        // Reproduction check
+                        if (this.canReproduce() && lily.canReproduce()) {
+                            if (this.tryReproduce(lily)) {
+                                this.reproduce(lily);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Regular movement updates with reduced forces
+        let totalForceX = rippleForce.x * 0.05 + this.fishForceX; // Reduced ripple force impact
+        let totalForceY = rippleForce.y * 0.05 + this.fishForceY;
         
-        // Update velocities with combined forces
         this.vx = lerp(this.vx, totalForceX, 0.1);
         this.vy = lerp(this.vy, totalForceY, 0.1);
         
-        // Apply damping
         this.vx *= 0.95;
         this.vy *= 0.95;
         
@@ -245,16 +329,90 @@ class WaterLily {
         this.x += this.vx;
         this.y += this.vy;
         
-        // Update rotation with combined ripple and fish effects
-        this.rotation += this.rotationVelocity + (this.vx + this.vy) * 0.02;
+        // Update rotation with reduced effect
+        this.rotation += this.rotationVelocity + (this.vx + this.vy) * 0.01;
         
-        // Return to target position
-        this.x = lerp(this.x, this.targetX, 0.02);
-        this.y = lerp(this.y, this.targetY, 0.02);
+        // Boundary behavior
+        let bounceForce = 0.3; // Reduced bounce force
+        let margin = this.size / 2;
         
-        // Keep within bounds
-        this.x = constrain(this.x, 0, width);
-        this.y = constrain(this.y, 0, height);
+        if (this.x < margin) {
+            this.x = margin;
+            this.vx = abs(this.vx) * bounceForce;
+            this.targetX = this.x + 30;
+        } else if (this.x > width - margin) {
+            this.x = width - margin;
+            this.vx = -abs(this.vx) * bounceForce;
+            this.targetX = this.x - 30;
+        }
+        
+        if (this.y < margin) {
+            this.y = margin;
+            this.vy = abs(this.vy) * bounceForce;
+            this.targetY = this.y + 30;
+        } else if (this.y > height - margin) {
+            this.y = height - margin;
+            this.vy = -abs(this.vy) * bounceForce;
+            this.targetY = this.y - 30;
+        }
+        
+        // Gradually return to original position
+        this.targetX = lerp(this.targetX, this.originalX, 0.002); // Very slow return to original X
+        this.targetY = lerp(this.targetY, this.originalY, 0.002); // Very slow return to original Y
+        
+        // Move current position toward target
+        this.x = lerp(this.x, this.targetX, 0.01);
+        this.y = lerp(this.y, this.targetY, 0.01);
+    }
+
+    reproduce(otherLily) {
+        let newX = (this.x + otherLily.x) / 2 + random(-200, 200); // Add random offset
+        let newY = (this.y + otherLily.y) / 2 + random(-200, 200);
+        
+        if (!this.isAreaOvercrowded(newX, newY)) {
+            newX = constrain(newX, 0, width);
+            newY = constrain(newY, 0, height);
+            
+            lilies.push(new WaterLily(newX, newY));
+            
+            // Consume energy from both parents
+            this.energy -= 50;
+            otherLily.energy -= 50;
+            
+            // Create ripple effect
+            let gridX = Math.floor(newX / 4);
+            let gridY = Math.floor(newY / 4);
+            if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+                previous[gridX][gridY] = 200;
+            }
+        }
+    }
+
+    canReproduce() {
+        return this.age > this.maturityAge &&  // Must be mature
+               this.hasFlower &&               // Must have flower
+               this.energy >= 50 &&            // Must have enough energy
+               this.decompositionStage === 0 && // Must be healthy
+               frameCount - this.lastReproductionTime > 600; // 10 second cooldown
+    }
+
+    tryReproduce(otherLily) {
+        return random(1) < 0.01;  // 1% chance
+    }
+
+    isAreaOvercrowded(x, y) {
+        let nearbyCount = 0;
+        let checkRadius = 150;
+        
+        for (let lily of lilies) {
+            if (dist(x, y, lily.x, lily.y) < checkRadius) {
+                nearbyCount++;
+                if (nearbyCount >= 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     draw() {
@@ -264,21 +422,28 @@ class WaterLily {
         
         noStroke();
         
+        // Adjust colors based on decomposition stage
+        let alphaBase = this.decompositionStage === 2 ? 100 : 200;
+        let colorMult = map(this.decompositionStage, 0, 2, 1, 0.4);
+        
         // Base shadow
-        fill(34, 80, 34, 200);
+        fill(34 * colorMult, 80 * colorMult, 34 * colorMult, alphaBase);
         rect(-this.size/2 + 4, -this.size*0.4 + 4, this.size/4, this.size*0.4, 2);
         rect(-this.size/4, -this.size*0.4 + 4, this.size/2, this.size*0.4, 2);
         
         // Main green blocks
-        fill(67, 124, 23, 230);
+        fill(67 * colorMult, 124 * colorMult, 23 * colorMult, alphaBase + 30);
         rect(-this.size/2, -this.size*0.4, this.size/4, this.size*0.4, 2);
         rect(-this.size/4, -this.size*0.4, this.size/2, this.size*0.4, 2);
         
         // Highlight blocks
-        fill(162, 201, 39, 180);
-        rect(-this.size/2 + 2, -this.size*0.4 + 2, this.size/8, this.size*0.2, 1);
+        if (this.decompositionStage < 2) {
+            fill(162 * colorMult, 201 * colorMult, 39 * colorMult, 180);
+            rect(-this.size/2 + 2, -this.size*0.4 + 2, this.size/8, this.size*0.2, 1);
+        }
         
-        if (this.hasFlower) {
+        if (this.hasFlower && this.decompositionStage === 0) {
+            // Only show flower if lily is healthy
             fill(219, 112, 147, 200);
             rect(-12, -12, 8, 8);
             rect(4, -12, 8, 8);
@@ -617,7 +782,11 @@ function draw() {
 
     updatePixels();
     updateCreatures();
-    // Update and draw lilies
+
+    // First filter out any lilies marked for removal
+    lilies = lilies.filter(lily => !lily.shouldRemove);
+
+    // Then update and draw the remaining lilies
     for (let lily of lilies) {
         // Convert lily position to grid coordinates
         let gridX = Math.floor(lily.x / 4);
@@ -625,8 +794,6 @@ function draw() {
         
         // Ensure we're within grid bounds
         if (gridX > 0 && gridX < cols-1 && gridY > 0 && gridY < rows-1) {
-            // Calculate ripple forces from surrounding cells
-        // Calculate ripple forces from surrounding cells
             let rippleForce = {
                 x: (current[gridX+1][gridY] - current[gridX-1][gridY]) * 0.15,
                 y: (current[gridX][gridY+1] - current[gridX][gridY-1]) * 0.15

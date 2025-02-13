@@ -260,6 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       printBtn.disabled = true;
       printBtn.textContent = '⏳';
+      document.getElementById('defaultCanvas0').classList.add('claude-mode');
+      document.querySelector('.claude-monet').classList.remove('hide');
       
       // Save the current state
       saveToPortfolio();
@@ -272,6 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
         printBtn.disabled = false;
         printBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
         setTimeout(() => {
+          document.getElementById('defaultCanvas0').classList.remove('claude-mode');
+          document.querySelector('.claude-monet').classList.add('hide');
           printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
         }, 1000);
       }, 1000);

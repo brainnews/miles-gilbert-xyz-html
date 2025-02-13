@@ -48,6 +48,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     touch-action: none;
     overflow: hidden;
+    position: relative;
 }
 .p5Canvas {
     transform: scale(1.02);
@@ -221,6 +222,37 @@ button.circle {
     align-items: center;
     text-align: center;
 }
+.claude-monet {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    z-index: 999;
+    bottom: 0;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+}
+.claude-monet.hide {
+    transform: translateX(-250px);
+}
+.claude-monet img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+}
+.claude-monet .grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 120%;
+    height: 40px;
+    background-color: #557b55;
+    border-top-right-radius: 300px;
+    z-index: -1;
+}
+.p5Canvas {
+    transition: all 0.3s ease-in-out;
+}
 /* desktop */
 @media screen and (min-width: 900px) {
     .container {
@@ -255,6 +287,13 @@ button.circle {
         width: 100%;
         height: 100%;
         touch-action: none;
+        perspective: 1000px;
+    }
+    #defaultCanvas0.claude-mode {
+        width: 600px;
+        height: 460px;
+        transform-style: preserve-3d;
+        transform: rotateX(65deg) scale(0.7) translateY(150px) translateZ(-50px);
     }
     #controls {
         position: relative;
