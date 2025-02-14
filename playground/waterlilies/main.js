@@ -13,6 +13,7 @@ let splashSound;
 let bubbleSound;
 let audioContext;
 let splashBuffer;
+let pollinationChance = 0.02;
 
 async function loadSounds() {
     try {
@@ -165,20 +166,20 @@ class Fish {
         for (let lily of lilies) {
             let d = dist(this.x, this.y, lily.x, lily.y);
             if (d < lily.size) {
-                if (lily.hasFlower && !this.carryingPollen && lily !== this.pollenSourceLily) {
+                if (lily.hasFlower && lily.age >= lily.maturityAge && !this.carryingPollen && lily !== this.pollenSourceLily) {
                     this.carryingPollen = true;
                     this.pollenSourceLily = lily;
                     // Gain energy from collecting pollen
                     this.energy = min(100, this.energy + 10);
                 } else if (this.carryingPollen && lily !== this.pollenSourceLily) {
-                    if (lily.hasFlower && lily.age > lily.maturityAge) {
-                        if (random(1) < 0.01) {
-                            let newX = lily.x + random(-20, 20);
-                            let newY = lily.y + random(-20, 20);
+                    if (lily.hasFlower) {
+                        if (random(1) < pollinationChance) {
+                            let newX = lily.x + random(-200, 200);
+                            let newY = lily.y + random(-200, 200);
                             lilies.push(new WaterLily(newX, newY));
                         }
                     } else {
-                        if (random(1) < 0.015) {
+                        if (random(1) < pollinationChance) {
                             lily.hasFlower = true;
                         }
                     }
@@ -248,13 +249,20 @@ class Fish {
 }
 class WaterLily {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.originalX = x;  // Store original position
-        this.originalY = y;
-        this.targetX = x;
-        this.targetY = y;
+        // Constrain initial position based on lily size
         this.size = random(60, 100);
+        const margin = this.size / 2;
+        
+        // Constrain x and y to be within safe bounds
+        this.x = constrain(x, margin, width - margin);
+        this.y = constrain(y, margin, height - margin);
+        
+        // Store constrained positions as original positions
+        this.originalX = this.x;
+        this.originalY = this.y;
+        this.targetX = this.x;
+        this.targetY = this.y;
+        
         this.rotation = random(TWO_PI);
         this.vx = 0;
         this.vy = 0;
@@ -369,9 +377,9 @@ class WaterLily {
         // Update rotation with reduced effect
         this.rotation += this.rotationVelocity + (this.vx + this.vy) * 0.01;
         
-        // Boundary behavior
-        let bounceForce = 0.3; // Reduced bounce force
-        let margin = this.size / 2;
+        // Boundary behavior with size-aware constraints
+        const margin = this.size / 2;
+        let bounceForce = 0.3;
         
         if (this.x < margin) {
             this.x = margin;
@@ -403,13 +411,19 @@ class WaterLily {
     }
 
     reproduce(otherLily) {
-        let newX = (this.x + otherLily.x) / 2 + random(-200, 200); // Add random offset
+        // Calculate new position with random offset
+        let newX = (this.x + otherLily.x) / 2 + random(-200, 200);
         let newY = (this.y + otherLily.y) / 2 + random(-200, 200);
         
+        // Get the size that the new lily would have
+        const newSize = random(60, 100);
+        const margin = newSize / 2;
+        
+        // Constrain position accounting for the new lily's size
+        newX = constrain(newX, margin, width - margin);
+        newY = constrain(newY, margin, height - margin);
+        
         if (!this.isAreaOvercrowded(newX, newY)) {
-            newX = constrain(newX, 0, width);
-            newY = constrain(newY, 0, height);
-            
             lilies.push(new WaterLily(newX, newY));
             
             // Consume energy from both parents
@@ -771,7 +785,7 @@ function draw() {
     fishPopulation.innerText = fish.length;
     lilyPopulation.innerText = lilies.length;
     rockPopulation.innerText = rocks.length;
-    
+
     background(232);
     loadPixels();
     

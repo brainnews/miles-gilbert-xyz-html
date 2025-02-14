@@ -257,7 +257,7 @@ button.circle {
     flex-grow: .5;
     font-family: 'Atkinson Hyperlegible Mono', monospace;
     pointer-events: auto;
-    padding: 4px;
+    padding: 4px 8px;
     background-color: #202a41;
     border-radius: 8px;
     color: #fff;
@@ -266,16 +266,20 @@ button.circle {
 }
 .population-container .population-stat {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 4px;
 }
 .population-container .population-stat-title {
     font-size: 12px;
     font-weight: bold;
+    flex-grow: 1;
 }
 .population-container .population-stat-value {
     font-size: 16px;
     font-weight: bold;
+    flex-grow: 1;
+    text-align: right;
 }
 /* desktop */
 @media screen and (min-width: 900px) {
