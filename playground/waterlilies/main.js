@@ -95,28 +95,54 @@ class Fish {
         this.lastRippleTime = 0;
         this.carryingPollen = false;
         this.pollenSourceLily = null;
+        
+        // New lifecycle properties
+        this.age = 0;
+        this.maxAge = random(3600, 7200); // 60-120 seconds at 60fps
+        this.shouldRemove = false;
+        this.energy = 100;
     }
 
     update() {
-        // Natural swimming motion
+        // Update age
+        this.age++;
+        
+        // Decrease energy over time
+        this.energy = max(0, this.energy - 0.02);
+        
+        // Check for death conditions
+        if (this.age >= this.maxAge || this.energy <= 0) {
+            this.shouldRemove = true;
+            // Create a final ripple effect when fish dies
+            let gridX = Math.floor(this.x / 4);
+            let gridY = Math.floor(this.y / 4);
+            if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+                previous[gridX][gridY] = 150;
+            }
+            return;
+        }
+
+        // Adjust velocity based on age
+        let ageRatio = this.age / this.maxAge;
+        if (ageRatio > 0.8) {
+            // Slow down in old age
+            this.targetVelocity = max(1, this.targetVelocity * 0.99);
+        }
+
+        // Original movement logic
         this.turnSpeed = noise(frameCount * 0.02, this.x * 0.01, this.y * 0.01) - 0.5;
         this.angle += this.turnSpeed * 0.1;
         
-        // Randomly dart occasionally
-        if (random(1) < 0.005) { // 0.5% chance each frame
-            this.targetVelocity = random(6, 8); // Start darting
+        if (random(1) < 0.005) {
+            this.targetVelocity = random(6, 8);
         }
         
-        // Smooth velocity transition
         this.velocity = lerp(this.velocity, this.targetVelocity, 0.1);
         
-        // Create ripples when moving fast
         if (this.velocity > 5) {
-            // Convert position to grid coordinates
             let gridX = Math.floor(this.x / 4);
             let gridY = Math.floor(this.y / 4);
             
-            // Only create ripple every few frames to avoid overwhelming the system
             if (frameCount - this.lastRippleTime > 5) {
                 if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
                     previous[gridX][gridY] = 200;
@@ -124,58 +150,53 @@ class Fish {
                 }
             }
             
-            // Gradually return to normal speed
             this.targetVelocity = lerp(this.targetVelocity, random(2, 4), 0.02);
         }
         
-        // Update position
         this.x += cos(this.angle) * this.velocity;
         this.y += sin(this.angle) * this.velocity;
         
-        // Wrap around screen
         if (this.x < 0) this.x = width;
         if (this.x > width) this.x = 0;
         if (this.y < 0) this.y = height;
         if (this.y > height) this.y = 0;
         
-        // Interact with lilies for pollination
+        // Lily interaction logic
         for (let lily of lilies) {
             let d = dist(this.x, this.y, lily.x, lily.y);
             if (d < lily.size) {
-                // Check for pollination interactions
                 if (lily.hasFlower && !this.carryingPollen && lily !== this.pollenSourceLily) {
                     this.carryingPollen = true;
                     this.pollenSourceLily = lily;
+                    // Gain energy from collecting pollen
+                    this.energy = min(100, this.energy + 10);
                 } else if (this.carryingPollen && lily !== this.pollenSourceLily) {
-                    // Try to pollinate
-                    if (lily.hasFlower) {
-                        // 1% chance to spawn new lily
+                    if (lily.hasFlower && lily.age > lily.maturityAge) {
                         if (random(1) < 0.01) {
                             let newX = lily.x + random(-20, 20);
                             let newY = lily.y + random(-20, 20);
                             lilies.push(new WaterLily(newX, newY));
                         }
                     } else {
-                        // 1.5% chance to spawn flower on target lily
                         if (random(1) < 0.015) {
                             lily.hasFlower = true;
                         }
                     }
                     this.carryingPollen = false;
                     this.pollenSourceLily = null;
+                    // Gain energy from successful pollination
+                    this.energy = min(100, this.energy + 5);
                 }
                 
-                // Steer away from lily
                 let angle = atan2(this.y - lily.y, this.x - lily.x);
                 this.angle = lerp(this.angle, angle, 0.2);
             }
         }
         
-        // Avoid rocks
+        // Rock avoidance logic
         for (let rock of rocks) {
             let d = dist(this.x, this.y, rock.x, rock.y);
             if (d < rock.size) {
-                // Steer away from rock
                 let angle = atan2(this.y - rock.y, this.x - rock.x);
                 this.angle = lerp(this.angle, angle, 0.2);
             }
@@ -187,31 +208,40 @@ class Fish {
         translate(this.x, this.y);
         rotate(this.angle);
         
-        // Draw fish body with transparency
-        let c = color(red(this.color), green(this.color), blue(this.color), 100); // 180/255 opacity
+        // Calculate transparency based on energy only
+        let alpha = map(this.energy, 0, 100, 100, 255);
+        
+        // Modify color based on energy
+        let c = color(
+            red(this.color), 
+            green(this.color), 
+            blue(this.color), 
+            alpha
+        );
         fill(c);
         noStroke();
         
-        // Body
+        // Draw body with normal size
         rect(-this.size, -this.size/2, this.size * 1.5, this.size, 4);
         
-        // Tail
+        // Draw tail
         triangle(
-            -this.size, -this.size/2,
-            -this.size, this.size/2,
+            -this.size + 1, -this.size/2,
+            -this.size + 1, this.size/2,
             -this.size * 1.5, 0
         );
         
-        // Eye
-        if (this.carryingPollen) { // Show eye if carrying pollen
+        // Eye color changes with age and energy
+        if (this.carryingPollen) {
             fill(255);
-            noStroke();
-            circle(0, 0, this.size/4);
         } else {
-            fill(0);
-            noStroke();
-            circle(0, 0, this.size/4);
+            let eyeColor = map(this.energy, 0, 100, 150, 0);
+            fill(eyeColor);
         }
+        noStroke();
+        circle(0, 0, this.size/4);
+        
+        // No age indicators
         
         pop();
     }
@@ -237,7 +267,7 @@ class WaterLily {
         // Lifecycle properties
         this.lastReproductionTime = frameCount;
         this.age = 0;
-        this.maturityAge = 1200;
+        this.maturityAge = 600;
         this.energy = 400;
         this.maxAge = random(7200 / fish.length, 10000 / fish.length);
         this.decompositionStage = 0;
@@ -462,6 +492,12 @@ class WaterLily {
             
             fill(255, 223, 51, 250);
             rect(-4, -4, 8, 8);
+
+            // if lily is mature, color flower white
+            if (this.age > this.maturityAge) {
+                fill(255);
+                rect(-4, -4, 8, 8);
+            }
         }
         
         pop();
@@ -711,10 +747,15 @@ function mousePressed() {
 }
 
 function updateCreatures() {
+    // Remove dead fish and update remaining ones
+    fish = fish.filter(f => !f.shouldRemove);
+
+    // Spawn new fish if there aren't enough
     if (random(lilies.length) < lilies.length * 0.0008 && fish.length < lilies.length * 2) {
         fish.push(new Fish(random(width), random(height)));
     }
-    // Update and draw fish first (so they appear under lilies)
+    
+    // Update and draw remaining fish
     for (let f of fish) {
         f.update();
         f.draw();
@@ -722,6 +763,15 @@ function updateCreatures() {
 }
 
 function draw() {
+    const fishPopulation = document.getElementById('fishPopulation');
+    const lilyPopulation = document.getElementById('lilyPopulation');
+    const rockPopulation = document.getElementById('rockPopulation');
+
+    // update population counters
+    fishPopulation.innerText = fish.length;
+    lilyPopulation.innerText = lilies.length;
+    rockPopulation.innerText = rocks.length;
+    
     background(232);
     loadPixels();
     

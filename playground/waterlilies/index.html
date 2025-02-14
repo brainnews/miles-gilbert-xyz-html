@@ -4,8 +4,9 @@
     <title>Simulateur d'étang '95 : édition Claude Monet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <!-- import css -->
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+25&family=Workbench&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="portfolio.css">
 </head>
@@ -26,6 +27,20 @@
                 <button id="rockBtn" class="control-btn" alt="Rock">🪨</button>
                 <button id="lilyBtn" class="control-btn" alt="Lily">🪷</button>
                 <button id="fishBtn" class="control-btn" alt="Fish">🐟</button>
+                <div class="population-container">
+                  <div class="population-stat">
+                    <div class="population-stat-title">🐟</div>
+                    <div id="fishPopulation" class="population-stat-value">0</div>
+                  </div>
+                  <div class="population-stat">
+                    <div class="population-stat-title">🪷</div>
+                    <div id="lilyPopulation" class="population-stat-value">0</div>
+                  </div>
+                  <div class="population-stat">
+                    <div class="population-stat-title">🪨</div>
+                    <div id="rockPopulation" class="population-stat-value">0</div>
+                  </div>
+                </div>
             </div>
             <div class="control-row">
                 <button id="showPortfolio" class="control-btn" alt="Portfolio">📓 <span class="hide-on-mobile">Compositions</span></button>

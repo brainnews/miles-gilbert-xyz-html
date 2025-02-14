@@ -253,6 +253,30 @@ button.circle {
 .p5Canvas {
     transition: all 0.3s ease-in-out;
 }
+.population-container {
+    flex-grow: .5;
+    font-family: 'Atkinson Hyperlegible Mono', monospace;
+    pointer-events: auto;
+    padding: 4px;
+    background-color: #202a41;
+    border-radius: 8px;
+    color: #fff;
+    border: 2px solid #dddddd;
+    box-shadow: 0 2px 0px 0px rgb(0 0 0 / 23%);
+}
+.population-container .population-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.population-container .population-stat-title {
+    font-size: 12px;
+    font-weight: bold;
+}
+.population-container .population-stat-value {
+    font-size: 16px;
+    font-weight: bold;
+}
 /* desktop */
 @media screen and (min-width: 900px) {
     .container {
