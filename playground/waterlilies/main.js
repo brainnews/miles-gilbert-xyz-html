@@ -203,8 +203,15 @@ class Fish {
         );
         
         // Eye
-        fill(0);
-        circle(0, 0, this.size/4);
+        if (this.carryingPollen) { // Show eye if carrying pollen
+            fill(255);
+            noStroke();
+            circle(0, 0, this.size/4);
+        } else {
+            fill(0);
+            noStroke();
+            circle(0, 0, this.size/4);
+        }
         
         pop();
     }
@@ -232,7 +239,7 @@ class WaterLily {
         this.age = 0;
         this.maturityAge = 1200;
         this.energy = 100;
-        this.maxAge = random(7200, 14400);
+        this.maxAge = random(7200 / fish.length, 10000 / fish.length);
         this.decompositionStage = 0;
         this.decompositionTime = 0;
         this.shouldRemove = false;
