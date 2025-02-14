@@ -238,7 +238,7 @@ class WaterLily {
         this.lastReproductionTime = frameCount;
         this.age = 0;
         this.maturityAge = 1200;
-        this.energy = 100;
+        this.energy = 400;
         this.maxAge = random(7200 / fish.length, 10000 / fish.length);
         this.decompositionStage = 0;
         this.decompositionTime = 0;
@@ -711,6 +711,9 @@ function mousePressed() {
 }
 
 function updateCreatures() {
+    if (random(lilies.length) < lilies.length * 0.0008 && fish.length < lilies.length * 2) {
+        fish.push(new Fish(random(width), random(height)));
+    }
     // Update and draw fish first (so they appear under lilies)
     for (let f of fish) {
         f.update();
