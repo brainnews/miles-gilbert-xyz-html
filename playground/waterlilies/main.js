@@ -13,7 +13,7 @@ let splashSound;
 let bubbleSound;
 let audioContext;
 let splashBuffer;
-let pollinationChance = 0.02;
+let pollinationChance = 0.01;
 
 async function loadSounds() {
     try {
