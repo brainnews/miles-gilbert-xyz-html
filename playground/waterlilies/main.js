@@ -15,8 +15,16 @@ let audioContext;
 let splashBuffer;
 let pollinationChance = 0.01;
 let foodParticles = [];
-let dayLength = 36000;
-let frameCount = 0;
+let dayLength = 72000; // 20 minute day
+let debug = true;
+const debugBtn = document.getElementById('debugBtn');
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('debugBtn').addEventListener('click', () => {
+        debug = !debug;
+        debugBtn.textContent = debug ? '🐞 On' : '🐞 Off';
+    });
+});
 
 async function loadSounds() {
     try {
@@ -259,7 +267,7 @@ class Fish {
         // Movement behavior when not pursuing food
         if (!this.targetFood) {
             this.turnSpeed = noise(frameCount * 0.02, this.x * 0.01, this.y * 0.01) - 0.5;
-            this.angle += this.turnSpeed * 0.1;
+            this.angle += this.turnSpeed * 0.5;
             
             if (random(1) < 0.005) {
                 this.targetVelocity = random(6, 8);
@@ -395,7 +403,7 @@ class Fish {
 class WaterLily {
     constructor(x, y) {
         // Constrain initial position based on lily size
-        this.size = random(60, 100);
+        this.size = random(50, 90);
         const margin = this.size / 2;
         
         // Constrain x and y to be within safe bounds
@@ -411,7 +419,8 @@ class WaterLily {
         this.rotation = random(TWO_PI);
         this.vx = 0;
         this.vy = 0;
-        this.hasFlower = random() < 0.5;
+        this.hasBloomed = false;
+        this.hasFlower = random() < 0.4;
         
         this.fishForceX = 0;
         this.fishForceY = 0;
@@ -422,23 +431,33 @@ class WaterLily {
         this.age = 0;
         this.maturityAge = 600;
         this.energy = 400;
-        this.maxAge = random(7200 / fish.length, 10000 / fish.length);
+        this.maxAge = random(7200, 14400);
         this.decompositionStage = 0;
         this.decompositionTime = 0;
         this.shouldRemove = false;
+        this.isHovered = false;
     }
 
     update(rippleForce) {
+        if (this.hasFlower) {
+            this.hasBloomed = true;
+        }
         this.age++;
         
         // Energy management
         if (this.energy > 0) {
             this.energy -= 0.02;
-            if (this.hasFlower && this.age < this.maxAge * 0.7) {
+            if (this.hasFlower && this.age < this.maxAge * 0.7 && this.energy > 0) {
                 this.energy += 0.03;
             }
         } else if (this.hasFlower) {
             this.hasFlower = false;
+        }
+
+        // small chance to grow a flower
+        if (random(1) < 0.0003 && !this.hasFlower && !this.hasBloomed) {
+            this.hasFlower = true;
+            this.hasBloomed = true;
         }
 
         // Age-based decomposition
@@ -448,6 +467,16 @@ class WaterLily {
             this.decompositionStage = 2;
             this.decompositionTime = frameCount;
         }
+
+        // increase energy loss based on amount of other lilies
+        let nearbyLilies = 0;
+        for (let lily of lilies) {
+            let d = dist(this.x, this.y, lily.x, lily.y);
+            if (d < this.size * 2) {
+                nearbyLilies++;
+            }
+        }
+        this.energy -= 0.01 * nearbyLilies;
 
         // Mark for removal after decomposition period
         if (this.decompositionStage === 2 && frameCount - this.decompositionTime > 300) {
@@ -489,7 +518,7 @@ class WaterLily {
                     let d = dist(this.x, this.y, lily.x, lily.y);
                     if (d < (this.size + lily.size) / 2) {
                         // Reduced flower transfer probability (from 2% to 0.5%)
-                        if (this.hasFlower && !lily.hasFlower && random(1) < 0.005) {
+                        if (this.hasFlower && !lily.hasFlower && random(1) < 0.005 && !lily.hasBloomed) {
                             lily.hasFlower = true;
                             lily.energy = min(lily.energy + 20, 100);
                         }
@@ -612,20 +641,67 @@ class WaterLily {
     }
 
     draw() {
-        push();
-        translate(this.x, this.y);
-        rotate(this.rotation);
-        
-        noStroke();
-        
-        // Adjust colors based on decomposition stage
         let alphaBase = this.decompositionStage === 2 ? 100 : 200;
         let colorMult = map(this.decompositionStage, 0, 2, 1, 0.4);
         
-        // Base shadow
+        // Draw shadow first - calculated based on fixed light source from top-right
+        push();
+        translate(this.x, this.y);
+        noStroke();
+        
+        // Base shadow with fixed light direction (top-right source)
+        const shadowOffset = 4;
         fill(34 * colorMult, 80 * colorMult, 34 * colorMult, alphaBase);
-        rect(-this.size/2 + 4, -this.size*0.4 + 4, this.size/4, this.size*0.4, 2);
-        rect(-this.size/4, -this.size*0.4 + 4, this.size/2, this.size*0.4, 2);
+        
+        // Draw the shadow by transforming the lily's rectangles
+        // First save the current rotation
+        const currentRotation = this.rotation;
+        
+        // Calculate shadow positions by applying the current rotation to the lily's shape
+        // but keeping shadow offset direction constant
+        const rectPoints = [
+            // First rectangle points
+            {x: -this.size/2, y: -this.size*0.4},
+            {x: -this.size/4, y: -this.size*0.4},
+            {x: -this.size/4, y: 0},
+            {x: -this.size/2, y: 0},
+            // Second rectangle points
+            {x: -this.size/4, y: -this.size*0.4},
+            {x: this.size/4, y: -this.size*0.4},
+            {x: this.size/4, y: 0},
+            {x: -this.size/4, y: 0}
+        ];
+        
+        // Rotate points according to lily rotation
+        const rotatedPoints = rectPoints.map(point => {
+            const rotatedX = point.x * cos(currentRotation) - point.y * sin(currentRotation);
+            const rotatedY = point.x * sin(currentRotation) + point.y * cos(currentRotation);
+            return {
+                x: rotatedX + shadowOffset,
+                y: rotatedY + shadowOffset
+            };
+        });
+        
+        // Draw first rectangle shadow
+        beginShape();
+        for(let i = 0; i < 4; i++) {
+            vertex(rotatedPoints[i].x, rotatedPoints[i].y);
+        }
+        endShape(CLOSE);
+        
+        // Draw second rectangle shadow
+        beginShape();
+        for(let i = 4; i < 8; i++) {
+            vertex(rotatedPoints[i].x, rotatedPoints[i].y);
+        }
+        endShape(CLOSE);
+        pop();
+        
+        // Draw the main lily with rotation
+        push();
+        translate(this.x, this.y);
+        rotate(this.rotation);
+        noStroke();
         
         // Main green blocks
         fill(67 * colorMult, 124 * colorMult, 23 * colorMult, alphaBase + 30);
@@ -657,6 +733,13 @@ class WaterLily {
                 fill(255);
                 rect(-4, -4, 8, 8);
             }
+        }
+        // display lily age, marurity age, and energy
+        if (debug && this.isHovered) {
+            fill(255);
+            textSize(9);
+            textAlign(LEFT, TOP);
+            text("Max age: " + this.maxAge.toFixed(0) + "\nAge: " + this.age + "\nMaturity: " + this.maturityAge + "\nEnergy: " + this.energy.toFixed(0) + "\nRotation: " + this.rotation.toFixed(0), 0, 0);
         }
         
         pop();
@@ -935,7 +1018,7 @@ function updateCreatures() {
     fish = fish.filter(f => !f.shouldRemove);
 
     // Spawn new fish if there aren't enough
-    if (random(lilies.length) < lilies.length * 0.0008 && fish.length < lilies.length * 2) {
+    if (random(rocks.length) < rocks.length * 0.0008 && fish.length < rocks.length * 2) {
         fish.push(new Fish(random(width), random(height)));
     }
     
@@ -949,7 +1032,8 @@ function updateCreatures() {
 function updateTimeOfDay(frameCount) {
     // 36000 frames = 24 hours
     // So each frame represents 24*60*60/36000 = 2.4 seconds of game time
-    const totalGameSeconds = (frameCount * 2.4) % (24 * 60 * 60);
+    const gameHour = 24*60*60/dayLength;
+    const totalGameSeconds = (frameCount * gameHour) % (24 * 60 * 60);
     
     // Convert to hours, minutes
     const hours = Math.floor(totalGameSeconds / 3600);
@@ -963,6 +1047,41 @@ function updateTimeOfDay(frameCount) {
     document.getElementById('timeOfDay').textContent = `${formattedHours}:${formattedMinutes}`;
 }
 
+function drawCursor() {
+    const iconOffset = 24;
+    fill(255, 255, 255);
+    stroke(255, 255, 255, 70);
+    strokeWeight(2);
+    circle(mouseX + iconOffset, mouseY + iconOffset, 40);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    cursor('none');
+    if (placeMode === 'rock') {
+        text('🪨', mouseX + iconOffset, mouseY + iconOffset);
+    } else if (placeMode === 'lily') {
+        text('🌺', mouseX + iconOffset, mouseY + iconOffset);
+    } else if (placeMode === 'fish') {
+        text('🐟', mouseX + iconOffset, mouseY + iconOffset);
+    } else if (placeMode === 'food') {
+        text('🍞', mouseX + iconOffset, mouseY + iconOffset);
+    }
+    fill(255);
+    stroke(0);
+    strokeWeight(0);
+    triangle(
+        mouseX, mouseY,
+        mouseX + 8, mouseY + 3,
+        mouseX + 3, mouseY + 8
+    );
+    // detect if mouse is over a lily
+    for (let lily of lilies) {
+        if (mouseX > lily.x - lily.size/2 && mouseX < lily.x + lily.size/2 && mouseY > lily.y - lily.size/2 && mouseY < lily.y + lily.size/2) {
+            lily.isHovered = true;
+        } else {
+            lily.isHovered = false;
+        }
+    }
+}
 
 function draw() {
     const fishPopulation = document.getElementById('fishPopulation');
@@ -1043,14 +1162,13 @@ function draw() {
     updatePixels();
     updateFoodParticles();
     updateCreatures();
-
     // Update time of day
-    if (frameCount >= dayLength) {
-        frameCount = 0;
-    } else {
-        frameCount++;
-    }
-    updateTimeOfDay(frameCount);
+    // if (frameCount >= dayLength) {
+    //     frameCount = 0;
+    // } else {
+    //     frameCount++;
+    // }
+    // updateTimeOfDay(frameCount);
 
     // First filter out any lilies marked for removal
     lilies = lilies.filter(lily => !lily.shouldRemove);
@@ -1071,7 +1189,7 @@ function draw() {
         }
         lily.draw();
     }
-    
+    drawCursor();
     // Swap buffers
     let temp = previous;
     previous = current;

@@ -253,7 +253,7 @@ button.circle {
 .p5Canvas {
     transition: all 0.3s ease-in-out;
 }
-.population-container, .time-container {
+.population-container, .time-container, .wallet-container {
     flex-grow: 1;
     font-family: 'Atkinson Hyperlegible Mono', monospace;
     pointer-events: auto;
@@ -264,7 +264,7 @@ button.circle {
     border: 2px solid #c5c5c5;
     box-shadow: inset 0px 3px 0px 0px rgb(0 0 0 / 30%);
 }
-.population-container .population-stat, .time-container .time {
+.population-container .population-stat, .time-container .time, .wallet-container .wallet {
     display: flex;
     justify-content: space-between;
     align-items: center;
