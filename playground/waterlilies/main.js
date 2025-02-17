@@ -14,6 +14,9 @@ let bubbleSound;
 let audioContext;
 let splashBuffer;
 let pollinationChance = 0.01;
+let foodParticles = [];
+let dayLength = 36000;
+let frameCount = 0;
 
 async function loadSounds() {
     try {
@@ -78,6 +81,72 @@ function createClickSound() {
     noiseNode.stop(time + 0.05);
 }
 
+class FoodParticle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = random(4, 8);
+        this.energy = 5;
+        this.color = color(218, 165, 32); // Golden color for food
+        this.shouldRemove = false;
+        this.lastRippleTime = 0;
+        this.age = 0;
+        this.maxAge = random(400, 600);
+        
+        // Create initial ripple effect
+        let gridX = Math.floor(this.x / 4);
+        let gridY = Math.floor(this.y / 4);
+        if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+            previous[gridX][gridY] = 100;
+        }
+    }
+
+    update() {
+        // Create occasional ripples
+        if (frameCount - this.lastRippleTime > 30) {
+            let gridX = Math.floor(this.x / 4);
+            let gridY = Math.floor(this.y / 4);
+            if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+                previous[gridX][gridY] = 50;
+                this.lastRippleTime = frameCount;
+            }
+        }
+
+        // Slowly sink and drift
+        this.y += random(-0.5, 0.5);
+        this.x += random(-0.5, 0.5);
+
+        // Check boundaries
+        if (this.y > height) {
+            this.shouldRemove = true;
+        }
+
+        // Increase age
+        this.age++;
+
+        // Check for death conditions
+        if (this.age > this.maxAge) {
+            this.shouldRemove = true;
+        }
+    }
+
+    draw() {
+        push();
+        noStroke();
+        fill(this.color);
+        rect(this.x, this.y, this.size);
+        pop();
+    }
+
+    consume(amount) {
+        this.energy -= amount;
+        this.size = map(this.energy, 0, 5, 2, 8);
+        if (this.energy <= 0) {
+            this.shouldRemove = true;
+        }
+    }
+}
+
 class Fish {
     constructor(x, y) {
         this.x = x;
@@ -97,11 +166,16 @@ class Fish {
         this.carryingPollen = false;
         this.pollenSourceLily = null;
         
-        // New lifecycle properties
+        // Lifecycle properties
         this.age = 0;
         this.maxAge = random(3600, 7200); // 60-120 seconds at 60fps
         this.shouldRemove = false;
         this.energy = 100;
+
+        // Food-seeking properties
+        this.isHungry = true;
+        this.targetFood = null;
+        this.eatingSpeed = random(0.5, 1.5);
     }
 
     update() {
@@ -123,6 +197,58 @@ class Fish {
             return;
         }
 
+        // Handle food-seeking behavior
+        if (this.isHungry) {
+            // Look for nearby food if not currently targeting any
+            if (!this.targetFood) {
+                this.findNearestFood();
+            }
+            
+            // If we have a target food, move towards it
+            if (this.targetFood) {
+                // Check if the target food still exists and isn't being consumed
+                if (this.targetFood.shouldRemove) {
+                    this.targetFood = null;
+                    return;
+                }
+
+                // Calculate angle to food
+                let angleToFood = atan2(
+                    this.targetFood.y - this.y,
+                    this.targetFood.x - this.x
+                );
+
+                // Adjust fish's angle towards food
+                let angleDiff = angleToFood - this.angle;
+                if (angleDiff > PI) angleDiff -= TWO_PI;
+                if (angleDiff < -PI) angleDiff += TWO_PI;
+                this.angle += angleDiff * 0.1;
+
+                // Increase speed when approaching food
+                this.targetVelocity = 5;
+
+                // Check if close enough to eat
+                let d = dist(this.x, this.y, this.targetFood.x, this.targetFood.y);
+                if (d < this.size) {
+                    // Consume some of the food
+                    this.targetFood.consume(this.eatingSpeed);
+                    
+                    // Gain energy from eating
+                    this.energy = min(100, this.energy + this.eatingSpeed);
+                    
+                    // If food is consumed, clear target and become temporarily satisfied
+                    if (this.targetFood.shouldRemove) {
+                        this.targetFood = null;
+                        this.isHungry = false;
+                        setTimeout(() => this.isHungry = true, random(5000, 10000));
+                    }
+                } else {
+                    // swim away from food
+                    this.targetFood = null;
+                }
+            }
+        }
+
         // Adjust velocity based on age
         let ageRatio = this.age / this.maxAge;
         if (ageRatio > 0.8) {
@@ -130,33 +256,37 @@ class Fish {
             this.targetVelocity = max(1, this.targetVelocity * 0.99);
         }
 
-        // Original movement logic
-        this.turnSpeed = noise(frameCount * 0.02, this.x * 0.01, this.y * 0.01) - 0.5;
-        this.angle += this.turnSpeed * 0.1;
-        
-        if (random(1) < 0.005) {
-            this.targetVelocity = random(6, 8);
-        }
-        
-        this.velocity = lerp(this.velocity, this.targetVelocity, 0.1);
-        
-        if (this.velocity > 5) {
-            let gridX = Math.floor(this.x / 4);
-            let gridY = Math.floor(this.y / 4);
+        // Movement behavior when not pursuing food
+        if (!this.targetFood) {
+            this.turnSpeed = noise(frameCount * 0.02, this.x * 0.01, this.y * 0.01) - 0.5;
+            this.angle += this.turnSpeed * 0.1;
             
-            if (frameCount - this.lastRippleTime > 5) {
-                if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
-                    previous[gridX][gridY] = 200;
-                    this.lastRippleTime = frameCount;
-                }
+            if (random(1) < 0.005) {
+                this.targetVelocity = random(6, 8);
             }
             
-            this.targetVelocity = lerp(this.targetVelocity, random(2, 4), 0.02);
+            this.velocity = lerp(this.velocity, this.targetVelocity, 0.1);
+            
+            if (this.velocity > 5) {
+                let gridX = Math.floor(this.x / 4);
+                let gridY = Math.floor(this.y / 4);
+                
+                if (frameCount - this.lastRippleTime > 5) {
+                    if (gridX > 0 && gridX < cols - 1 && gridY > 0 && gridY < rows - 1) {
+                        previous[gridX][gridY] = 200;
+                        this.lastRippleTime = frameCount;
+                    }
+                }
+                
+                this.targetVelocity = lerp(this.targetVelocity, random(2, 4), 0.02);
+            }
         }
         
+        // Update position
         this.x += cos(this.angle) * this.velocity;
         this.y += sin(this.angle) * this.velocity;
         
+        // Wrap around screen edges
         if (this.x < 0) this.x = width;
         if (this.x > width) this.x = 0;
         if (this.y < 0) this.y = height;
@@ -204,6 +334,23 @@ class Fish {
         }
     }
 
+    findNearestFood() {
+        let nearestDist = Infinity;
+        let nearestFood = null;
+
+        for (let food of foodParticles) {
+            if (!food.shouldRemove) {
+                let d = dist(this.x, this.y, food.x, food.y);
+                if (d < 100 && d < nearestDist) { // Detection radius of 200 pixels
+                    nearestDist = d;
+                    nearestFood = food;
+                }
+            }
+        }
+
+        this.targetFood = nearestFood;
+    }
+
     draw() {
         push();
         translate(this.x, this.y);
@@ -241,8 +388,6 @@ class Fish {
         }
         noStroke();
         circle(0, 0, this.size/4);
-        
-        // No age indicators
         
         pop();
     }
@@ -621,11 +766,16 @@ function setupControls() {
                     placeMode = 'fish';
                     button.classList.add('active');
                     createClickSound();
+                } else if (button.id === 'foodBtn') {
+                    placeMode = 'food';
+                    button.classList.add('active');
+                    createClickSound();
                 } else if (button.id === 'resetBtn') {
                     screenElement.style.filter = 'blur(10px)';
                     rocks = [];
                     lilies = [];
                     fish = [];
+                    foodParticles = [];
                     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
                     setTimeout(() => screenElement.style.filter = 'none', 500);
@@ -756,8 +906,28 @@ function mousePressed() {
             fish.push(new Fish(mouseX, mouseY));
             createSplashSound();
             break;
+        case 'food':
+            // Add 5-10 food particles in a small area
+            const numParticles = random(2, 5);
+            for (let i = 0; i < numParticles; i++) {
+                const offsetX = random(-20, 20);
+                const offsetY = random(-20, 20);
+                foodParticles.push(new FoodParticle(mouseX + offsetX, mouseY + offsetY));
+            }
+            createSplashSound();
+            break;
     }
     return false;
+}
+function updateFoodParticles() {
+    // Remove consumed food
+    foodParticles = foodParticles.filter(food => !food.shouldRemove);
+
+    // Update and draw remaining food
+    for (let food of foodParticles) {
+        food.update();
+        food.draw();
+    }
 }
 
 function updateCreatures() {
@@ -776,15 +946,31 @@ function updateCreatures() {
     }
 }
 
+function updateTimeOfDay(frameCount) {
+    // 36000 frames = 24 hours
+    // So each frame represents 24*60*60/36000 = 2.4 seconds of game time
+    const totalGameSeconds = (frameCount * 2.4) % (24 * 60 * 60);
+    
+    // Convert to hours, minutes
+    const hours = Math.floor(totalGameSeconds / 3600);
+    const minutes = Math.floor((totalGameSeconds % 3600) / 60);
+    
+    // Format with leading zeros
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    
+    // Update the display
+    document.getElementById('timeOfDay').textContent = `${formattedHours}:${formattedMinutes}`;
+}
+
+
 function draw() {
     const fishPopulation = document.getElementById('fishPopulation');
     const lilyPopulation = document.getElementById('lilyPopulation');
-    const rockPopulation = document.getElementById('rockPopulation');
 
     // update population counters
     fishPopulation.innerText = fish.length;
     lilyPopulation.innerText = lilies.length;
-    rockPopulation.innerText = rocks.length;
 
     background(232);
     loadPixels();
@@ -855,7 +1041,16 @@ function draw() {
     }
 
     updatePixels();
+    updateFoodParticles();
     updateCreatures();
+
+    // Update time of day
+    if (frameCount >= dayLength) {
+        frameCount = 0;
+    } else {
+        frameCount++;
+    }
+    updateTimeOfDay(frameCount);
 
     // First filter out any lilies marked for removal
     lilies = lilies.filter(lily => !lily.shouldRemove);

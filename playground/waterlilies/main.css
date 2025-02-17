@@ -64,8 +64,8 @@ h1, h2, h3, h4, h5, h6 {
     touch-action: none;
 }
 .control-row {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
     width: 100%;
 }
@@ -253,18 +253,18 @@ button.circle {
 .p5Canvas {
     transition: all 0.3s ease-in-out;
 }
-.population-container {
-    flex-grow: .5;
+.population-container, .time-container {
+    flex-grow: 1;
     font-family: 'Atkinson Hyperlegible Mono', monospace;
     pointer-events: auto;
-    padding: 4px 8px;
+    padding: 8px 12px;
     background-color: #202a41;
-    border-radius: 8px;
+    border-radius: 80px;
     color: #fff;
-    border: 2px solid #dddddd;
-    box-shadow: 0 2px 0px 0px rgb(0 0 0 / 23%);
+    border: 2px solid #c5c5c5;
+    box-shadow: inset 0px 3px 0px 0px rgb(0 0 0 / 30%);
 }
-.population-container .population-stat {
+.population-container .population-stat, .time-container .time {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -348,13 +348,6 @@ button.circle {
     }
     #about {
         grid-area: 2 / 1 / 4 / 1;
-        max-height: 585px;
-    }
-    .control-row {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        width: 100%;
     }
     .control-row:not(:last-child) {
         margin-bottom: 10px;
