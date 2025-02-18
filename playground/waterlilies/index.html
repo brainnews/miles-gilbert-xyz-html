@@ -14,10 +14,18 @@
     <div id="container" class="container">
         <div class="label">
             <div>Simulateur d'étang '95 : édition Claude Monet</div>
-            <button id="debugBtn" class="control-btn circle" style="padding: 0 8px 0 4px;" alt="Debug">🐞 On</button>
-            <button id="aboutBtn" class="control-btn circle" alt="About">i</button>
         </div>
         <div class="screen" id="screen">
+          <div id="pausedNotification" class="paused-notification hidden">Paused</div>
+          <div id="milestoneModal" class="milestone-modal hidden">
+            <div class="modal-content">
+              <div class="modal-header"></div>
+              <div class="modal-body"></div>
+              <div class="modal-footer">
+                <button id="closeModal">Close</button>
+              </div>
+            </div>
+          </div>
           <div class="claude-monet hide">
             <img src="monet-painting.png" alt="Claude Monet painting en plein air">
             <div class="grass"></div>
@@ -51,17 +59,16 @@
               </div>
             </div>
             <div class="control-row">
-              <div class="game-menu hidden">
-                <div class="menu-column">
-                  <button id="showPortfolio" class="control-btn" alt="Portfolio">📓 Load game...</button>
-                  <button id="printBtn" class="control-btn" alt="Print">📸 Save game</button>
-                  <button id="resetBtn" class="control-btn delete-btn" alt="Reset">🗑 Effacer</span></button>
-                  <button id="closeGameMenuBtn" class="control-btn" alt="Close menu">🗙 Fermer</span></button>
-                </div>
+              <div id="gameMenu" class="game-menu hidden">
+                <button id="showPortfolio" class="control-btn" alt="Portfolio">Load game... <span>📓</span></button>
+                <button id="printBtn" class="control-btn" alt="Print">Save game <span>💾</span></button>
+                <button id="resetBtn" class="control-btn delete-btn" alt="Reset">Clear pond <span>🧹</span></button>
+                <button id="debugBtn" class="control-btn" alt="Debug">Debugging on <span>✅</span></button>
+                <button id="aboutBtn" class="control-btn" alt="About">About <span>❓</span></button>
               </div>
               <div class="time-controls">
                 <button id="playPauseBtn" class="play-pause-btn" alt="Play/Pause"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z" width="20" height="20"></path></svg></button>
-                <div id="currentDate" class="current-date">02/01/2023</div>
+                <div id="currentDate" class="current-date"></div>
                 <button id="gameMenuBtn" class="game-menu-btn" alt="Menu">⋯</button>
               </div>
             </div>

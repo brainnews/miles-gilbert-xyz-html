@@ -3,6 +3,8 @@ const closePortfolioBtn = document.getElementById('closePortfolioBtn');
 const showPortfolioBtn = document.getElementById('showPortfolio');
 const showAboutBtn = document.getElementById('aboutBtn');
 const closeAboutBtn = document.getElementById('closeAboutBtn');
+const gameMenuBtn = document.getElementById('gameMenuBtn');
+const gameMenu = document.getElementById('gameMenu');
 
 // Containers
 const screen = document.getElementById('screen');
@@ -17,6 +19,7 @@ closePortfolioBtn.addEventListener('click', () => {
 showPortfolioBtn.addEventListener('click', () => {
     portfolio.classList.remove('hidden');
     screen.classList.add('hidden');
+    gameMenu.classList.add('hidden');
 });
 
 closeAboutBtn.addEventListener('click', () => {
@@ -27,6 +30,7 @@ closeAboutBtn.addEventListener('click', () => {
 showAboutBtn.addEventListener('click', () => {
     about.classList.remove('hidden');
     screen.classList.add('hidden');
+    gameMenu.classList.add('hidden');
 });
 
 // Touch events
@@ -40,6 +44,7 @@ showPortfolioBtn.addEventListener('touchstart', (e) => {
     e.preventDefault(); // Prevent default touch behavior
     portfolio.classList.remove('hidden');
     screen.classList.add('hidden');
+    gameMenu.classList.add('hidden');
 });
 
 closeAboutBtn.addEventListener('touchstart', (e) => {
@@ -52,4 +57,18 @@ showAboutBtn.addEventListener('touchstart', (e) => {
     e.preventDefault(); // Prevent default touch behavior
     about.classList.remove('hidden');
     screen.classList.add('hidden');
+    gameMenu.classList.add('hidden');
+});
+
+// Game menu
+gameMenuBtn.addEventListener('click', () => {
+    const gameMenu = document.getElementById('gameMenu');
+    gameMenu.classList.toggle('hidden');
+});
+
+// listen for click and touch events on any element that does not have the id "gameMenu"
+document.addEventListener('click', (e) => {
+    if (e.target.id !== 'gameMenu' && e.target.id !== 'gameMenuBtn') {
+        gameMenu.classList.add('hidden');
+    }
 });

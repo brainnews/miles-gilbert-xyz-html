@@ -49,6 +49,23 @@ h1, h2, h3, h4, h5, h6 {
     touch-action: none;
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
+}
+#screen .paused-notification {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    font-size: 16px;
+    padding: 4px 8px 4px 4px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #e12929;
+    z-index: 999;
+    border-top-right-radius: 4px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+#screen.paused {
+    border: 4px solid #e12929;
 }
 .p5Canvas {
     transform: scale(1.02);
@@ -85,7 +102,6 @@ button {
     color: #3b3b3b;
     cursor: pointer;
     font-family: Arial, sans-serif;
-    min-height: 44px;
     min-width: 44px;
     font-size: 16px;
     touch-action: manipulation;
@@ -260,7 +276,7 @@ button.circle {
     background-color: #202a41;
     border-radius: 80px;
     color: #fff;
-    border: 2px solid #c5c5c5;
+    border: none;
     box-shadow: inset 0px 3px 0px 0px rgb(0 0 0 / 30%);
 }
 .population-container .population-stat, .time-controls, .wallet-container .wallet {
@@ -287,38 +303,45 @@ button.circle {
     max-height: 38px;
     position: relative;
 }
+.time-controls .current-date {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 16px;
+}
 .play-pause-btn, .game-menu-btn {
-    padding: 1px 8px 0px 8px;
+    padding: 2px 0px 0px 0px;
     background-color: #333a4b;
-    border-top-left-radius: 80px;
-    border-bottom-left-radius: 80px;
     color: #fff;
-    border: none;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border: 2px solid #333a4b;
     box-shadow: none;
     cursor: pointer;
     color: white;
+    min-height: 38px;
+}
+.play-pause-btn {
+    border-right: none;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
 }
 .game-menu-btn {
-    padding: 1px 10px 0px 8px;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
     border-top-right-radius: 80px;
     border-bottom-right-radius: 80px;
+    border-left: none;
 }
 .play-pause-btn:hover, .game-menu-btn:hover {
     background-color: #3f4557;
 }
+.play-pause-btn:active, .game-menu-btn:active {
+    transform: none;
+}
 .play-pause-btn svg {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     margin-top: 2px;
 }
 .game-menu {
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 40px;
+    right: 6px;
     background-color: #333a4b;
     padding: 8px;
     box-shadow: 0px 2px 0px 1px rgb(0 0 0 / 23%);
@@ -327,24 +350,25 @@ button.circle {
     font-weight: bold;
     cursor: pointer;
     z-index: 9;
-    width: 100%;
-    height: 100%;
+    width: max-content;
+    height: fit-content;
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+    border-radius: 16px;
+    border-bottom-right-radius: 6px;
 }
-.menu-column {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.menu-column .control-btn {
+.game-menu .control-btn {
     pointer-events: auto;
     background: #354875;
     border: 2px solid #4f6597;
     color: white;
     display: flex;
+    justify-content: space-between;
     align-items: baseline;
 }
-.menu-column .control-btn:hover {
+.game-menu .control-btn:hover {
     background: #4f6597;
 }
 /* desktop */

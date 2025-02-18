@@ -16,13 +16,19 @@ let splashBuffer;
 let pollinationChance = 0.01;
 let foodParticles = [];
 let dayLength = 72000; // 20 minute day
-let debug = true;
+let debug = false;
 const debugBtn = document.getElementById('debugBtn');
+let timeController;
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (debug) {
+        debugBtn.innerHTML = 'Debugging on <span>✅</span>';
+    } else {
+        debugBtn.innerHTML = 'Debugging off <span>❌</span>';
+    }
     document.getElementById('debugBtn').addEventListener('click', () => {
         debug = !debug;
-        debugBtn.textContent = debug ? '🐞 On' : '🐞 Off';
+        debugBtn.innerHTML = debug ? 'Debugging on <span>✅</span>' : 'Debugging off <span>❌</span>';
     });
 });
 
@@ -745,6 +751,151 @@ class WaterLily {
         pop();
     }
 }
+// Time management system
+// Time management system
+class TimeController {
+    constructor() {
+        this.startYear = 1897;
+        this.endYear = 1926;
+        this.currentDate = new Date(this.startYear, 0, 1);
+        this.isPlaying = true; // Start playing by default
+        
+        // Time progression settings
+        this.framesPerMonth = 60 * 60 * 5; // 5 minutes worth of frames at 60fps
+        this.frameCounter = 0;
+        
+        // Chapter/milestone system
+        this.milestones = [
+            {
+                date: new Date(1897, 5, 1), // June 1897
+                id: 'giverny-purchase',
+                title: 'Purchase of Giverny',
+                triggered: false
+            },
+            {
+                date: new Date(1899, 3, 15), // April 1899
+                id: 'water-garden-start',
+                title: 'Water Garden Construction Begins',
+                triggered: false
+            },
+            {
+                date: new Date(1900, 8, 1), // September 1900
+                id: 'first-lilies',
+                title: 'First Water Lilies Planted',
+                triggered: false
+            },
+            {
+                date: new Date(1914, 6, 1), // July 1914
+                id: 'large-studio',
+                title: 'Large Studio Construction',
+                triggered: false
+            },
+            {
+                date: new Date(1922, 11, 15), // December 1922
+                id: 'grandes-decorations',
+                title: 'Grandes Décorations Installation',
+                triggered: false
+            }
+        ];
+    }
+
+    initialize() {
+        // Update existing date display element
+        this.dateDisplay = document.getElementById('currentDate');
+        
+        // Update play/pause button
+        this.playPauseBtn = document.getElementById('playPauseBtn');
+        this.updatePlayPauseButton();
+        
+        // Setup event listeners
+        this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+        
+        // Initial display update
+        this.updateDateDisplay();
+    }
+
+    togglePlayPause() {
+        this.isPlaying = !this.isPlaying;
+        this.updatePlayPauseButton();
+    }
+
+    updatePlayPauseButton() {
+        // Update button icon based on state
+        this.playPauseBtn.innerHTML = this.isPlaying ? 
+            '<svg class="pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>' :
+            '<svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z" width="20" height="20"></path></svg>';
+    }
+
+    update() {
+        if (!this.isPlaying) return;
+
+        // Increment frame counter
+        this.frameCounter++;
+
+        // Check if we should advance the month
+        if (this.frameCounter >= this.framesPerMonth) {
+            // Reset frame counter
+            this.frameCounter = 0;
+
+            // Advance the date by one month
+            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+
+            // Check if we've reached the end date
+            if (this.currentDate.getFullYear() > this.endYear) {
+                this.currentDate = new Date(this.endYear, 11, 31);
+                this.isPlaying = false;
+                this.updatePlayPauseButton();
+            }
+
+            // Update display
+            this.updateDateDisplay();
+            
+            // Check milestones
+            this.checkMilestones();
+        }
+    }
+
+    updateDateDisplay() {
+        const monthNames = [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+        
+        const month = monthNames[this.currentDate.getMonth()];
+        const year = this.currentDate.getFullYear();
+        this.dateDisplay.textContent = `${month} ${year}`;
+    }
+
+    checkMilestones() {
+        for (let milestone of this.milestones) {
+            if (!milestone.triggered && this.currentDate >= milestone.date) {
+                milestone.triggered = true;
+                this.triggerMilestone(milestone);
+            }
+        }
+    }
+
+    triggerMilestone(milestone) {
+        // Pause the simulation
+        this.isPlaying = false;
+        this.updatePlayPauseButton();
+
+        // Dispatch custom event for milestone trigger
+        const event = new CustomEvent('milestone-triggered', {
+            detail: milestone
+        });
+        document.dispatchEvent(event);
+    }
+
+    getCurrentDate() {
+        return this.currentDate;
+    }
+
+    setTimeSpeed(minutesPerMonth) {
+        // Convert minutes to frames (assuming 60fps)
+        this.framesPerMonth = minutesPerMonth * 60 * 60;
+    }
+}
 function initAudio() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
@@ -882,7 +1033,6 @@ function setup() {
         canvas = createCanvas(600, 460);
     }
     canvas.parent("screen");
-    //canvas.getContext('2d', { willReadFrequently: true });
     pixelDensity(1);
     // Reduce resolution - each cell represents 4x4 pixels
     cols = Math.floor(width/4);
@@ -891,6 +1041,10 @@ function setup() {
     // Create 2D arrays
     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
     previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+    
+    // Initialize time controller
+    timeController = new TimeController();
+    timeController.initialize();
     
     // Load sounds
     loadSounds();
@@ -1084,6 +1238,25 @@ function drawCursor() {
 }
 
 function draw() {
+    // Update time controller
+    timeController?.update();
+
+    if (debug) {
+        timeController.setTimeSpeed(0.1);
+    } else {
+        timeController.setTimeSpeed(5);
+    }
+    
+    if (timeController && !timeController.isPlaying) {
+        cursor('default');
+        screen.classList.add('paused');
+        document.getElementById('pausedNotification').classList.remove('hidden');
+        return;
+    } else {
+        screen.classList.remove('paused');
+        document.getElementById('pausedNotification').classList.add('hidden');
+    }
+
     const fishPopulation = document.getElementById('fishPopulation');
     const lilyPopulation = document.getElementById('lilyPopulation');
 

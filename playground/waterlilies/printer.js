@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
   printBtn.addEventListener('click', async (e) => {
     try {
       printBtn.disabled = true;
-      printBtn.textContent = '⏳';
+      printBtn.innerHTML = 'Saving <span>⏳</span>';
       document.getElementById('defaultCanvas0').classList.add('claude-mode');
       document.querySelector('.claude-monet').classList.remove('hide');
       
@@ -272,11 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       setTimeout(() => {
         printBtn.disabled = false;
-        printBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
+        printBtn.innerHTML = 'Saved <span>👍</span>';
         setTimeout(() => {
           document.getElementById('defaultCanvas0').classList.remove('claude-mode');
           document.querySelector('.claude-monet').classList.add('hide');
-          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
+          printBtn.innerHTML = 'Save game <span>💾</span>';
+          document.getElementById('gameMenu').classList.add('hidden');
         }, 1000);
       }, 1000);
     }
