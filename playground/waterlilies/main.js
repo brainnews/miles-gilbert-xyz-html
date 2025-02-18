@@ -1057,13 +1057,13 @@ function drawCursor() {
     textAlign(CENTER, CENTER);
     cursor('none');
     if (placeMode === 'rock') {
-        text('🪨', mouseX + iconOffset, mouseY + iconOffset);
+        text('🪨', mouseX + iconOffset, mouseY + iconOffset + 1);
     } else if (placeMode === 'lily') {
-        text('🌺', mouseX + iconOffset, mouseY + iconOffset);
+        text('🌺', mouseX + iconOffset, mouseY + iconOffset + 2);
     } else if (placeMode === 'fish') {
-        text('🐟', mouseX + iconOffset, mouseY + iconOffset);
+        text('🐟', mouseX + iconOffset, mouseY + iconOffset + 1);
     } else if (placeMode === 'food') {
-        text('🍞', mouseX + iconOffset, mouseY + iconOffset);
+        text('🍞', mouseX + iconOffset, mouseY + iconOffset + 2);
     }
     fill(255);
     stroke(0);
@@ -1162,13 +1162,6 @@ function draw() {
     updatePixels();
     updateFoodParticles();
     updateCreatures();
-    // Update time of day
-    // if (frameCount >= dayLength) {
-    //     frameCount = 0;
-    // } else {
-    //     frameCount++;
-    // }
-    // updateTimeOfDay(frameCount);
 
     // First filter out any lilies marked for removal
     lilies = lilies.filter(lily => !lily.shouldRemove);

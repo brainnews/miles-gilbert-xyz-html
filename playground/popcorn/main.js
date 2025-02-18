@@ -118,6 +118,7 @@ class PhysicsParticle {
 }
 
 function draw() {
+    cursor('none');
     // Create gradient background
     let c1 = color(255, 200, 100);
     let c2 = color(200, 100, 255);
@@ -130,7 +131,7 @@ function draw() {
     }
     
     // Draw grid of animated squares
-    let gridSize = baseSize * 2;
+    let gridSize = baseSize * 4;
     for(let x = 0; x < width; x += gridSize) {
         for(let y = 0; y < height; y += gridSize) {
             drawConcentricSquares(x, y, gridSize);

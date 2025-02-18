@@ -29,15 +29,8 @@
                 <button id="lilyBtn" class="control-btn" alt="Lily">🌺</button>
                 <button id="fishBtn" class="control-btn" alt="Fish">🐟</button>
                 <button id="foodBtn" class="control-btn" alt="Food">🍞</button>
-                
             </div>
             <div class="control-row">
-              <div class="time-container">
-                <div class="time">
-                  <div class="clock">🕐</div>
-                  <div id="timeOfDay" class="formatted-time">00:00:00</div>
-                </div>
-              </div>
               <div class="population-container">
                 <div class="population-stat">
                   <div class="population-stat-title">🐟</div>
@@ -58,9 +51,19 @@
               </div>
             </div>
             <div class="control-row">
-                <button id="showPortfolio" class="control-btn" alt="Portfolio">📓 <span class="hide-on-mobile">Compositions</span></button>
-                <button id="printBtn" class="control-btn" alt="Print">📸 <span class="hide-on-mobile">Enregistrer</span></button>
-                <button id="resetBtn" class="control-btn delete-btn" alt="Reset">🗑 <span class="hide-on-mobile">Effacer</span></button>
+              <div class="game-menu hidden">
+                <div class="menu-column">
+                  <button id="showPortfolio" class="control-btn" alt="Portfolio">📓 Load game...</button>
+                  <button id="printBtn" class="control-btn" alt="Print">📸 Save game</button>
+                  <button id="resetBtn" class="control-btn delete-btn" alt="Reset">🗑 Effacer</span></button>
+                  <button id="closeGameMenuBtn" class="control-btn" alt="Close menu">🗙 Fermer</span></button>
+                </div>
+              </div>
+              <div class="time-controls">
+                <button id="playPauseBtn" class="play-pause-btn" alt="Play/Pause"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z" width="20" height="20"></path></svg></button>
+                <div id="currentDate" class="current-date">02/01/2023</div>
+                <button id="gameMenuBtn" class="game-menu-btn" alt="Menu">⋯</button>
+              </div>
             </div>
         </div>
         <!-- <div class="painting-reference">
