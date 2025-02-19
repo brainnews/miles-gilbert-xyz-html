@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simulateur d'étang '95 : édition Claude Monet</title>
+    <title>L'étang de Claude Monet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
 <body>
     <div id="container" class="container">
         <div class="label">
-            <div>Simulateur d'étang '95 : édition Claude Monet</div>
+            <div>L'étang de Claude Monet</div>
         </div>
         <div class="screen" id="screen">
           <div id="pausedNotification" class="paused-notification hidden">Paused</div>
@@ -60,8 +60,8 @@
             </div>
             <div class="control-row">
               <div id="gameMenu" class="game-menu hidden">
-                <button id="showPortfolio" class="control-btn" alt="Portfolio">Load game... <span>📓</span></button>
-                <button id="printBtn" class="control-btn" alt="Print">Save game <span>💾</span></button>
+                <button id="loadGameBtn" class="control-btn" alt="Load game">Load game... <span>📓</span></button>
+                <button id="saveGameBtn" class="control-btn" alt="Save game">Save game <span>💾</span></button>
                 <button id="resetBtn" class="control-btn delete-btn" alt="Reset">Clear pond <span>🧹</span></button>
                 <button id="debugBtn" class="control-btn" alt="Debug">Debugging on <span>✅</span></button>
                 <button id="aboutBtn" class="control-btn" alt="About">About <span>❓</span></button>
@@ -73,20 +73,16 @@
               </div>
             </div>
         </div>
-        <!-- <div class="painting-reference">
-            <div class="sticker"></div>
-            <img id="referenceImage" src="painting.webp" alt="Mossy Pond with Lilies">
-        </div> -->
         <div id="portfolio" class="hidden">
             <div class="portfolio-header">
-                <h2>📓 Compositions</h2>
-                <button id="closePortfolioBtn" class="control-btn small" alt="Close Portfolio" style="flex: none;">🗙 Fermer</button>
+                <h2>📓 Saved games</h2>
+                <button id="closeGameSavesBtn" class="control-btn small" alt="Close" style="flex: none;">🗙 Close</button>
             </div>
             <div id="portfolio-container"></div>
-            <button id="clearPortfolio" class="control-btn small delete-btn" alt="Clear Portfolio">🗑 Supprimer tout</button>
+            <button id="clearGameSavesBtn" class="control-btn small delete-btn" alt="Delete all">🗑 Delete all</button>
         </div>
         <div id="about" class="hidden">
-            <h2>A propos</h2>
+            <h2>About</h2>
             <svg class="monet-portrait-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="width: 200px; height: 200px;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                     <!-- Previous head and face elements remain the same until clothing section -->
@@ -186,13 +182,13 @@
                     </g>
                   </svg>
             </svg>
-            <p>Simulateur d'étang '95 : édition Claude Monet</p>
+            <p>L'étang de Claude Monet</p>
             <p>© 2025 <a href="https://miles-gilbert.xyz">Miles Gilbert</a>. Tous droits réservés.</p>
             <button id="closeAboutBtn" class="control-btn small" alt="Close About" style="flex: none; margin-top: 40px;">Fermer</button>
         </div>
     </div>
 </body>
 <script src="main.js"></script>
-<script src="printer.js"></script>
+<script src="save-game.js"></script>
 <script src="ui.js"></script>
 </html>

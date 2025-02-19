@@ -32,7 +32,7 @@ async function resizeImage(imageDataUrl, maxWidth = 256, maxHeight = 256) {
 }
 
 // Function to save canvas state to portfolio
-async function saveToPortfolio() {
+async function saveGame() {
   try {
     const portfolio = JSON.parse(localStorage.getItem('artPortfolio') || '[]');
     
@@ -40,11 +40,16 @@ async function saveToPortfolio() {
     const canvas = document.getElementById('defaultCanvas0');
     const thumbnailDataUrl = await resizeImage(canvas.toDataURL(), 200, 200);
 
+    // Get wallet value from DOM
+    const walletElement = document.getElementById('wallet');
+    const walletValue = parseInt(walletElement.textContent.replace('₳', ''));
+
     // Create a state object with the current placement of all elements
     const newState = {
       id: Date.now(),
       date: new Date().toISOString(),
       thumbnail: thumbnailDataUrl,
+      // Game objects
       rocks: rocks.map(rock => ({
         x: rock.x,
         y: rock.y,
@@ -57,7 +62,13 @@ async function saveToPortfolio() {
         rotation: lily.rotation,
         hasFlower: lily.hasFlower,
         targetX: lily.targetX,
-        targetY: lily.targetY
+        targetY: lily.targetY,
+        age: lily.age,
+        energy: lily.energy,
+        maturityAge: lily.maturityAge,
+        maxAge: lily.maxAge,
+        decompositionStage: lily.decompositionStage,
+        lastReproductionTime: lily.lastReproductionTime
       })),
       fish: fish.map(fish => ({
         x: fish.x,
@@ -65,8 +76,34 @@ async function saveToPortfolio() {
         size: fish.size,
         angle: fish.angle,
         velocity: fish.velocity,
-        color: fish.color.toString()
-      }))
+        color: fish.color.toString(),
+        age: fish.age,
+        maxAge: fish.maxAge,
+        energy: fish.energy,
+        isHungry: fish.isHungry,
+        eatingSpeed: fish.eatingSpeed
+      })),
+      foodParticles: foodParticles.map(food => ({
+        x: food.x,
+        y: food.y,
+        size: food.size,
+        energy: food.energy,
+        age: food.age,
+        maxAge: food.maxAge,
+        lastRippleTime: food.lastRippleTime
+      })),
+      // Game state
+      wallet: walletValue,
+      timeController: {
+        currentDate: timeController.getCurrentDate().toISOString(),
+        isPlaying: timeController.isPlaying,
+        milestones: timeController.milestones.map(milestone => ({
+          date: milestone.date.toISOString(),
+          id: milestone.id,
+          title: milestone.title,
+          triggered: milestone.triggered
+        }))
+      }
     };
     
     // Add to beginning of array (most recent first)
@@ -93,12 +130,13 @@ async function saveToPortfolio() {
 }
 
 // Function to load a state from portfolio
-function loadState(state) {
+function loadGame(state) {
   try {
     // Clear current state
     rocks = [];
     lilies = [];
     fish = [];
+    foodParticles = [];
     
     // Load rocks
     state.rocks.forEach(rockData => {
@@ -117,6 +155,12 @@ function loadState(state) {
       lily.hasFlower = lilyData.hasFlower;
       lily.targetX = lilyData.targetX;
       lily.targetY = lilyData.targetY;
+      lily.age = lilyData.age;
+      lily.energy = lilyData.energy;
+      lily.maturityAge = lilyData.maturityAge;
+      lily.maxAge = lilyData.maxAge;
+      lily.decompositionStage = lilyData.decompositionStage;
+      lily.lastReproductionTime = lilyData.lastReproductionTime;
       lilies.push(lily);
     });
     
@@ -127,8 +171,48 @@ function loadState(state) {
       newFish.angle = fishData.angle;
       newFish.velocity = fishData.velocity;
       newFish.color = color(fishData.color);
+      newFish.age = fishData.age;
+      newFish.maxAge = fishData.maxAge;
+      newFish.energy = fishData.energy;
+      newFish.isHungry = fishData.isHungry;
+      newFish.eatingSpeed = fishData.eatingSpeed;
       fish.push(newFish);
     });
+
+    // Load food particles
+    if (state.foodParticles) {
+      state.foodParticles.forEach(foodData => {
+        const food = new FoodParticle(foodData.x, foodData.y);
+        food.size = foodData.size;
+        food.energy = foodData.energy;
+        food.age = foodData.age;
+        food.maxAge = foodData.maxAge;
+        food.lastRippleTime = foodData.lastRippleTime;
+        foodParticles.push(food);
+      });
+    }
+
+    // Load wallet
+    if (state.wallet !== undefined) {
+      const walletElement = document.getElementById('wallet');
+      walletElement.textContent = `₳${state.wallet}`;
+    }
+
+    // Load time controller state
+    if (state.timeController) {
+      timeController.currentDate = new Date(state.timeController.currentDate);
+      timeController.isPlaying = state.timeController.isPlaying;
+      
+      // Load milestone states
+      state.timeController.milestones.forEach((savedMilestone, index) => {
+        timeController.milestones[index].date = new Date(savedMilestone.date);
+        timeController.milestones[index].triggered = savedMilestone.triggered;
+      });
+
+      // Update UI
+      timeController.updateDateDisplay();
+      timeController.updatePlayPauseButton();
+    }
     
     // Reset water simulation
     current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
@@ -136,7 +220,7 @@ function loadState(state) {
     
     // Hide portfolio after loading
     document.getElementById('portfolio').classList.add('hidden');
-    document.getElementById('showPortfolio').classList.remove('active');
+    document.getElementById('loadGameBtn').classList.remove('active');
     document.getElementById('screen').classList.remove('hidden');
     
   } catch (error) {
@@ -184,7 +268,7 @@ function updatePortfolioDisplay() {
     `;
 
     // Add event listeners
-    entryElement.querySelector('.load-btn').addEventListener('click', () => loadState(state));
+    entryElement.querySelector('.load-btn').addEventListener('click', () => loadGame(state));
     entryElement.querySelector('.delete-btn').addEventListener('click', () => {
       if (confirm('Are you sure you want to delete this saved state?')) {
         const updatedPortfolio = portfolio.filter(item => item.id !== state.id);
@@ -196,7 +280,7 @@ function updatePortfolioDisplay() {
     // add touch event listeners
     entryElement.querySelector('.load-btn').addEventListener('touchstart', (e) => {
       e.preventDefault(); // Prevent default touch behavior
-      loadState(state);
+      loadGame(state);
     });
 
     entryElement.querySelector('.delete-btn').addEventListener('touchstart', (e) => {
@@ -246,9 +330,9 @@ function addTouchAndClickHandler(element, handler) {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  const printBtn = document.querySelector('#printBtn');
-  if (!printBtn) {
-    console.error('Print button not found');
+  const saveGameBtn = document.querySelector('#saveGameBtn');
+  if (!saveGameBtn) {
+    console.error('Save game button not found');
     return;
   }
 
@@ -256,65 +340,65 @@ document.addEventListener('DOMContentLoaded', () => {
   updatePortfolioDisplay();
 
   // Add event listener for printing
-  printBtn.addEventListener('click', async (e) => {
+  saveGameBtn.addEventListener('click', async (e) => {
     try {
-      printBtn.disabled = true;
-      printBtn.innerHTML = 'Saving <span>⏳</span>';
+      saveGameBtn.disabled = true;
+      saveGameBtn.innerHTML = 'Saving <span>⏳</span>';
       document.getElementById('defaultCanvas0').classList.add('claude-mode');
       document.querySelector('.claude-monet').classList.remove('hide');
       
       // Save the current state
-      saveToPortfolio();
+      saveGame();
 
     } catch (error) {
       console.error('Error saving state:', error);
       alert('There was an error saving your artwork. Please try again.');
     } finally {
       setTimeout(() => {
-        printBtn.disabled = false;
-        printBtn.innerHTML = 'Saved <span>👍</span>';
+        saveGameBtn.disabled = false;
+        saveGameBtn.innerHTML = 'Saved <span>👍</span>';
         setTimeout(() => {
           document.getElementById('defaultCanvas0').classList.remove('claude-mode');
           document.querySelector('.claude-monet').classList.add('hide');
-          printBtn.innerHTML = 'Save game <span>💾</span>';
+          saveGameBtn.innerHTML = 'Save game <span>💾</span>';
           document.getElementById('gameMenu').classList.add('hidden');
         }, 1000);
       }, 1000);
     }
   });
 
-  printBtn.addEventListener('touchstart', async (e) => {
+  saveGameBtn.addEventListener('touchstart', async (e) => {
     try {
-      printBtn.disabled = true;
-      printBtn.textContent = '⏳';
+      saveGameBtn.disabled = true;
+      saveGameBtn.textContent = '⏳';
       
       // Save the current state
-      saveToPortfolio();
+      saveGame();
 
     } catch (error) {
       console.error('Error saving state:', error);
       alert('There was an error saving your artwork. Please try again.');
     } finally {
       setTimeout(() => {
-        printBtn.disabled = false;
-        printBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
+        saveGameBtn.disabled = false;
+        saveGameBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
         setTimeout(() => {
-          printBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
+          saveGameBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
         }, 1000);
       }, 1000);
     }
   });
 
-  const clearPortfolioBtn = document.getElementById('clearPortfolio');
+  const clearGameSavesBtn = document.getElementById('clearGameSavesBtn');
   // Add event listener for clearing portfolio
-  clearPortfolioBtn.addEventListener('click', () => {
+  clearGameSavesBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
       localStorage.removeItem('artPortfolio');
       updatePortfolioDisplay();
     }
   });
 
-  clearPortfolioBtn.addEventListener('touchstart', (e) => {
+  clearGameSavesBtn.addEventListener('touchstart', (e) => {
     e.preventDefault(); // Prevent default touch behavior
     if (confirm('Are you sure you want to clear your portfolio? This cannot be undone.')) {
       localStorage.removeItem('artPortfolio');
