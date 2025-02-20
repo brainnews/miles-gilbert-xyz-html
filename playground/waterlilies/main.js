@@ -809,6 +809,7 @@ class TimeController {
         
         // Setup event listeners
         this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+        this.playPauseBtn.addEventListener('touchstart', () => this.togglePlayPause());
         
         // Initial display update
         this.updateDateDisplay();
@@ -1029,6 +1030,7 @@ function setup() {
         } else {
             canvas = createCanvas(screen.offsetWidth + 100, screen.offsetHeight);
         }
+        isMobile = true;
     } else {
         canvas = createCanvas(600, 460);
     }
@@ -1063,7 +1065,7 @@ function touchStarted() {
     if (touches.length > 0) {
         let touch = touches[0];
         // check if touch is on a button
-        const buttons = document.querySelectorAll('.control-btn');
+        const buttons = document.querySelectorAll('.control-btn, #playPauseBtn, #gameMenuBtn');
         const clickedButton = Array.from(buttons).some(button => {
             const rect = button.getBoundingClientRect();
             return (
@@ -1073,7 +1075,6 @@ function touchStarted() {
                 touch.y <= rect.bottom
             );
         });
-        
         if (clickedButton) return false;
         
         // check if touch is on canvas
@@ -1355,7 +1356,10 @@ function draw() {
         }
         lily.draw();
     }
-    drawCursor();
+    // check if user is on mobile
+    if (!isMobile) {
+        drawCursor();
+    }
     // Swap buffers
     let temp = previous;
     previous = current;

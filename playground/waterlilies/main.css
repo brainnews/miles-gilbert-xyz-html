@@ -86,6 +86,12 @@ h1, h2, h3, h4, h5, h6 {
     gap: 10px;
     width: 100%;
 }
+.control-row.time-controller {
+    position: absolute;
+    bottom: -38px;
+    right: 10px;
+    width: 80vw;
+}
 #instructions {
     display: none;
 }
@@ -441,6 +447,12 @@ button.circle {
     }
     .control-row:not(:last-child) {
         margin-bottom: 10px;
+    }
+    .control-row.time-controller {
+        position: inherit;
+        bottom: inherit;
+        right: inherit;
+        width: 100%;
     }
     .painting-reference {
         display: block;

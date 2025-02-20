@@ -42,7 +42,7 @@ async function saveGame() {
 
     // Get wallet value from DOM
     const walletElement = document.getElementById('wallet');
-    const walletValue = parseInt(walletElement.textContent.replace('₳', ''));
+    const walletValue = parseInt(walletElement.textContent);
 
     // Create a state object with the current placement of all elements
     const newState = {
@@ -195,7 +195,7 @@ function loadGame(state) {
     // Load wallet
     if (state.wallet !== undefined) {
       const walletElement = document.getElementById('wallet');
-      walletElement.textContent = `₳${state.wallet}`;
+      walletElement.textContent = `${state.wallet}`;
     }
 
     // Load time controller state
@@ -328,6 +328,33 @@ function addTouchAndClickHandler(element, handler) {
   });
 }
 
+function handleSaveGame(btn) {
+  try {
+    btn.disabled = true;
+    btn.innerHTML = 'Saving <span>⏳</span>';
+    document.getElementById('defaultCanvas0').classList.add('claude-mode');
+    document.querySelector('.claude-monet').classList.remove('hide');
+    
+    // Save the current state
+    saveGame();
+
+  } catch (error) {
+    console.error('Error saving state:', error);
+    alert('There was an error saving your artwork. Please try again.');
+  } finally {
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'Saved <span>👍</span>';
+      setTimeout(() => {
+        document.getElementById('defaultCanvas0').classList.remove('claude-mode');
+        document.querySelector('.claude-monet').classList.add('hide');
+        btn.innerHTML = 'Save game <span>💾</span>';
+        document.getElementById('gameMenu').classList.add('hidden');
+      }, 1000);
+    }, 1000);
+  }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   const saveGameBtn = document.querySelector('#saveGameBtn');
@@ -341,52 +368,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add event listener for printing
   saveGameBtn.addEventListener('click', async (e) => {
-    try {
-      saveGameBtn.disabled = true;
-      saveGameBtn.innerHTML = 'Saving <span>⏳</span>';
-      document.getElementById('defaultCanvas0').classList.add('claude-mode');
-      document.querySelector('.claude-monet').classList.remove('hide');
-      
-      // Save the current state
-      saveGame();
-
-    } catch (error) {
-      console.error('Error saving state:', error);
-      alert('There was an error saving your artwork. Please try again.');
-    } finally {
-      setTimeout(() => {
-        saveGameBtn.disabled = false;
-        saveGameBtn.innerHTML = 'Saved <span>👍</span>';
-        setTimeout(() => {
-          document.getElementById('defaultCanvas0').classList.remove('claude-mode');
-          document.querySelector('.claude-monet').classList.add('hide');
-          saveGameBtn.innerHTML = 'Save game <span>💾</span>';
-          document.getElementById('gameMenu').classList.add('hidden');
-        }, 1000);
-      }, 1000);
-    }
+    handleSaveGame(e.target);
   });
 
   saveGameBtn.addEventListener('touchstart', async (e) => {
-    try {
-      saveGameBtn.disabled = true;
-      saveGameBtn.textContent = '⏳';
-      
-      // Save the current state
-      saveGame();
-
-    } catch (error) {
-      console.error('Error saving state:', error);
-      alert('There was an error saving your artwork. Please try again.');
-    } finally {
-      setTimeout(() => {
-        saveGameBtn.disabled = false;
-        saveGameBtn.innerHTML = '👍 <span class="hide-on-mobile">Enregistrée</span>';
-        setTimeout(() => {
-          saveGameBtn.innerHTML = '📸 <span class="hide-on-mobile">Enregistrer</span>';
-        }, 1000);
-      }, 1000);
-    }
+    e.preventDefault(); // Prevent default touch behavior
+    handleSaveGame(e.target);
   });
 
   const clearGameSavesBtn = document.getElementById('clearGameSavesBtn');
