@@ -53,7 +53,6 @@ button.control-btn {
 }
 #particleCount {
     backdrop-filter: blur(10px);
-    color: rgb(200, 100, 255);
     padding: 10px 20px;
     text-align: center;
     font-size: 30px;
@@ -75,7 +74,6 @@ button.control-btn {
     left: 50%;
     transform: translate(-50%, -50%);
     backdrop-filter: blur(10px);
-    color: rgb(200, 100, 255);
     padding: 10px 20px;
     text-align: center;
     font-size: 16px;
@@ -86,13 +84,20 @@ button.control-btn {
     border-radius: 4px;
     cursor: pointer;
 }
+#reduceBtn, #particleCount, #instructions {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: rgb(43 41 44);
+    transition: background-color 0.3s ease;
+}
+#reduceBtn:hover, #particleCount:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
 #instructions {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     backdrop-filter: blur(10px);
-    color: rgb(200, 100, 255);
     padding: 10px 20px;
     text-align: center;
     font-size: 16px;
