@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where is the President?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Where is the President?</h1>
+            <p>Recent and upcoming events</p>
+        </header>
+
+        <div id="status" class="status-message loading">
+            Loading events...
+        </div>
+
+        <div class="event-filters" id="filters" style="display: none;">
+            <div class="search-container">
+                <label for="search">Search:</label>
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Search events...">
+                    <button id="clear-search" class="clear-button" title="Clear search">×</button>
+                </div>
+                <button id="search-btn">Search</button>
+            </div>
+            <div class="backup-container">
+                <button id="backup-btn" title="Save current data to your device">Backup Data</button>
+                <span id="backup-status" class="backup-status"></span>
+            </div>
+        </div>
+
+        <div id="events">
+            <!-- Events will be loaded here -->
+        </div>
+
+        <div class="pagination" id="pagination" style="display: none;">
+            <button id="prev-btn" disabled>Previous</button>
+            <span id="page-info" class="page-info">Page 1</span>
+            <button id="next-btn">Next</button>
+        </div>
+
+        <p class="timestamp" id="last-updated"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
