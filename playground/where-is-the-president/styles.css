@@ -36,9 +36,7 @@ header {
     text-align: center;
     margin-bottom: 20px;
     padding: 30px 20px;
-    background-color: var(--header-color);
     color: white;
-    border-bottom: 1px solid var(--border-color);
 }
 
 h1 {
@@ -104,9 +102,16 @@ h1 {
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease;
+    min-width: 150px;
 }
 
 #backup-btn:hover {
+    background-color: rgba(16, 185, 129, 0.2);
+    border-color: var(--success-color);
+    color: white;
+}
+
+#backup-btn.active {
     background-color: var(--success-color);
     border-color: var(--success-color);
     color: white;
@@ -242,9 +247,8 @@ h1 {
 }
 
 .event-date-section {
-    margin: 30px 20px 15px;
+    margin: 40px 20px 15px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
     color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
@@ -347,6 +351,58 @@ h1 {
 .page-info {
     color: var(--muted-text-color);
     font-size: 0.9em;
+}
+
+/* Stats Container Styles */
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 20px 20px;
+    padding: 20px;
+    background-color: var(--card-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.stat-box {
+    text-align: center;
+    flex: 1;
+    padding: 10px;
+    border-right: 1px solid var(--border-color);
+}
+
+.stat-box:last-child {
+    border-right: none;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+}
+
+/* Make sure it works on mobile */
+@media (max-width: 768px) {
+    .stats-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .stat-box {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 15px 0;
+    }
+    
+    .stat-box:last-child {
+        border-bottom: none;
+    }
 }
 
 /* Mobile responsiveness */

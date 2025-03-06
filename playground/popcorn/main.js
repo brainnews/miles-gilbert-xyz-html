@@ -4,31 +4,29 @@ let baseSize; // Base size for scaling
 let spawnCount = 37;
 let padding = 2.5;
 let maxParticles = 1000;
+let currentShape = 'circle';
+const shapes = ['circle', 'square', 'triangle'];
 
 // Matter.js variables
 let engine;
 let world;
 let particles = [];
+let selectedParticles = [];
+let lockedParticles = [];
 let boundaries = [];
 let previousColor;
 
 const emojis = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '😂', '😒', '👀', '🥵', '👽', '🦶'];
 
-
-const reduceBtn = document.getElementById('reduceBtn');
 const particleCount = document.getElementById('particleCount');
 const instructions = document.getElementById('instructions');
-
-document.addEventListener('DOMContentLoaded', () => {
-    // add event listener for reduceBtn
-    reduceBtn.addEventListener('click', () => {
-        resetParticles();
-    });
-
-    reduceBtn.addEventListener('touchstart', () => {
-        resetParticles();
-    });
-});
+const shapeSelectBtn = document.getElementById('shapeSelectBtn');
+const colorPaletteBtn = document.getElementById('colorPaletteBtn');
+const cutBtn = document.getElementById('cutBtn');
+const lockBtn = document.getElementById('lockBtn');
+const clearBtn = document.getElementById('clearBtn');
+const helpBtn = document.getElementById('helpBtn');
+const toolbar = document.getElementById('toolbar');
 
 function calculateBaseSize() {
     // Calculate base size relative to screen dimensions
@@ -76,6 +74,7 @@ function setup() {
     canvas.parent('#canvasContainer');
     previousColor = [random(0, 255), random(0, 255), random(0, 255)];
     baseSize = calculateBaseSize();
+    setupControls();
     setupPhysics();
 }
 
@@ -86,21 +85,43 @@ function windowResized() {
 }
 
 class PhysicsParticle {
-    constructor(x, y, color) {
+    constructor(x, y, color, shape) {
         this.size = random(baseSize * 0.75, baseSize * 1.5);
-        // this.body = Matter.Bodies.rectangle(x, y, this.size, this.size, {
-        //     friction: 0.3,
-        //     restitution: 0.4,
-        //     angle: random(TWO_PI),
-        //     density: 0.001
-        // });
-        // create a circular body
-        this.body = Matter.Bodies.circle(x, y, this.size/2 + padding, {
-           friction: 0.3,
-           restitution: 0.4,
-           angle: random(TWO_PI),
-           density: 0.001
-        });
+        // switch statement to change particle shape
+        switch (shape) {
+            case 'circle':
+                this.body = Matter.Bodies.circle(x, y, this.size/2 + padding, {
+                    friction: 0.3,
+                    restitution: 0.4,
+                    angle: random(TWO_PI),
+                    density: 0.001
+                });
+                break;
+            case 'square':
+                this.body = Matter.Bodies.rectangle(x, y, this.size + padding, this.size + padding, {
+                    friction: 0.3,
+                    restitution: 0.4,
+                    angle: random(TWO_PI),
+                    density: 0.001
+                });
+                break;
+            case 'triangle':
+                this.body = Matter.Bodies.polygon(x, y, 3, this.size/1.8, {
+                    friction: 0.3,
+                    restitution: 0.4,
+                    angle: random(TWO_PI),
+                    density: 0.001
+                });
+                break;
+            default:
+                this.body = Matter.Bodies.circle(x, y, this.size/2 + padding, {
+                    friction: 0.3,
+                    restitution: 0.4,
+                    angle: random(TWO_PI),
+                    density: 0.001
+                });
+                break;
+        }
         // Add some initial velocity
         Matter.Body.setVelocity(this.body, { 
             x: random(-5, 5),
@@ -110,6 +131,10 @@ class PhysicsParticle {
         Matter.World.add(world, this.body);
         this.alpha = 255;
         this.color = color;
+        this.shape = currentShape;
+        this.isHovered = false;
+        this.isSelected = false;
+        this.isLocked = false;
         previousColor = this.color;
     }
 
@@ -122,13 +147,63 @@ class PhysicsParticle {
         rotate(angle);
         rectMode(CENTER);
         noStroke();
-        fill(this.color[0], this.color[1], this.color[2], this.alpha);
-        circle(0, 0, this.size);
-        // draw text
-        //fill(255);
-        // textAlign(CENTER, CENTER);
-        // textSize(baseSize);
-        // text(this.emoji, 0, 0);
+        
+        // Change appearance based on state
+        if (this.isHovered || this.isSelected) {
+            // Draw hover/selection effect with white glow
+            fill(255, 255, 255, 100);
+            stroke(255, 255, 255, 100);
+            strokeWeight(4);
+            
+            // Draw the glow shape
+            switch (this.shape) {
+                case 'circle':
+                    circle(0, 0, this.size);
+                    break;
+                case 'square':
+                    rect(0, 0, this.size, this.size);
+                    break;
+                case 'triangle':
+                    triangle(-this.size/2, this.size/2, this.size/2, this.size/2, 0, -this.size/2);
+                    break;
+                default:
+                    circle(0, 0, this.size);
+                    break;
+            }
+            
+            // Main particle fill
+            fill(this.color[0], this.color[1], this.color[2], 120);
+        } else {
+            // Normal or locked state (no glow)
+            if (this.isLocked) {
+                // Locked particles are paler in color (higher alpha/brightness)
+                fill(
+                    this.color[0] + (255 - this.color[0]) * 0.4, 
+                    this.color[1] + (255 - this.color[1]) * 0.4, 
+                    this.color[2] + (255 - this.color[2]) * 0.4, 
+                    this.alpha
+                );
+            } else {
+                // Normal color
+                fill(this.color[0], this.color[1], this.color[2], this.alpha);
+            }
+        }
+        
+        // switch statement to change particle shape
+        switch (this.shape) {
+            case 'circle':
+                circle(0, 0, this.size);
+                break;
+            case 'square':
+                rect(0, 0, this.size, this.size);
+                break;
+            case 'triangle':
+                triangle(-this.size/2, this.size/2, this.size/2, this.size/2, 0, -this.size/2);
+                break;
+            default:
+                circle(0, 0, this.size);
+                break;
+        }
         pop();
     }
 
@@ -138,7 +213,20 @@ class PhysicsParticle {
 }
 
 function draw() {
-    cursor('none');
+    if (selectedParticles.length > 0) {
+        cutBtn.classList.remove('disabled');
+        lockBtn.classList.remove('disabled');
+    } else {
+        cutBtn.classList.add('disabled');
+        lockBtn.classList.add('disabled');
+    }
+    
+    if (particles.length > 0) {
+        clearBtn.classList.remove('disabled');
+    } else {
+        clearBtn.classList.add('disabled');
+    }
+    cursor('default');
     // Create gradient background
     let c1 = color(255, 200, 100);
     let c2 = color(200, 100, 255);
@@ -168,22 +256,9 @@ function draw() {
     } else {
         instructions.style.display = 'none';
     }
-
-    if (particles.length === 0) {
-        reduceBtn.style.display = 'none';
-    } else {
-        reduceBtn.style.display = 'block';
-    }
     
     time += 0.02;
     rotation += 0.01;
-    // Draw grid of animated squares
-    let gridSize = baseSize;
-    for(let x = 0; x < width; x += gridSize) {
-        for(let y = 0; y < height; y += gridSize) {
-            drawConcentricSquares(x, y, gridSize);
-        }
-    }
 }
 
 function drawConcentricSquares(x, y, size) {
@@ -231,26 +306,54 @@ function touchStarted() {
 }
 
 function mousePressed() {
-    // Create burst of physics particles
-    //let spawnCount = floor(map(min(windowWidth, windowHeight), 0, 2000, 10, 30));
-    createParticles(mouseX, mouseY);
-    return false;
+    // detect if click is inside the "toolbar" and prevent adding particles
+    if (mouseX > toolbar.offsetLeft && mouseX < toolbar.offsetLeft + toolbar.offsetWidth && mouseY > toolbar.offsetTop && mouseY < toolbar.offsetTop + toolbar.offsetHeight) {
+        return;
+    }
+    if (particles.length === 0) {
+        createParticles(mouseX, mouseY);
+        return;
+    }
+    let clicked = false;
+    // detect if mouse click is on a particle
+    for (let particle of particles) {
+        if (dist(mouseX, mouseY, particle.body.position.x, particle.body.position.y) < particle.size/2) {
+            if (selectedParticles.indexOf(particle) === -1) {
+                selectedParticles.push(particle);
+                particle.isSelected = true;
+            } else {
+                selectedParticles.splice(selectedParticles.indexOf(particle), 1);
+                particle.isSelected = false;
+                particle.isHovered = false;
+            }
+            clicked = true;
+            break;
+        }
+    }
+    if (!clicked) {
+        createParticles(mouseX, mouseY);
+    }
 }
 
 function touchStarted() {
     if (touches.length === 1) {
         createParticles(touches[0].x, touches[0].y);
+    } else if (touches.length === 2) {
+        resetParticles();
+    } else if (touches.length === 3) {
+        // Remove only unlocked particles
+        for (let i = particles.length - 1; i >= 0; i--) {
+            if (!particles[i].isLocked) {
+                particles[i].remove();
+                particles.splice(i, 1);
+            }
+        }
     }
     return false;
 }
 
 function createParticles(x, y) {
-    // detect if mouse click is inside div with id "reduceBtn"
-    if (document.getElementById('reduceBtn').contains(event.target)) {
-        return;
-    }
     // use noise to determine color based on rgb value of previousColor
-    console.log(previousColor);
     let noiseValue1 = noise(previousColor[0]);
     let noiseValue2 = noise(previousColor[1]);
     let noiseValue3 = noise(previousColor[2]);
@@ -260,47 +363,196 @@ function createParticles(x, y) {
     let color = [r, g, b];
 
     for (let i = 0; i < spawnCount; i++) {
-        particles.push(new PhysicsParticle(x, y, color));
+        particles.push(new PhysicsParticle(x, y, color, currentShape));
     }
 }
 
 function keyPressed() {
-    if (key === ' ') {
-        resetParticles();
+    if (key === 'Backspace') {
+        if (selectedParticles.length > 0) {
+            // Remove selected particles (even if locked)
+            for (let particle of selectedParticles) {
+                // Also remove from lockedParticles if it was locked
+                const lockedIndex = lockedParticles.indexOf(particle);
+                if (lockedIndex !== -1) {
+                    lockedParticles.splice(lockedIndex, 1);
+                }
+                
+                particle.remove();
+                particles.splice(particles.indexOf(particle), 1);
+            }
+            selectedParticles = [];
+        } else {
+            resetParticles();
+        }
+    }
+    // detect escape key to deselect all particles
+    if (key === 'Escape') {
+        for (let particle of particles) {
+            particle.isSelected = false;
+            particle.isHovered = false;
+        }
+        selectedParticles = [];
+    }
+    // L key to toggle lock/unlock for selected particles
+    if (key === 'l' || key === 'L') {
+        if (selectedParticles.length > 0) {
+            const event = new Event('click');
+            lockBtn.dispatchEvent(event);
+        }
     }
 }
 
 function resetParticles() {
     if (particles.length === 0) return;
     
-    // Pick a random particle as the center of removal
-    let centerIndex = floor(random(particles.length));
-    let centerParticle = particles[centerIndex];
+    // Make a copy of the particles array for processing
+    let particlesCopy = [...particles];
+    
+    // Filter out locked particles for determining the center
+    let unlockParticles = particlesCopy.filter(p => !p.isLocked);
+    
+    // If all particles are locked, nothing to do
+    if (unlockParticles.length === 0) return;
+    
+    // Pick a random unlocked particle as the center of removal
+    let centerIndex = floor(random(unlockParticles.length));
+    let centerParticle = unlockParticles[centerIndex];
     let centerPos = centerParticle.body.position;
     
     // Calculate radius based on screen size
     let removalRadius = min(windowWidth, windowHeight) * 0.15;
     
-    // Find particles within radius
-    let particlesToRemove = [];
-    for (let i = particles.length - 1; i >= 0; i--) {
+    // Identify which ORIGINAL particles to remove (maintaining the original indices)
+    let toRemove = [];
+    
+    for (let i = 0; i < particles.length; i++) {
         let particle = particles[i];
+        
+        // Skip locked particles
+        if (particle.isLocked) {
+            continue;
+        }
+        
         let pos = particle.body.position;
         let distance = dist(centerPos.x, centerPos.y, pos.x, pos.y);
         
         if (distance <= removalRadius) {
-            particlesToRemove.push(i);
+            // Store the actual particle reference to remove
+            toRemove.push(particle);
         }
     }
     
-    // Remove the particles (in reverse order to maintain indices)
-    for (let i = particlesToRemove.length - 1; i >= 0; i--) {
-        let index = particlesToRemove[i];
-        particles[index].remove();
-        particles.splice(index, 1);
+    // Remove each particle from the physics world first
+    for (let particle of toRemove) {
+        particle.remove();
     }
+    
+    // Then filter the particles array to remove these particles
+    particles = particles.filter(p => !toRemove.includes(p));
 }
 
 function mouseMoved() {
+    // Change cursor when hovering over a particle
+    let hovering = false;
+    
+    // Reset all particles to not hovered
+    for (let particle of particles) {
+        particle.isHovered = false;
+    }
+    
+    // Check for hover on each particle
+    for (let particle of particles) {
+        if (dist(mouseX, mouseY, particle.body.position.x, particle.body.position.y) < particle.size/2) {
+            particle.isHovered = true;
+            hovering = true;
+            break; // Only hover one particle at a time
+        }
+    }
+    
+    // Change cursor based on hover state
+    if (hovering) {
+        cursor('pointer'); // Change cursor to pointer when hovering
+    } else {
+        cursor('default');
+    }
+    
     return false;
+}
+
+function setupControls () {
+    shapeSelectBtn.addEventListener('click', () => {
+        // cycle through shapes in shapes array
+        currentShape = shapes[(shapes.indexOf(currentShape) + 1) % shapes.length];
+        let shapeName;
+        if (currentShape === 'triangle') {
+            shapeName = 'change_history';
+        } else {
+            shapeName = currentShape;
+        }
+        shapeSelectBtn.innerHTML = '<span class="material-symbols-outlined">' + shapeName + '</span>'
+    });
+    
+    cutBtn.addEventListener('click', () => {
+        if (selectedParticles.length > 0) {
+            for (let particle of selectedParticles) {
+                // Also remove from lockedParticles if it was locked
+                const lockedIndex = lockedParticles.indexOf(particle);
+                if (lockedIndex !== -1) {
+                    lockedParticles.splice(lockedIndex, 1);
+                }
+                
+                particle.remove();
+                particles.splice(particles.indexOf(particle), 1);
+            }
+            selectedParticles = [];
+        }
+    });
+    
+    clearBtn.addEventListener('click', () => {
+        // Remove all particles (even if locked)
+        for (let particle of particles) {
+            particle.remove();
+        }
+        particles = [];
+        lockedParticles = [];
+        selectedParticles = [];
+    });
+
+    lockBtn.addEventListener('click', () => {
+        if (selectedParticles.length > 0) {
+            for (let particle of selectedParticles) {
+                if (!particle.isLocked) {
+                    // Lock the particle
+                    particle.isLocked = true;
+                    
+                    // Make it static to remove gravity and physics effects
+                    Matter.Body.setStatic(particle.body, true);
+                    
+                    // Add to locked particles array if not already there
+                    if (lockedParticles.indexOf(particle) === -1) {
+                        lockedParticles.push(particle);
+                    }
+                } else {
+                    // Unlock the particle
+                    particle.isLocked = false;
+                    
+                    // Make it dynamic again
+                    Matter.Body.setStatic(particle.body, false);
+                    
+                    // Remove from locked particles array
+                    const index = lockedParticles.indexOf(particle);
+                    if (index !== -1) {
+                        lockedParticles.splice(index, 1);
+                    }
+                }
+            }
+        }
+        // Deselect all particles
+        for (let particle of particles) {
+            particle.isSelected = false;
+            particle.isHovered = false;
+        }
+        selectedParticles = [];
+    });
 }

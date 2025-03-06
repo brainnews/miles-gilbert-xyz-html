@@ -11,15 +11,58 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+    <style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div id="canvasContainer"></div>
-        <div id="particleCount">37</div>
-        <div id="reduceBtn" class="control-btn">Reduce</div>
+        <div class="toolbar-container">
+            <div id="toolbar" class="toolbar">
+                <button id="shapeSelectBtn" class="toolbar-btn">
+                    <span class="material-symbols-outlined">
+                        circle
+                    </span>
+                </button>
+                <button id="colorPaletteBtn" class="toolbar-btn">
+                    <span class="material-symbols-outlined">
+                        palette
+                    </span>
+                </button>
+                <button id="cutBtn" class="toolbar-btn disabled">
+                    <span class="material-symbols-outlined">
+                        content_cut
+                    </span>
+                </button>
+                <button id="lockBtn" class="toolbar-btn disabled">
+                    <span class="material-symbols-outlined">
+                        lock
+                    </span>
+                </button>
+                <button id="clearBtn" class="toolbar-btn disabled">
+                    <span class="material-symbols-outlined">
+                        cleaning_services
+                    </span>
+                </button>
+                <button id="helpBtn" class="toolbar-btn">
+                    <span class="material-symbols-outlined">
+                        help
+                    </span>
+                </button>
+                <div id="particleCount">37</div>
+            </div>
+        </div>
         <div id="instructions">Tap anywhere to exist</div>
     </div>
     <script src="main.js"></script>

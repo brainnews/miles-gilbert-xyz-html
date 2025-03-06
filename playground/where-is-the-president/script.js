@@ -26,6 +26,14 @@ const paginationElement = document.getElementById('pagination');
 const prevButton = document.getElementById('prev-btn');
 const nextButton = document.getElementById('next-btn');
 const pageInfoElement = document.getElementById('page-info');
+// DOM elements for statistics
+const statsContainer = document.getElementById('stats-container');
+const marAlagoCountElement = document.getElementById('maralago-count');
+const firstLadyCountElement = document.getElementById('firstlady-count');
+const diplomatsCountElement = document.getElementById('diplomats-count');
+
+// Auto backup state
+let autoBackupEnabled = localStorage.getItem('autoBackupEnabled') === 'true';
 
 // Format date for display
 function formatDate(dateString) {
@@ -137,7 +145,7 @@ function clearSearch() {
 }
 
 // Save current data to localStorage
-function backupData() {
+function backupData(silent = false) {
     try {
         const dataToSave = {
             events: state.allEvents,
@@ -147,18 +155,54 @@ function backupData() {
         
         localStorage.setItem('presidentCalendarBackup', JSON.stringify(dataToSave));
         
-        showBackupStatus('✓ Data saved successfully!', 'success');
-        
-        setTimeout(() => {
-            backupStatusElement.textContent = '';
-            backupStatusElement.className = 'backup-status';
-        }, 3000);
+        if (!silent) {
+            showBackupStatus('✓ Data saved successfully!', 'success');
+            
+            setTimeout(() => {
+                backupStatusElement.textContent = '';
+                backupStatusElement.className = 'backup-status';
+            }, 3000);
+        }
         
         return true;
     } catch (error) {
         console.error('Error saving data to localStorage:', error);
-        showBackupStatus('❌ Failed to save data', 'error');
+        if (!silent) {
+            showBackupStatus('❌ Failed to save data', 'error');
+        }
         return false;
+    }
+}
+
+// Toggle auto-backup functionality
+function toggleAutoBackup() {
+    autoBackupEnabled = !autoBackupEnabled;
+    localStorage.setItem('autoBackupEnabled', autoBackupEnabled);
+    updateBackupButtonState();
+    
+    if (autoBackupEnabled) {
+        showBackupStatus('Auto backup enabled', 'success');
+        backupData(true);
+    } else {
+        showBackupStatus('Auto backup disabled', 'info');
+    }
+}
+
+// Update backup button appearance based on state
+function updateBackupButtonState() {
+    if (autoBackupEnabled) {
+        backupButton.classList.add('active');
+        backupButton.textContent = 'Auto Backup: ON';
+    } else {
+        backupButton.classList.remove('active');
+        backupButton.textContent = 'Auto Backup: OFF';
+    }
+}
+
+// Perform auto backup if enabled
+function performAutoBackupIfEnabled() {
+    if (autoBackupEnabled && state.allEvents.length > 0) {
+        backupData(true);
     }
 }
 
@@ -289,7 +333,10 @@ function initializeFilters() {
     clearSearchButton.style.display = searchElement.value.trim() !== '' ? 'block' : 'none';
 
     // Set up backup button functionality
-    backupButton.addEventListener('click', backupData);
+    backupButton.addEventListener('click', toggleAutoBackup);
+    
+    // Initialize backup button state
+    updateBackupButtonState();
 
     prevButton.addEventListener('click', () => {
         if (state.currentPage > 1) {
@@ -476,6 +523,10 @@ async function fetchCalendarData() {
         // Initialize UI
         initializeFilters();
         renderEvents();
+        if (!state.hasError) {
+            calculateEventStatistics();
+            performAutoBackupIfEnabled();
+        }
         
     } catch (error) {
         console.error('Error fetching calendar data:', error);
@@ -491,6 +542,11 @@ async function fetchCalendarData() {
 document.addEventListener('DOMContentLoaded', () => {
     try {
         fetchCalendarData();
+        
+        // If auto backup is enabled, save data after loading
+        if (autoBackupEnabled && state.allEvents.length > 0) {
+            setTimeout(() => backupData(true), 2000);
+        }
     } catch(e) {
         console.error("Error initializing application:", e);
         const errorElement = document.createElement('div');
@@ -499,3 +555,77 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.container').prepend(errorElement);
     }
 });
+
+// Calculate event statistics
+function calculateEventStatistics() {
+    // Initialize counters
+    let marALagoDays = 0;
+    let firstLadyDays = 0;
+    let diplomatDays = 0;
+    
+    // Create a Set to track unique days for each category
+    const marALagoDates = new Set();
+    const firstLadyDates = new Set();
+    const diplomatDates = new Set();
+    
+    // Analyze all events
+    state.allEvents.forEach(event => {
+        const dateKey = event.date.split('T')[0]; // Get just the date part
+        
+        // Check for Mar-a-Lago mentions (case insensitive)
+        const locationLower = (event.location || '').toLowerCase();
+        const descriptionLower = (event.description || '').toLowerCase();
+        const titleLower = (event.title || '').toLowerCase();
+        
+        if (
+            locationLower.includes('mar-a-lago') || 
+            locationLower.includes('mar a lago') ||
+            descriptionLower.includes('mar-a-lago') || 
+            descriptionLower.includes('mar a lago') ||
+            titleLower.includes('mar-a-lago') || 
+            titleLower.includes('mar a lago')
+        ) {
+            marALagoDates.add(dateKey);
+        }
+        
+        // Check for First Lady mentions
+        if (
+            descriptionLower.includes('first lady') || 
+            descriptionLower.includes('melania trump') ||
+            titleLower.includes('first lady') || 
+            titleLower.includes('melania trump')
+        ) {
+            firstLadyDates.add(dateKey);
+        }
+        
+        // Check for foreign diplomat mentions
+        if (
+            descriptionLower.includes('diplomat') || 
+            descriptionLower.includes('ambassador') ||
+            descriptionLower.includes('foreign') ||
+            descriptionLower.includes('minister') ||
+            descriptionLower.includes('president of') ||
+            descriptionLower.includes('prime minister') ||
+            titleLower.includes('diplomat') || 
+            titleLower.includes('ambassador') ||
+            titleLower.includes('foreign') ||
+            titleLower.includes('minister') ||
+            titleLower.includes('bilateral')
+        ) {
+            diplomatDates.add(dateKey);
+        }
+    });
+    
+    // Update counters with the number of unique days
+    marALagoDays = marALagoDates.size;
+    firstLadyDays = firstLadyDates.size;
+    diplomatDays = diplomatDates.size;
+    
+    // Update UI with the counts
+    marAlagoCountElement.textContent = marALagoDays;
+    firstLadyCountElement.textContent = firstLadyDays;
+    diplomatsCountElement.textContent = diplomatDays;
+    
+    // Show the stats container
+    statsContainer.style.display = 'flex';
+}

@@ -16,10 +16,22 @@
         <div id="status" class="status-message loading">
             Loading events...
         </div>
-
+        <div class="stats-container" id="stats-container" style="display: none;">
+            <div class="stat-box">
+                <div class="stat-number" id="maralago-count">0</div>
+                <div class="stat-label">Days at Mar-a-Lago</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="firstlady-count">0</div>
+                <div class="stat-label">Days with The First Lady</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="diplomats-count">0</div>
+                <div class="stat-label">Days with Foreign Diplomats</div>
+            </div>
+        </div>
         <div class="event-filters" id="filters" style="display: none;">
             <div class="search-container">
-                <label for="search">Search:</label>
                 <div class="search-box">
                     <input type="text" id="search" placeholder="Search events...">
                     <button id="clear-search" class="clear-button" title="Clear search">×</button>
@@ -27,8 +39,8 @@
                 <button id="search-btn">Search</button>
             </div>
             <div class="backup-container">
-                <button id="backup-btn" title="Save current data to your device">Backup Data</button>
                 <span id="backup-status" class="backup-status"></span>
+                <button id="backup-btn" title="Toggle automatic data backup when you visit the site">Auto Backup: OFF</button>
             </div>
         </div>
 
