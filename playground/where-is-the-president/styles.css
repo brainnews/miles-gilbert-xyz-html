@@ -26,6 +26,12 @@ body {
     padding: 0;
 }
 
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 1px solid #1a56db;
+}
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -364,11 +370,21 @@ h1 {
     border: 1px solid var(--border-color);
 }
 
-.stat-box {
+/* Style for the detailed stat information */
+.stat-detail {
+    font-size: 0.75rem;
+    color: var(--muted-text-color);
+    margin-top: 2px;
     text-align: center;
-    flex: 1;
-    padding: 10px;
-    border-right: 1px solid var(--border-color);
+}
+
+/* Adjust stat boxes for additional content */
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
 }
 
 .stat-box:last-child {
@@ -387,6 +403,47 @@ h1 {
     color: var(--muted-text-color);
 }
 
+.stat-box {
+    position: relative;
+}
+
+.stat-box .tooltip-content {
+    visibility: hidden;
+    position: absolute;
+    background-color: var(--card-color);
+    color: var(--text-color);
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    width: 200px;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    pointer-events: none;
+}
+
+.stat-box:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Add a small arrow to the tooltip */
+.stat-box .tooltip-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--card-color) transparent transparent transparent;
+}
+
 /* Make sure it works on mobile */
 @media (max-width: 768px) {
     .stats-container {
@@ -402,6 +459,10 @@ h1 {
     
     .stat-box:last-child {
         border-bottom: none;
+    }
+    
+    .stat-detail {
+        margin-top: 5px;
     }
 }
 

@@ -31,6 +31,8 @@ const statsContainer = document.getElementById('stats-container');
 const marAlagoCountElement = document.getElementById('maralago-count');
 const firstLadyCountElement = document.getElementById('firstlady-count');
 const diplomatsCountElement = document.getElementById('diplomats-count');
+const lidHoursElement = document.getElementById('lid-hours');
+const lidAvgElement = document.getElementById('lid-avg');
 
 // Auto backup state
 let autoBackupEnabled = localStorage.getItem('autoBackupEnabled') === 'true';
@@ -556,6 +558,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Calculate lid time statistics
+function calculateLidTimeStatistics() {
+    // Initialize counters and trackers
+    let totalDaysWithLid = 0;
+    let totalLidHours = 0;
+    let averageLidTime = 0;
+    
+    // Create a Map to track lid times by date
+    const lidTimesByDate = new Map();
+    
+    // Group events by date to find the last "full lid called" event for each day
+    const eventsByDate = {};
+    state.allEvents.forEach(event => {
+        if (!event.date) return;
+        // Extract just the date part (YYYY-MM-DD)
+        const dateKey = event.date.split('T')[0];
+        if (!eventsByDate[dateKey]) {
+            eventsByDate[dateKey] = [];
+        }
+        eventsByDate[dateKey].push(event);
+    });
+    
+    // Process each day to find "full lid called" events
+    Object.keys(eventsByDate).forEach(dateKey => {
+        const dayEvents = eventsByDate[dateKey];
+        
+        // Find the full lid event if any
+        const fullLidEvent = dayEvents.find(event => 
+            event.description && 
+            event.description.toLowerCase().includes('full lid called')
+        );
+        
+        if (fullLidEvent && fullLidEvent.timeStart) {
+            const [hours, minutes] = fullLidEvent.timeStart.split(':').map(Number);
+            const minutesFromMidnight = hours * 60 + minutes;
+            
+            // Calculate lid time (minutes from lid call to midnight)
+            const minutesToMidnight = 24 * 60 - minutesFromMidnight;
+            const hoursToMidnight = minutesToMidnight / 60;
+            
+            // Store the lid time for this date
+            lidTimesByDate.set(dateKey, {
+                lidTime: hoursToMidnight,
+                lidCallTime: fullLidEvent.time_formatted || `${hours}:${minutes.toString().padStart(2, '0')}`
+            });
+            
+            // Update totals
+            totalDaysWithLid++;
+            totalLidHours += hoursToMidnight;
+        }
+    });
+    
+    // Calculate average lid time
+    if (totalDaysWithLid > 0) {
+        averageLidTime = totalLidHours / totalDaysWithLid;
+    }
+    
+    // Return the statistics
+    return {
+        totalDaysWithLid,
+        totalLidHours,
+        averageLidHours: averageLidTime,
+        lidTimesByDate
+    };
+}
+
 // Calculate event statistics
 function calculateEventStatistics() {
     // Initialize counters
@@ -621,10 +689,25 @@ function calculateEventStatistics() {
     firstLadyDays = firstLadyDates.size;
     diplomatDays = diplomatDates.size;
     
+    // Calculate lid time statistics
+    const lidStats = calculateLidTimeStatistics();
+    
     // Update UI with the counts
     marAlagoCountElement.textContent = marALagoDays;
     firstLadyCountElement.textContent = firstLadyDays;
     diplomatsCountElement.textContent = diplomatDays;
+    
+    // Update lid statistics if elements exist
+    if (lidHoursElement) {
+        lidHoursElement.textContent = Math.round(lidStats.totalLidHours);
+    }
+    
+    if (lidAvgElement) {
+        // Format the average time nicely (hours and minutes)
+        const avgHours = Math.floor(lidStats.averageLidHours);
+        const avgMinutes = Math.round((lidStats.averageLidHours - avgHours) * 60);
+        lidAvgElement.textContent = `Avg: ${avgHours}h ${avgMinutes}m per day`;
+    }
     
     // Show the stats container
     statsContainer.style.display = 'flex';
