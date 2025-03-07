@@ -36,7 +36,7 @@ button.toolbar-btn {
     border: none;
     color: rgb(43 41 44);
     padding: 10px 14px;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -44,11 +44,25 @@ button.toolbar-btn {
     cursor: pointer;
     font-family: inherit;
     background-color: rgba(255, 255, 255, 0.4);
-    transition: background-color 0.3s ease;
+    transition: all 0.1s ease;
     border-radius: 10px;
 }
 button.toolbar-btn:hover {
     background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+}
+.toolbar .current-color {
+    width: 52px;
+    height: 45px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.current-color .material-symbols-outlined {
+    font-size: 20px;
+    color: #000;
 }
 .toolbar-container {
     grid-area: toolbar;
@@ -99,4 +113,106 @@ button.toolbar-btn:hover {
 .disabled {
     opacity: 0.5;
     pointer-events: none;
+}
+.rainbow-bg {
+    background: 
+    radial-gradient(circle at 30% 30%, #ffb74d, transparent 50%),
+    radial-gradient(circle at 70% 60%, #81c784, transparent 50%),
+    radial-gradient(circle at 40% 80%, #64b5f6, transparent 50%),
+    radial-gradient(circle at 80% 20%, #ba68c8, transparent 60%),
+    radial-gradient(circle at 10% 50%, #e57373, transparent 50%),
+    #9575cd;
+}
+
+.toolbar .current-color {
+    width: 52px;
+    height: 45px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.current-color .material-symbols-outlined {
+    font-size: 20px;
+    color: #000;
+}
+.color-picker-container {
+    margin-left: -61px;
+    position: relative;
+    z-index: -9;
+    opacity: 0;
+}
+.help-modal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.help-content {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: auto;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 20px;
+}
+.help-content p {
+    color: #ffc86490;
+    margin-top: 40px;
+    border-bottom: 1px solid #ffc86430;
+    padding-bottom: 5px;
+}
+.help-content p:first-child {
+    margin-top: 0;
+}
+.help-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.help-content td {
+    padding: 8px 0;
+}
+.help-content .key {
+    background-color: #f3f3f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: black;
+}
+.help-content .tip {
+    background-color: #fff9e6;
+    border-left: 4px solid #ffc864;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 0 4px 4px 0;
+    color: black;
+}
+.help-content button {
+    display: block;
+    margin: 30px auto 10px;
+    padding: 8px 20px;
+    background-color: #ffc86430;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.help-content .material-symbols-outlined {
+    font-size: 18px;
+    transform: translateY(2px);
+    margin-right: 5px;
 }
