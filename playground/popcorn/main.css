@@ -216,3 +216,119 @@ button.toolbar-btn:hover {
     transform: translateY(2px);
     margin-right: 5px;
 }
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .toolbar {
+        padding: 8px 15px;
+        gap: 8px;
+        border-radius: 40px;
+    }
+    
+    button.toolbar-btn {
+        padding: 8px 10px;
+        padding-bottom: 4px;
+        font-size: 14px;
+    }
+    
+    .toolbar .current-color {
+        width: 40px;
+        height: 36px;
+    }
+    
+    #particleCount {
+        width: 50px;
+        font-size: 18px;
+    }
+    
+    .help-content {
+        max-width: 90vw;
+        max-height: 80vh;
+        font-size: 14px;
+        padding: 15px;
+    }
+    
+    .help-content table {
+        width: 100%;
+    }
+    .help-content td {
+        padding: 10px 5px;
+        line-height: 1.4;
+    }
+    
+    .help-content button {
+        padding: 12px 24px;
+        margin: 20px auto 10px;
+    }
+    
+    /* Larger close button for easier tapping */
+    #closeHelpBtn {
+        width: 70%;
+        height: 44px;
+        border-radius: 22px;
+    }
+    
+    /* Make tables more readable on mobile */
+    .help-content table {
+        border-spacing: 0 5px;
+    }
+    
+    .help-content td:first-child {
+        width: 40%;
+    }
+}
+
+/* Make sure buttons are large enough to tap on mobile */
+@media (max-width: 480px) {
+    button.toolbar-btn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+    
+    .help-content {
+        max-height: 75vh;
+        font-size: 13px;
+        padding: 12px;
+    }
+}
+
+/* Styles for the mobile menu and floating action button */
+#mobileFab {
+    transition: all 0.3s ease;
+}
+
+#mobileFab:active {
+    transform: scale(0.95);
+    background-color: #e6b44d;
+}
+
+.mobile-menu-item {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.mobile-menu-item:active {
+    transform: scale(0.98);
+}
+
+/* Improve mobile touch feedback */
+.button-touch-active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Styles for the long press visual indicator */
+.long-press-indicator {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 10px rgba(255, 200, 100, 0.5);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.1); opacity: 0.5; }
+}

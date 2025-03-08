@@ -1,3 +1,9 @@
+let longPressActive = false;
+let previousTouchDistance = 0;
+let touchStartTime = 0;
+let touchStartPos = { x: 0, y: 0 };
+let longPressTimer = null;
+const LONG_PRESS_DURATION = 500; // ms
 let time = 0;
 let rotation = 0;
 let baseSize; // Base size for scaling
@@ -76,6 +82,15 @@ function setup() {
     baseSize = calculateBaseSize();
     setupControls();
     setupPhysics();
+
+    if (isMobileDevice()) {
+        setupMobileControls();
+    }
+}
+
+// Utility function to detect mobile devices
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 }
 
 function windowResized() {
@@ -261,6 +276,14 @@ function draw() {
             }
         }
     }
+
+    // If long press is active, draw a selection circle
+    if (longPressActive && touches.length > 0) {
+        noFill();
+        stroke(255, 255, 255, 180);
+        strokeWeight(2);
+        circle(touchStartPos.x, touchStartPos.y, baseSize * 6);
+    }
     
     // Draw all particles
     for (let particle of particles) {
@@ -335,12 +358,6 @@ function drawConcentricSquares(x, y, size) {
 
 // create a function that detects mouse wheel movement to set the amount of particles to spawn
 function mouseWheel(event) {
-    // detect if mouse is over helpModal
-    // if(helpModal) {
-    //     if (mouseX > helpModal.offsetLeft && mouseX < helpModal.offsetLeft + helpModal.offsetWidth && mouseY > helpModal.offsetTop && mouseY < helpModal.offsetTop + helpModal.offsetHeight) {
-    //         return;
-    //     }
-    // }
     if (event.delta < 0) {
         spawnCount += 7;
     } else {
@@ -397,8 +414,71 @@ function mousePressed() {
 }
 
 function touchStarted() {
+    // Only track single touches for long press
     if (touches.length === 1) {
-        createParticles(touches[0].x, touches[0].y);
+        touchStartTime = millis();
+        touchStartPos = { x: touches[0].x, y: touches[0].y };
+        
+        // Set a timer for long press
+        clearTimeout(longPressTimer);
+        longPressTimer = setTimeout(() => {
+            // Check if we're still touching the same position
+            if (touches.length === 1 && 
+                dist(touches[0].x, touches[0].y, touchStartPos.x, touchStartPos.y) < 20) {
+                handleLongPress(touches[0].x, touches[0].y);
+            }
+        }, LONG_PRESS_DURATION);
+    }
+    // First check if the touch is within the toolbar or help modal
+    if (toolbar && touches.length === 1) {
+        const touch = touches[0];
+        if (touch.x > toolbar.offsetLeft && touch.x < toolbar.offsetLeft + toolbar.offsetWidth && 
+            touch.y > toolbar.offsetTop && touch.y < toolbar.offsetTop + toolbar.offsetHeight) {
+            return false;
+        }
+    }
+    
+    // Check if help modal is open and touch is inside it
+    const helpModal = document.getElementById('helpModal');
+    if (helpModal && helpModal.style.display !== 'none' && touches.length === 1) {
+        const touch = touches[0];
+        // Simple check to see if touch is in the modal
+        const helpContent = helpModal.querySelector('.help-content');
+        if (helpContent) {
+            const rect = helpContent.getBoundingClientRect();
+            if (touch.x >= rect.left && touch.x <= rect.right && 
+                touch.y >= rect.top && touch.y <= rect.bottom) {
+                return false;
+            } else {
+                // Close the modal if clicking outside
+                helpModal.style.display = 'none';
+                return false;
+            }
+        }
+    }
+
+    if (touches.length === 1) {
+        // Check if touching a particle
+        let touchedParticle = false;
+        for (let particle of particles) {
+            if (dist(touches[0].x, touches[0].y, particle.body.position.x, particle.body.position.y) < particle.size/2) {
+                if (selectedParticles.indexOf(particle) === -1) {
+                    selectedParticles.push(particle);
+                    particle.isSelected = true;
+                } else {
+                    selectedParticles.splice(selectedParticles.indexOf(particle), 1);
+                    particle.isSelected = false;
+                    particle.isHovered = false;
+                }
+                touchedParticle = true;
+                break;
+            }
+        }
+        
+        // If not touching a particle, create new ones
+        if (!touchedParticle) {
+            createParticles(touches[0].x, touches[0].y);
+        }
     } else if (touches.length === 2) {
         resetParticles();
     } else if (touches.length === 3) {
@@ -411,6 +491,217 @@ function touchStarted() {
         }
     }
     return false;
+}
+
+function touchEnded() {
+    // Clear the long press timer
+    clearTimeout(longPressTimer);
+    return false;
+}
+
+function touchMoved() {
+    // Handle pinch-to-zoom behavior
+    if (touches.length >= 2) {
+        const touch1 = touches[0];
+        const touch2 = touches[1];
+        const currentDistance = dist(touch1.x, touch1.y, touch2.x, touch2.y);
+        
+        // If we have a previous distance, calculate the change
+        if (previousTouchDistance > 0) {
+            const distanceDelta = currentDistance - previousTouchDistance;
+            
+            // Adjust spawn count based on pinch gesture
+            if (abs(distanceDelta) > 2) { // Threshold to avoid small fluctuations
+                spawnCount += distanceDelta * 0.1;
+                spawnCount = constrain(spawnCount, 10, 100);
+            }
+        }
+        
+        previousTouchDistance = currentDistance;
+        return false;
+    } else {
+        // Reset for next gesture
+        previousTouchDistance = 0;
+    }
+    
+    return false;
+}
+
+function handleLongPress(x, y) {
+    // Find particles near the long press position
+    let nearbyParticles = [];
+    
+    for (let particle of particles) {
+        if (dist(x, y, particle.body.position.x, particle.body.position.y) < baseSize * 3) {
+            nearbyParticles.push(particle);
+        }
+    }
+    
+    // Select all nearby particles
+    for (let particle of nearbyParticles) {
+        if (selectedParticles.indexOf(particle) === -1) {
+            selectedParticles.push(particle);
+            particle.isSelected = true;
+        }
+    }
+    
+    // Show a visual feedback for the selection
+    if (nearbyParticles.length > 0) {
+        // Flash effect or some other visual indicator
+        // This could be implemented in the draw function
+        longPressActive = true;
+        setTimeout(() => {
+            longPressActive = false;
+        }, 300);
+    }
+}
+
+function setupMobileControls() {
+    // Create a floating action button (FAB) for mobile
+    const fab = document.createElement('div');
+    fab.id = 'mobileFab';
+    fab.innerHTML = '<span class="material-symbols-outlined">more_vert</span>';
+    
+    document.body.appendChild(fab);
+    
+    // Style the FAB
+    fab.style.position = 'fixed';
+    fab.style.bottom = '20px';
+    fab.style.right = '20px';
+    fab.style.width = '56px';
+    fab.style.height = '56px';
+    fab.style.borderRadius = '50%';
+    fab.style.backgroundColor = '#ffc864';
+    fab.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+    fab.style.display = 'flex';
+    fab.style.alignItems = 'center';
+    fab.style.justifyContent = 'center';
+    fab.style.zIndex = '1000';
+    fab.style.fontSize = '24px';
+    
+    // Add touch event
+    fab.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        toggleMobileMenu();
+    });
+    
+    // Create mobile menu (initially hidden)
+    const mobileMenu = document.createElement('div');
+    mobileMenu.id = 'mobileMenu';
+    mobileMenu.style.display = 'none';
+    mobileMenu.style.position = 'fixed';
+    mobileMenu.style.bottom = '85px';
+    mobileMenu.style.right = '20px';
+    mobileMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+    mobileMenu.style.borderRadius = '12px';
+    mobileMenu.style.padding = '10px';
+    mobileMenu.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    mobileMenu.style.zIndex = '999';
+    
+    // Add mobile menu buttons
+    mobileMenu.innerHTML = `
+        <div class="mobile-menu-item" id="mobileSelectAll">Select All</div>
+        <div class="mobile-menu-item" id="mobileColor">Change Color</div>
+        <div class="mobile-menu-item" id="mobileShape">Change Shape</div>
+        <div class="mobile-menu-item" id="mobileLock">Lock/Unlock</div>
+        <div class="mobile-menu-item" id="mobileClear">Clear All</div>
+        <div class="mobile-menu-item" id="mobileHelp">Help</div>
+    `;
+    
+    document.body.appendChild(mobileMenu);
+    
+    // Style the menu items
+    const menuItems = document.querySelectorAll('.mobile-menu-item');
+    menuItems.forEach(item => {
+        item.style.padding = '12px 16px';
+        item.style.margin = '4px 0';
+        item.style.borderRadius = '8px';
+        item.style.backgroundColor = 'rgba(255, 200, 100, 0.2)';
+        item.style.fontSize = '16px';
+        item.style.fontWeight = 'bold';
+        
+        // Add active state styling
+        item.addEventListener('touchstart', function() {
+            this.style.backgroundColor = 'rgba(255, 200, 100, 0.5)';
+        });
+        
+        item.addEventListener('touchend', function() {
+            this.style.backgroundColor = 'rgba(255, 200, 100, 0.2)';
+        });
+    });
+    
+    // Implement menu functionality
+    document.getElementById('mobileSelectAll').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        for (let particle of particles) {
+            if (!particle.isSelected) {
+                selectedParticles.push(particle);
+                particle.isSelected = true;
+            }
+        }
+        toggleMobileMenu();
+    });
+    
+    document.getElementById('mobileColor').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        if (selectedParticles.length > 0) {
+            const event = new KeyboardEvent('keydown', { 'key': 'c' });
+            document.dispatchEvent(event);
+        } else {
+            // Toggle the color mode
+            const event = new Event('click');
+            currentColor.dispatchEvent(event);
+        }
+        toggleMobileMenu();
+    });
+    
+    document.getElementById('mobileShape').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const event = new Event('click');
+        shapeSelectBtn.dispatchEvent(event);
+        toggleMobileMenu();
+    });
+    
+    document.getElementById('mobileLock').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        if (selectedParticles.length > 0) {
+            const event = new Event('click');
+            lockBtn.dispatchEvent(event);
+        }
+        toggleMobileMenu();
+    });
+    
+    document.getElementById('mobileClear').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const event = new Event('click');
+        clearBtn.dispatchEvent(event);
+        toggleMobileMenu();
+    });
+    
+    document.getElementById('mobileHelp').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const event = new Event('click');
+        helpBtn.dispatchEvent(event);
+        toggleMobileMenu();
+    });
+}
+
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu.style.display === 'none') {
+        mobileMenu.style.display = 'block';
+    } else {
+        mobileMenu.style.display = 'none';
+    }
+}
+
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu.style.display === 'none') {
+        mobileMenu.style.display = 'block';
+    } else {
+        mobileMenu.style.display = 'none';
+    }
 }
 
 function createParticles(x, y) {
@@ -814,6 +1105,37 @@ function setupControls() {
         const helpContent = document.createElement('div');
         helpContent.classList.add('help-content');
         
+        // Define mobile-specific tips
+        const mobileTips = isMobileDevice() ? `
+            <p>Mobile Gestures</p>
+            <table>
+                <tr>
+                    <td><b>Tap</b></td>
+                    <td>Create particles or select/deselect a particle</td>
+                </tr>
+                <tr>
+                    <td><b>Long Press</b></td>
+                    <td>Select all particles in the area</td>
+                </tr>
+                <tr>
+                    <td><b>Two-Finger Tap</b></td>
+                    <td>Remove particles in a circular area</td>
+                </tr>
+                <tr>
+                    <td><b>Three-Finger Tap</b></td>
+                    <td>Remove all unlocked particles</td>
+                </tr>
+                <tr>
+                    <td><b>Pinch</b></td>
+                    <td>Adjust number of particles per spawn</td>
+                </tr>
+                <tr>
+                    <td><b>Floating Button</b></td>
+                    <td>Access mobile-specific controls</td>
+                </tr>
+            </table>
+        ` : '';
+
         // Add help content
         helpContent.innerHTML = `
             <p>Hotkeys</p>
@@ -883,20 +1205,7 @@ function setupControls() {
             
             <p>Mobile controls</p>
             
-            <table>
-                <tr>
-                    <td><b>Single Tap</b></td>
-                    <td>Create particles</td>
-                </tr>
-                <tr>
-                    <td><b>Two-Finger Tap</b></td>
-                    <td>Remove particles in a circular area</td>
-                </tr>
-                <tr>
-                    <td><b>Three-Finger Tap</b></td>
-                    <td>Remove all unlocked particles</td>
-                </tr>
-            </table>
+            ${mobileTips}
             
             <div class="tip">
                 <b>Creative tip:</b> Try locking some particles in place to create obstacles, then spawn more particles to interact with them!
