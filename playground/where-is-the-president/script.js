@@ -33,6 +33,9 @@ const firstLadyCountElement = document.getElementById('firstlady-count');
 const diplomatsCountElement = document.getElementById('diplomats-count');
 const lidHoursElement = document.getElementById('lid-hours');
 const lidAvgElement = document.getElementById('lid-avg');
+const daysInOfficeCountElement = document.getElementById('days-in-office-count');
+
+
 
 // Auto backup state
 let autoBackupEnabled = localStorage.getItem('autoBackupEnabled') === 'true';
@@ -558,6 +561,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// create a function that counts days since January 20, 2025
+function daysSince2025() {
+    const today = new Date();
+    const inaugurationDay = new Date(2025, 0, 20); // January 20, 2025
+    const timeDifference = today - inaugurationDay;
+    return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+}
+
+
 // Calculate lid time statistics
 function calculateLidTimeStatistics() {
     // Initialize counters and trackers
@@ -674,6 +686,8 @@ function calculateEventStatistics() {
             descriptionLower.includes('minister') ||
             descriptionLower.includes('president of') ||
             descriptionLower.includes('prime minister') ||
+            descriptionLower.includes('taoiseach') ||
+            descriptionLower.includes('bilateral') ||
             titleLower.includes('diplomat') || 
             titleLower.includes('ambassador') ||
             titleLower.includes('foreign') ||
@@ -696,6 +710,7 @@ function calculateEventStatistics() {
     marAlagoCountElement.textContent = marALagoDays;
     firstLadyCountElement.textContent = firstLadyDays;
     diplomatsCountElement.textContent = diplomatDays;
+    daysInOfficeCountElement.textContent = daysSince2025();
     
     // Update lid statistics if elements exist
     if (lidHoursElement) {
