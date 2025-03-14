@@ -20,6 +20,8 @@ let marqueeStartY = 0;
 let marqueeEndX = 0;
 let marqueeEndY = 0;
 let shiftPressed = false;
+let mKeyPressed = false;
+let xKeyPressed = false;
 
 // Matter.js variables
 let engine;
@@ -396,7 +398,12 @@ function mousePressed() {
     // detect if mouse click is on a particle
     for (let particle of particles) {
         if (dist(mouseX, mouseY, particle.body.position.x, particle.body.position.y) < particle.size/2) {
-            if (selectedParticles.indexOf(particle) === -1) {
+            if (xKeyPressed) {
+                // Split the particle if M key is pressed
+                splitParticle(particle);
+                clicked = true;
+                break;
+            } else if (selectedParticles.indexOf(particle) === -1) {
                 selectedParticles.push(particle);
                 particle.isSelected = true;
             } else {
@@ -731,6 +738,16 @@ function keyPressed() {
     if (keyCode === SHIFT) {
         shiftPressed = true;
     }
+
+    // Track M key state
+    if (key === 'm' || key === 'M') {
+        mKeyPressed = true;
+    }
+
+    // Track C key state
+    if (key === 'x' || key === 'X') {
+        xKeyPressed = true;
+    }
     
     if (key === 'Backspace') {
         if (selectedParticles.length > 0) {
@@ -801,6 +818,16 @@ function keyReleased() {
             isMarqueeSelecting = false;
         }
     }
+
+    // Track M key state
+    if (key === 'm' || key === 'M') {
+        mKeyPressed = false;
+    }
+
+    if (key === 'x' || key === 'X') {
+        xKeyPressed = false;
+    }
+
     return false;
 }
 
@@ -1165,6 +1192,10 @@ function setupControls() {
                     <td>Lock/unlock selected particles</td>
                 </tr>
                 <tr>
+                    <td><span class="key">M</span> + Click</td>
+                    <td>Split a particle into smaller fragments</td>
+                </tr>
+                <tr>
                     <td><span class="key">Shift</span> + Drag</td>
                     <td>Marquee selection (draw a box to select multiple particles)</td>
                 </tr>
@@ -1234,4 +1265,65 @@ function setupControls() {
             event.stopPropagation();
         });
     });
+}
+
+function splitParticle(particle) {
+    // Get original particle properties
+    const originalSize = particle.size;
+    const pos = particle.body.position;
+    const originalColor = particle.color;
+    const originalShape = particle.shape;
+    
+    // Remove the original particle
+    particle.remove();
+    const index = particles.indexOf(particle);
+    if (index !== -1) {
+        particles.splice(index, 1);
+    }
+    
+    // Also remove from selected and locked arrays if needed
+    const selectedIndex = selectedParticles.indexOf(particle);
+    if (selectedIndex !== -1) {
+        selectedParticles.splice(selectedIndex, 1);
+    }
+    
+    const lockedIndex = lockedParticles.indexOf(particle);
+    if (lockedIndex !== -1) {
+        lockedParticles.splice(lockedIndex, 1);
+    }
+    
+    // Number of smaller particles to create
+    const numFragments = floor(random(4, 8));
+    
+    // Size reduction factor - particles will be 60% of original size
+    const sizeReduction = 0.6;
+    
+    // Store the original base size
+    const originalBaseSize = baseSize;
+    
+    // Temporarily reduce base size for creating smaller particles
+    // We want new particles that are sizeReduction (e.g. 60%) of the original's size
+    // PhysicsParticle constructor uses random(baseSize * 0.75, baseSize * 1.5)
+    // So we adjust baseSize so the middle of this range (baseSize * 1.125) is sizeReduction * originalSize
+    baseSize = originalSize * sizeReduction / 1.125;
+    
+    // Create smaller particles
+    for (let i = 0; i < numFragments; i++) {
+        // Create a new particle with temporarily reduced baseSize
+        const newParticle = new PhysicsParticle(pos.x, pos.y, originalColor, originalShape);
+        
+        // Apply random velocity for explosion effect
+        const angle = random(TWO_PI);
+        const force = random(2, 5);
+        Matter.Body.setVelocity(newParticle.body, {
+            x: cos(angle) * force,
+            y: sin(angle) * force
+        });
+        
+        // Add to particles array
+        particles.push(newParticle);
+    }
+    
+    // Restore original base size
+    baseSize = originalBaseSize;
 }
