@@ -395,7 +395,6 @@ async function fetchCalendarData() {
         try {
             // Use the Cloudflare Worker URL
             const workerUrl = 'https://where-is-the-president.miles-gilbert.workers.dev/';
-            console.log("Fetching data from:", workerUrl);
             
             const response = await fetch(workerUrl);
             
@@ -708,7 +707,7 @@ function calculateEventStatistics() {
     
     // Update UI with the counts
     marAlagoCountElement.textContent = marALagoDays;
-    firstLadyCountElement.textContent = firstLadyDays;
+    //firstLadyCountElement.textContent = firstLadyDays;
     diplomatsCountElement.textContent = diplomatDays;
     daysInOfficeCountElement.textContent = daysSince2025();
     

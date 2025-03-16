@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where is the President?</title>
+    <title>U.S. President Schedule</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Where is the President?</h1>
-            <p>Recent and upcoming events</p>
+            <h1>U.S. President Schedule</h1>
+            <p>Current U.S. President: <a href="https://en.wikipedia.org/wiki/Donald_Trump" target="_blank" rel="noopener noreferrer">Donald Trump</a></p>
         </header>
 
         <div id="status" class="status-message loading">
@@ -26,16 +26,12 @@
                 <div class="stat-label">Days at Mar-a-Lago</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="firstlady-count">0</div>
-                <div class="stat-label">Events with The First Lady</div>
-            </div>
-            <div class="stat-box">
                 <div class="stat-number" id="diplomats-count">0</div>
                 <div class="stat-label">Events with Foreign Diplomats</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number" id="lid-hours">0</div>
-                <div class="stat-label">Hours Under "<a href="https://www.quora.com/What-does-the-White-House-means-when-they-say-%E2%80%9Cthats-a-lid%E2%80%9D-to-the-press-What-did-they-mean-by-this-on-the-West-Wing" target="_blank" rel="noopener noreferrer">Lid</a>"</div>
+                <div class="stat-label">Hours Under "<a href="https://www.quora.com/What-does-the-White-House-means-when-they-say-%E2%80%9Cthats-a-lid%E2%80%9D-to-the-press-What-did-they-mean-by-this-on-the-West-Wing" target="_blank" rel="noopener noreferrer" title="Lid is a term used by the White House to describe when the President is not available to the press. It is a reference to the fact that the President is often in the 'Lid' when they are not available to the press.">Lid</a>"</div>
                 <div class="stat-detail" id="lid-avg">Avg: 0h 0m per day</div>
             </div>
         </div>
@@ -49,7 +45,7 @@
             </div>
             <div class="backup-container">
                 <span id="backup-status" class="backup-status"></span>
-                <button id="backup-btn" title="Toggle automatic data backup when you visit the site">Auto Backup: OFF</button>
+                <button id="backup-btn" title="Toggle automatic backup">Auto Backup: OFF</button>
             </div>
         </div>
 
@@ -62,7 +58,12 @@
             <span id="page-info" class="page-info">Page 1</span>
             <button id="next-btn">Next</button>
         </div>
-
+        <ul class="tips">
+            <li style="font-weight: bold;">Tips:</li>
+            <li>Enable automatic backup to save all data to your device every time you visit the site.</li>
+            <li>Look out for a "More information" link to learn more about the event and see video clips, transcripts, and other data.</li>
+            <li>The term "Lid" is used by the White House to describe when the President is not available to the press.</li>
+        </ul>
         <p class="timestamp" id="last-updated"></p>
     </div>
 
