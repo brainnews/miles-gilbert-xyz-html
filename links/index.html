@@ -31,6 +31,7 @@
 
         [data-theme="dark"] {
             --bg: var(--gray-900);
+            --bg-opacity-50: rgba(0, 0, 0, 0.5);
             --text: var(--gray-100);
             --link: var(--gray-400);
             --hover: var(--gray-600);
@@ -39,6 +40,7 @@
 
         [data-theme="light"] {
             --bg: var(--gray-100);
+            --bg-opacity-50: rgba(255, 255, 255, 0.5);
             --text: var(--gray-900);
             --link: var(--gray-600);
             --hover: var(--gray-400);
@@ -61,21 +63,50 @@
             transition: all 0.3s ease;
         }
 
+        a {
+            color: var(--link);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--hover);
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 1rem;
             margin-bottom: 3rem;
-            border-bottom: 2px solid var(--text);
-            padding-bottom: 0.5rem;
+            border: 2px solid var(--text);
+            padding: 0.5rem 0.75rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-left: auto;
             margin-right: auto;
+            border-radius: 12px;
+            position: sticky;
+            top: 2rem;
+            background-color: var(--bg-opacity-50);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+        }
+
+        .breadcrumbs {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .theme-toggle {
@@ -103,14 +134,14 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
             margin: 0 auto;
-            padding: 0;
+            padding: 0 0.75rem;
         }
 
         .link-card {
             color: var(--link);
             text-decoration: none;
             padding: 2rem;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
@@ -134,8 +165,8 @@
         }
 
         .link-card:hover {
-            background-color: var(--hover);
             transform: translateY(-2px);
+            border-color: var(--hover);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -186,8 +217,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>
-            Miles Gilbert
+        <h1 style="font-size: 1rem;">
+            <img class="logo" src="../favicon-96x96.png" alt="Miles Gilbert">
+            <div class="breadcrumbs">
+                <a href="../">Miles Gilbert</a> <span class="material-symbols-outlined">line_end</span> Links
+            </div>
             <div class="theme-toggle">
                 <button onclick="toggleTheme()" class="theme-button">
                     <span class="material-symbols-outlined light-icon">light_mode</span>
@@ -223,6 +257,13 @@
                 </div>
                 <h2>Are.na</h2>
                 <p>As an early investor in Are.na, I have a special place in my heart for this platform. It embodies the ethos of a digital garden, a place where I can experiment, share, and learn.</p>
+            </a>
+            <a href="../blog/" class="link-card">
+                <div class="link-icon">
+                    <span class="material-symbols-outlined">perm_media</span>
+                </div>
+                <h2>Collected Media</h2>
+                <p>Digital images, videos, and other media that would be on Tumblr if I were still on Tumblr.</p>
             </a>
         </section>
     </div>
