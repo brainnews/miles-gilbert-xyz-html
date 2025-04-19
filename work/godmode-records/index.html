@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godmode Records</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-container"></div>
+        <section class="project-section">
+            <div class="project-header">
+                <p>As creative director for Godmode Records, I led the development of a series of visual assets that defined the label's identity and aesthetic. The project included creating album artwork, promotional materials, and visual branding that reflected the label's commitment to independent music and creative expression. Through compelling visual design, we established Godmode Records as a distinctive voice in the independent music scene.</p>
+                <div class="project-meta">
+                    <span class="role">Creative Director</span>
+                    <span class="client">Godmode Records</span>
+                    <span class="year">2013</span>
+                </div>
+            </div>
+            <div class="project-content">
+                <div class="project-gallery">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/godmode-wide.jpg" alt="Godmode Records - Wide">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/flyer.png" alt="Godmode Records - Flyer">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/gm01.png" alt="Godmode Records - GM01">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/godmode-biz.png" alt="Godmode Records - Business">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/lightbox.png" alt="Godmode Records - Lightbox">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/pr-cover.png" alt="Godmode Records - PR Cover">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/social.png" alt="Godmode Records - Social">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/gm02.png" alt="Godmode Records - GM02">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/gm03.png" alt="Godmode Records - GM03">
+                    <img src="https://files.milesgilbert.xyz/images/godmode-records/street-art.jpg" alt="Godmode Records - Street Art">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { renderProjects } from '../../js/projects.js';
+
+        // Load the header when the page loads
+        async function loadHeader() {
+            try {
+                const response = await fetch('../../components/header.html');
+                const html = await response.text();
+                
+                // Create a temporary container to parse the HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                
+                // Extract and append the header HTML
+                const header = temp.querySelector('.header');
+                document.querySelector('.header-container').appendChild(header);
+                
+                // Extract and append the styles
+                const styles = temp.querySelector('style');
+                if (styles) {
+                    document.head.appendChild(styles);
+                }
+                
+                // Extract and execute the scripts
+                const scripts = temp.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                });
+            } catch (error) {
+                console.error('Error loading header:', error);
+            }
+        }
+
+        // Initialize everything when the page loads
+        window.addEventListener('load', async () => {
+            await loadHeader();
+        });
+    </script>
+</body>
+</html>

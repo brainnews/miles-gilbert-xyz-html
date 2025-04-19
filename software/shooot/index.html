@@ -3,34 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miles Gilbert | Writing</title>
+    <title>Shooot</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../../../css/styles.css">
 </head>
 <body>
     <div class="container">
         <div class="header-container"></div>
-        <section class="links">
-            <a href="./a-certification-for-algorithm-free-platforms/" class="link-card">
-                <div class="link-icon">
-                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="128" height="128" fill="white"/>
-                    </svg>
+        <section class="project-section">
+            <div class="project-header">
+                <h1>Shooot</h1>
+                <p class="subhead">The camera for happy accidents</p>
+                <div class="project-meta">
+                    <span class="role">Creator, Creative Director, Product Designer</span>
+                    <span class="client">Self-directed</span>
+                    <span class="year">2016</span>
                 </div>
-                <h2>A Certification for Algorithm-Free Platforms</h2>
-                <p>Thoughts on transparency and trust on an internet built of algorithmically-driven platforms.</p>
-            </a>
+            </div>
+            <div class="project-content">
+                <p>Shooot was a camera app for iPhone that removed the distractions of smartphone photography. The app simulated the waiting period of old school film development by asking users to wait until the next morning to see their photos. Shooot also encouraged users to work without a viewfinder – helping them see the world through their own eyes. We called it "The Camera for Happy Accidents".</p>
+                
+                <p><a href="https://www.instagram.com/explore/tags/shotwithshooot/" target="_blank">#shotwithshooot on Instagram</a></p>
+                
+                <div class="project-media">
+                    <!-- Add video players if needed -->
+                </div>
+
+                <div class="project-gallery">
+                    <!-- Add images if needed -->
+                </div>
+            </div>
         </section>
     </div>
 
     <script type="module">
+        import { renderProjects } from '../../../js/projects.js';
+
         // Load the header when the page loads
         async function loadHeader() {
             try {
-                const response = await fetch('../components/header.html');
+                const response = await fetch('../../../components/header.html');
                 const html = await response.text();
                 
                 // Create a temporary container to parse the HTML
@@ -64,5 +79,6 @@
             await loadHeader();
         });
     </script>
+    <script src="../../../components/video-player.js"></script>
 </body>
-</html> 
+</html>

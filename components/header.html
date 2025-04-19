@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        :root {
+            /* Monochrome color palette */
+            --gray-100: #ffffff;
+            --gray-200: #f0f0f0;
+            --gray-300: #e0e0e0;
+            --gray-400: #c0c0c0;
+            --gray-500: #808080;
+            --gray-600: #404040;
+            --gray-700: #202020;
+            --gray-800: #101010;
+            --gray-900: #000000;
+
+            /* Default to system theme */
+            --bg: var(--gray-100);
+            --text: var(--gray-900);
+            --link: var(--gray-600);
+            --hover: var(--gray-400);
+            --border: var(--gray-300);
+            --bg-opacity-50: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            --bg: var(--gray-900);
+            --text: var(--gray-100);
+            --link: var(--gray-400);
+            --hover: var(--gray-600);
+            --border: var(--gray-700);
+            --bg-opacity-50: rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg: var(--gray-100);
+            --text: var(--gray-900);
+            --link: var(--gray-600);
+            --hover: var(--gray-400);
+            --border: var(--gray-300);
+            --bg-opacity-50: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--hover);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1200px;
+            padding: 2rem 0.75rem;
+            padding-bottom: 0;
+        }
+
+        .logo {
+            width: 24px;
+            height: 24px;
+        }
+
+        .breadcrumbs {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            justify-content: center;
+        }
+
+        .breadcrumbs span, .breadcrumbs a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breadcrumbs span.material-symbols-outlined {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .theme-button {
+            background: none;
+            border: none;
+            color: var(--text);
+            padding: 0.5rem;
+            cursor: pointer;
+            font-family: inherit;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .theme-button .light-icon,
+        .theme-button .dark-icon {
+            display: none;
+        }
+
+        [data-theme="light"] .theme-button .light-icon {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-button .dark-icon {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="breadcrumbs">
+            <a href="https://milesgilbert.xyz">Miles Gilbert</a><span id="parent-page"></span> <span id="current-page"></span>
+        </div>
+        <div class="theme-toggle">
+            <button onclick="toggleTheme()" class="theme-button">
+                <span class="material-symbols-outlined light-icon">light_mode</span>
+                <span class="material-symbols-outlined dark-icon">dark_mode</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let devMode = false;
+        if (window.location.host === '127.0.0.1:5500' || window.location.host === 'localhost:5500') {
+            devMode = true;
+        }
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Initialize theme based on system preference or saved preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark ? 'dark' : 'light');
+        }
+
+        const pathname = window.location.pathname;
+        const pathParts = pathname.split('/');
+        let currentPage = '';
+        let parentPage = '';
+        if (devMode) {
+            if (pathParts.length > 4) {
+                currentPage = pathParts[3];
+                parentPage = pathParts[2];
+            } else {
+                currentPage = pathParts[2];
+                parentPage = null;
+            }
+        } else {
+            if (pathParts.length > 2) {
+                currentPage = pathParts[2];
+                parentPage = pathParts[1];
+            } else {
+                currentPage = pathParts[1];
+                parentPage = null;
+            }
+        }
+        if (parentPage) {
+            document.getElementById('parent-page').innerHTML = '<a href="../"><span class="material-symbols-outlined">line_end</span>' + parentPage.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()) + '</a>';
+        } else {
+            document.getElementById('parent-page').style.display = 'none';
+        }
+        // Set current page title
+        if (currentPage) {
+            document.getElementById('current-page').innerHTML = '<span class="material-symbols-outlined">line_end</span>' + currentPage.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        } else {
+            document.getElementById('current-page').style.display = 'none';
+        }
+        
+    </script>
+</body>
+</html> 

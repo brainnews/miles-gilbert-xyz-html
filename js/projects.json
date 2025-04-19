@@ -58,31 +58,6 @@
     "visible": true
   },
   {
-    "title": "Metitate.art",
-    "slug": "metitate-art",
-    "role": "Developer, Designer",
-    "client": "Self-directed",
-    "year": "2022",
-    "tagline": "A portal to mindfulness, discovery, and the joy of reading art",
-    "summary": "Metitate.art is my portal to mindfulness, discovery, and the joy of reading art. Over the past 2 years, it has evolved into a personal art history companion, guiding my personal exploration of the vast collection of The Metropolitan Museum of Art.\n<br/><br/>\nEach day on metitate.art, a new gallery is unveiled, showcasing objects ranging from European masterpieces to ancient sarcophagi. An algorithm of my own design prioritizes the most intriguing objects based on factors like age, materials, and artist renown.\n\nUsers can curate their own digital museums by collecting objects and adding them to their personal collections. This feature fosters a sense of ownership and encourages a deeper connection with art, as each collected artifact becomes exclusive to the user.\n<br/><br/>\n<a href=\"https://www.metitate.art\" target=\"_blank\">Visit Metitate.art</a>",
-    "tags": [
-      "web app",
-      "product design",
-      "product development",
-      "web development",
-      "javascript",
-      "vue",
-      "css",
-      "html",
-      "side project",
-      "mindfulness",
-      "ux design",
-      "app"
-    ],
-    "featured": true,
-    "visible": true
-  },
-  {
     "title": "Rising Voices Tribeca",
     "slug": "rising-voices-tribeca",
     "role": "Creative Director",
@@ -170,7 +145,7 @@
       "video editing"
     ],
     "featured": false,
-    "visible": true
+    "visible": false
   },
   {
     "title": "Work Wellbeing Series",
@@ -308,7 +283,7 @@
       "Indeed"
     ],
     "featured": false,
-    "visible": false
+    "visible": true
   },
   {
     "title": "Indeed on Youtube",
@@ -326,45 +301,6 @@
       "marketing strategy",
       "brand alignment",
       "cross-functional"
-    ],
-    "featured": false,
-    "visible": true
-  },
-  {
-    "title": "The End of the Road",
-    "slug": "the-end-of-the-road",
-    "role": "Researcher",
-    "client": "Self-directed",
-    "year": "2010",
-    "tagline": "A photographic study on the limitations of digital maps",
-    "summary": "The End of the Road was a self-directed interrogation of the limits of the Google Streetview project conducted sporadically from 2008 – 2010. The project explored the tension between the unlimited potential of big data and the very limited realities of physical space by documenting where the Google Streetview car had to physically stop driving and, as a result, stop capturing images. Obstacles such as closed fences, unpassable dirt roads, and even tiny dogs showed how our physical world can obstruct our virtual world.\n\nThe project ended in 2011 when, unsurprisingly, Google designed a workaround for these obstacles by including user submitted photos and who knows what else to stitch together unobstructed images of our world. Still, the project lives on as a reminder of limits of technology and the value of privacy – both as an individual right and a corporate commodity.\n\nView the project on <a href=\"https://www.are.na/miles-gilbert/the-end-of-the-road\" target=\"_blank\">Are.na</a>",
-    "tags": [
-      "digital-art",
-      "data-visualization",
-      "google-streetview",
-      "privacy",
-      "technology-limits",
-      "physical-space",
-      "virtual-world"
-    ],
-    "featured": false,
-    "visible": true
-  },
-  {
-    "title": "Shooot",
-    "slug": "shooot",
-    "role": "Creator, Creative Director, Product Designer",
-    "client": "Self-directed",
-    "year": "2016",
-    "tagline": "The camera for happy accidents",
-    "summary": "Shooot was a camera app for iPhone that removed the distractions of smartphone photography. The app simulated the waiting period of old school film development by asking users to wait until the next morning to see their photos. Shooot also encouraged users to work without a viewfinder – helping them see the world through their own eyes. We called it \"The Camera for Happy Accidents\".\n\n<a href=\"https://www.instagram.com/explore/tags/shotwithshooot/\" target=\"_blank\">#shotwithshooot on Instagram</a>",
-    "tags": [
-      "mobile app",
-      "photography",
-      "camera",
-      "film simulation",
-      "minimalism",
-      "user experience"
     ],
     "featured": false,
     "visible": true
@@ -428,26 +364,6 @@
     "visible": false
   },
   {
-    "title": "Finn",
-    "slug": "finn",
-    "role": "Creator, Co-lead, Creative Director",
-    "client": "Indeed Creative",
-    "year": "2024",
-    "tagline": "Transforming creative feedback workflows with artificial intelligence",
-    "summary": "What began as a personal solution to streamline creative feedback evolved into an effective AI-powered tool for Indeed's creative teams. I identified a critical pain point: creative professionals were spending excessive time processing and responding to feedback, leading to decreased productivity and creative burnout. Taking initiative, I developed a Chrome extension prototype that dramatically simplified feedback management.\n\nThe initial prototype showed clear impact, reducing feedback processing time and preserving creative energy. This success caught the attention of my colleagues, who saw its practical value in their daily work. Leveraging my technical expertise and understanding of creative workflows, I secured internal funding from Indeed to expand the project.\n\nThe result was Finn, an AI-driven product that not only accelerates feedback processing but also helps maintain creative momentum. By bridging my experience in creative direction with technical innovation, I transformed a personal productivity hack into a robust enterprise solution that makes creative teams' work more efficient and sustainable.",
-    "tags": [
-      "product management",
-      "software development",
-      "user experience design",
-      "creative direction",
-      "artificial intelligence",
-      "enterprise software",
-      "productivity tools"
-    ],
-    "featured": true,
-    "visible": false
-  },
-  {
     "title": "Careers in Care: Off the Clock",
     "slug": "careers-in-care-off-the-clock",
     "role": "Creative Director",
@@ -463,6 +379,6 @@
       "vendor agency"
     ],
     "featured": false,
-    "visible": true
+    "visible": false
   }
 ]

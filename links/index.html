@@ -3,290 +3,703 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miles Gilbert - Links</title>
+    <title>Links</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../css/styles.css">
     <style>
-        :root {
-            /* Monochrome color palette */
-            --gray-100: #ffffff;
-            --gray-200: #f0f0f0;
-            --gray-300: #e0e0e0;
-            --gray-400: #c0c0c0;
-            --gray-500: #808080;
-            --gray-600: #404040;
-            --gray-700: #202020;
-            --gray-800: #101010;
-            --gray-900: #000000;
-
-            /* Default to system theme */
-            --bg: var(--gray-100);
-            --text: var(--gray-900);
-            --link: var(--gray-600);
-            --hover: var(--gray-400);
-            --border: var(--gray-300);
+        [data-theme="light"] .link-icon rect[fill="white"], [data-theme="light"] path[fill="white"] {
+            fill: black;
         }
-
-        [data-theme="dark"] {
-            --bg: var(--gray-900);
-            --bg-opacity-50: rgba(0, 0, 0, 0.5);
-            --text: var(--gray-100);
-            --link: var(--gray-400);
-            --hover: var(--gray-600);
-            --border: var(--gray-700);
+        [data-theme="light"] path[fill="black"] {
+            fill: white;
         }
-
-        [data-theme="light"] {
-            --bg: var(--gray-100);
-            --bg-opacity-50: rgba(255, 255, 255, 0.5);
-            --text: var(--gray-900);
-            --link: var(--gray-600);
-            --hover: var(--gray-400);
-            --border: var(--gray-300);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "DM Sans", sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 2rem;
-            margin: 0;
-            transition: all 0.3s ease;
-        }
-
-        a {
-            color: var(--link);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        a:hover {
-            color: var(--hover);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        h1 {
-            font-size: 1rem;
-            margin-bottom: 3rem;
-            border: 2px solid var(--text);
-            padding: 0.5rem 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 12px;
-            position: sticky;
-            top: 2rem;
-            background-color: var(--bg-opacity-50);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .logo {
-            width: 30px;
-            height: 30px;
-        }
-
-        .breadcrumbs {
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .theme-toggle {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .theme-toggle button {
-            background: none;
-            border: 0px solid var(--text);
-            color: var(--text);
-            padding: 0.25rem 0.5rem;
-            cursor: pointer;
-            font-family: inherit;
-            border-radius: 4px;
-        }
-
-        .theme-toggle button.active {
-            background-color: var(--text);
-            color: var(--bg);
-        }
-
-        .links {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin: 0 auto;
-            padding: 0 0.75rem;
-        }
-
-        .link-card {
-            color: var(--link);
-            text-decoration: none;
-            padding: 2rem;
-            border: 2px solid var(--border);
+        .link-card-icon-rect {
+            opacity: 0.4;
             transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-height: 250px;
-            border-radius: 12px;
-            background-color: var(--bg);
         }
-
-        .link-card h2 {
-            font-family: "Lora", serif;
-            font-size: 1.5rem;
-            margin: 0;
-            color: var(--text);
+        .link-card:hover .link-card-icon-rect {
+            opacity: 1;
         }
-
-        .link-card p {
-            margin: 0;
-            color: var(--link);
-            font-size: 1rem;
+        .software-icon .code-line {
+            width: 0;
         }
-
-        .link-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--hover);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .software-icon:hover .led-light {
+            animation: blink 0.5s infinite;
         }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-            
-            .links {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-
-            h1 {
-                padding: 0 1rem;
-                margin-bottom: 2rem;
-            }
+        .software-icon:hover .code-line-9 {
+            animation: grow-line-9 0.2s ease forwards;
+            animation-delay: 0s;
         }
-
-        .theme-button {
-            background: none;
-            border: 1px solid var(--text);
-            color: var(--text);
-            padding: 0.5rem;
-            cursor: pointer;
-            font-family: inherit;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+        .software-icon:hover .code-line-8 {
+            animation: grow-line-8 0.2s ease forwards;
+            animation-delay: 0.1s;
         }
-
-        .theme-button .light-icon,
-        .theme-button .dark-icon {
-            display: none;
+        .software-icon:hover .code-line-7 {
+            animation: grow-line-7 0.2s ease forwards;
+            animation-delay: 0.2s;
         }
-
-        [data-theme="light"] .theme-button .light-icon {
-            display: block;
+        .software-icon:hover .code-line-6 {
+            animation: grow-line-6 0.2s ease forwards;
+            animation-delay: 0.3s;
         }
-
-        [data-theme="dark"] .theme-button .dark-icon {
-            display: block;
+        .software-icon:hover .code-line-5 {
+            animation: grow-line-5 0.2s ease forwards;
+            animation-delay: 0.4s;
+        }
+        .software-icon:hover .code-line-4 {
+            animation: grow-line-4 0.2s ease forwards;
+            animation-delay: 0.5s;
+        }
+        .software-icon:hover .code-line-3 {
+            animation: grow-line-3 0.2s ease forwards;
+            animation-delay: 0.6s;
+        }
+        .software-icon:hover .code-line-2 {
+            animation: grow-line-2 0.2s ease forwards;
+            animation-delay: 0.7s;
+        }
+        .software-icon:hover .code-line-1 {
+            animation: grow-line-1 0.2s ease forwards;
+            animation-delay: 0.8s;
+        }
+        @keyframes grow-line-9 {
+            from { width: 0; }
+            to { width: 4px; }
+        }
+        @keyframes grow-line-8 {
+            from { width: 0; }
+            to { width: 6px; }
+        }
+        @keyframes grow-line-7 {
+            from { width: 0; }
+            to { width: 4px; }
+        }
+        @keyframes grow-line-6 {
+            from { width: 0; }
+            to { width: 4px; }
+        }
+        @keyframes grow-line-5 {
+            from { width: 0; }
+            to { width: 10x; }
+        }
+        @keyframes grow-line-4 {
+            from { width: 0; }
+            to { width: 8px; }
+        }
+        @keyframes grow-line-3 {
+            from { width: 0; }
+            to { width: 4px; }
+        }
+        @keyframes grow-line-2 {
+            from { width: 0; }
+            to { width: 4px; }
+        }
+        @keyframes grow-line-1 {
+            from { width: 0; }
+            to { width: 10px; }
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .algo-strikethrough {
+            width: 0px;
+            fill: #169FFF;
+            transition: width 0.2s ease;
+        }
+        .algo-shadow {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .link-card:hover .algo-strikethrough {
+            width: 128px;
+        }
+        .link-card:hover .algo-shadow {
+            opacity: 0.2;
+        }
+        .flower-petal {
+            width: 0px;
+            height: 0px;
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+        .link-card:hover .flower-petal {
+            width: 4px;
+            height: 4px;
+        }
+        .link-card .arrow-top, .link-card .arrow-bottom {
+            transform: translateX(-400px);
+            transition: transform 0.07s linear;
+        }
+        .link-card:hover .arrow-top, .link-card:hover .arrow-bottom {
+            transform: translateX(0px);
+        }
+        .link-card .bullseye {
+            fill: #ffffff;
+            transition: transform 0.25s linear, fill 0.07s linear;
+        }
+        .link-card:hover .bullseye {
+            fill: #c81313;
+        }
+        .link-card .arrow-shadow {
+            opacity: 0;
+            transition: opacity 0.07s linear;
+        }
+        .link-card:hover .arrow-shadow {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="font-size: 1rem;">
-            <img class="logo" src="../favicon-96x96.png" alt="Miles Gilbert">
-            <div class="breadcrumbs">
-                <a href="../">Miles Gilbert</a> <span class="material-symbols-outlined">line_end</span> Links
-            </div>
-            <div class="theme-toggle">
-                <button onclick="toggleTheme()" class="theme-button">
-                    <span class="material-symbols-outlined light-icon">light_mode</span>
-                    <span class="material-symbols-outlined dark-icon">dark_mode</span>
-                </button>
-            </div>
-        </h1>
+        <div class="header-container"></div>
         <section class="links">
             <a href="../writing/algorithm-free-certification/" class="link-card">
                 <div class="link-icon">
-                    <span class="material-symbols-outlined">note_stack</span>
+                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="55" y="78" width="8" height="8" fill="white"/>
+                        <rect x="115" y="78" width="8" height="8" fill="white"/>
+                        <rect x="31" y="78" width="8" height="8" fill="white"/>
+                        <rect class="algo-strikethrough" y="78" width="128" height="8" fill="#169FFF"/>
+                        <rect x="15" y="98" width="4" height="4" fill="white"/>
+                        <rect x="99" y="98" width="4" height="4" fill="white"/>
+                        <rect x="63" y="98" width="16" height="4" fill="white"/>
+                        <rect x="59" y="94" width="8" height="4" fill="white"/>
+                        <rect x="75" y="94" width="8" height="4" fill="white"/>
+                        <rect x="27" y="98" width="4" height="4" fill="white"/>
+                        <rect x="111" y="98" width="4" height="4" fill="white"/>
+                        <rect x="23" y="98" width="4" height="4" fill="white"/>
+                        <rect x="107" y="98" width="4" height="4" fill="white"/>
+                        <rect x="19" y="98" width="4" height="4" fill="white"/>
+                        <rect x="103" y="98" width="4" height="4" fill="white"/>
+                        <rect x="27" y="94" width="4" height="4" fill="white"/>
+                        <rect x="111" y="94" width="4" height="4" fill="white"/>
+                        <rect x="15" y="94" width="4" height="4" fill="white"/>
+                        <rect x="99" y="94" width="4" height="4" fill="white"/>
+                        <rect x="55" y="86" width="8" height="4" fill="white"/>
+                        <rect x="15" y="62" width="16" height="4" fill="white"/>
+                        <rect x="99" y="62" width="16" height="4" fill="white"/>
+                        <rect x="7" y="70" width="8" height="24" fill="white"/>
+                        <rect x="91" y="70" width="8" height="24" fill="white"/>
+                        <rect x="11" y="66" width="4" height="4" fill="white"/>
+                        <rect x="95" y="66" width="4" height="4" fill="white"/>
+                        <rect class="algo-shadow" opacity="0.3" x="15" y="78" width="4" height="8" fill="black"/>
+                        <rect class="algo-shadow" opacity="0.3" x="51" y="78" width="4" height="8" fill="black"/>
+                        <rect class="algo-shadow" opacity="0.3" x="87" y="78" width="4" height="8" fill="black"/>
+                        <rect class="algo-shadow" opacity="0.3" x="99" y="78" width="4" height="8" fill="black"/>
+                        <rect x="11" y="94" width="4" height="4" fill="white"/>
+                        <rect x="95" y="94" width="4" height="4" fill="white"/>
+                        <rect x="31" y="94" width="4" height="4" fill="white"/>
+                        <rect x="115" y="94" width="4" height="4" fill="white"/>
+                        <rect x="35" y="94" width="4" height="4" fill="white"/>
+                        <rect x="35" y="98" width="4" height="4" fill="white"/>
+                        <rect x="31" y="66" width="4" height="4" fill="white"/>
+                        <rect x="115" y="66" width="4" height="4" fill="white"/>
+                        <rect x="35" y="62" width="4" height="4" fill="white"/>
+                        <rect x="55" y="70" width="8" height="8" fill="white"/>
+                        <rect x="31" y="70" width="8" height="8" fill="white"/>
+                        <rect x="115" y="70" width="8" height="8" fill="white"/>
+                        <rect x="63" y="62" width="16" height="4" fill="white"/>
+                        <rect x="59" y="66" width="4" height="4" fill="white"/>
+                        <rect x="31" y="86" width="8" height="8" fill="white"/>
+                        <rect x="115" y="86" width="8" height="8" fill="white"/>
+                        <rect x="79" y="66" width="4" height="4" fill="white"/>
+                        <rect x="83" y="62" width="4" height="4" fill="white"/>
+                        <rect x="119" y="62" width="4" height="4" fill="white"/>
+                        <rect x="79" y="70" width="8" height="8" fill="white"/>
+                        <rect x="79" y="78" width="8" height="8" fill="white"/>
+                        <rect x="79" y="86" width="8" height="8" fill="white"/>
+                        <rect x="39" y="98" width="4" height="4" fill="white"/>
+                        <rect x="43" y="98" width="4" height="4" fill="white"/>
+                        <rect x="51" y="98" width="4" height="4" fill="white"/>
+                        <rect x="87" y="98" width="4" height="4" fill="white"/>
+                        <rect x="91" y="98" width="4" height="4" fill="white"/>
+                        <rect x="55" y="94" width="4" height="4" fill="white"/>
+                        <rect x="59" y="90" width="4" height="4" fill="white"/>
+                        <rect x="39" y="94" width="4" height="4" fill="white"/>
+                        <rect x="39" y="98" width="4" height="4" fill="white"/>
+                        <rect x="43" y="50" width="8" height="48" fill="white"/>
+                        <rect x="47" y="46" width="4" height="4" fill="white"/>
+                        <rect x="51" y="42" width="4" height="4" fill="white"/>
+                        <rect x="79" y="98" width="4" height="20" fill="white"/>
+                        <rect x="83" y="102" width="4" height="8" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M43 6H31V10H27H23V6H19V10H23V14V18H19V34H23V38V42H19V46H23V42H27V38V34V18V14H31V10H39V14H43V38V42H39V46H43V42H47V38H51V14H47V10H43V6ZM79 22V30V38H75V42H71H67V38H63V14V10H79V14V22ZM83 10V14H87V22V30V38H83V42H79V46H75H71H67H63V42H59V38H55V14H59V10H63V6H79V10H83ZM83 10V6H87V10H83Z" fill="#FFE7A5"/>
+                        <rect x="75" y="118" width="4" height="4" fill="white"/>
+                        <rect x="71" y="118" width="4" height="4" fill="white"/>
+                        <rect x="71" y="114" width="4" height="4" fill="white"/>
+                        <rect x="67" y="114" width="4" height="4" fill="white"/>
+                        <rect x="63" y="118" width="4" height="4" fill="white"/>
+                    </svg>  
                 </div>
-                <h2>A Certification for Algorithm-Free Platforms</h2>
+                <h2>Essay: A Certification for Algorithm-Free Platforms on the Internet</h2>
                 <p>Thoughts on transparency and trust on an internet built of algorithmically-driven platforms.</p>
             </a>
-            <a href="../software/" class="link-card">
+            <a href="../software/" class="link-card software-icon">
                 <div class="link-icon">
-                    <span class="material-symbols-outlined">code</span>
+                    <svg class="code-icon" width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M102 16H38V20H34V24H30V28V72V76H26V80H22V100H18V104H14V108V112H98V108H102V104H106V100H110V96H114V72H110H106V24V20H102V16ZM106 76V72H102V24H98V20H38V24H98V28V72V76H94H34H30V80H102V84V96V100H26H22V104H18V108H98V104H102V100H106V96H110V76H106ZM106 76V80H102V76H106ZM34 72V28H94V72H34ZM42 64H86V36H42V64ZM42 68H86H90V64V36V32H86H42H38V36V45V47V49V64V68H42ZM26 84H98V96H26V84ZM46 89V91H30V89H46Z" fill="white"/>
+                        <rect class="code-line code-line-1" width="10" height="2" transform="matrix(-1 0 0 1 58 59)" fill="#DA70D6"/>
+                        <rect class="code-line code-line-2" width="4" height="2" transform="matrix(-1 0 0 1 52 55)" fill="white"/>
+                        <rect class="code-line code-line-3" width="4" height="2" transform="matrix(-1 0 0 1 64 51)" fill="white"/>
+                        <rect class="code-line code-line-4" width="8" height="2" transform="matrix(-1 0 0 1 58 51)" fill="#A699F0"/>
+                        <rect class="code-line code-line-5" width="10" height="2" transform="matrix(-1 0 0 1 66 47)" fill="#DA70D6"/>
+                        <rect class="code-line code-line-6" width="4" height="2" transform="matrix(-1 0 0 1 54 47)" fill="#169FFF"/>
+                        <rect class="code-line code-line-7" width="4" height="2" transform="matrix(-1 0 0 1 60 43)" fill="white"/>
+                        <rect class="code-line code-line-8" width="6" height="2" transform="matrix(-1 0 0 1 54 43)" fill="#83D6C5"/>
+                        <rect class="code-line code-line-9" width="4" height="2" transform="matrix(-1 0 0 1 52 39)" fill="white"/>
+                        <rect class="led-light" x="92" y="89" width="2" height="2" fill="#16D4FF"/>
+                        <rect class="interface" x="72" y="42" width="8" height="16" fill="#83D6C5" fill-opacity="0.8"/>
+                    </svg>
                 </div>
                 <h2>Software</h2>
-                <p>Websites, apps, and other software projects.</p>
+                <p>Websites, apps, and other software projects I've built as a hobbyist developer.</p>
             </a>
-            <a href="../" class="link-card">
+            <a href="../work/" class="link-card">
                 <div class="link-icon">
-                    <span class="material-symbols-outlined">draw_abstract</span>
+                    <svg width="276" height="128" viewBox="0 0 276 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M244 22H193V26H189V30H185V34H181V38H177V42H173V46H169V82H173V86H177V90H181V94H185V98H189V102H193V106H244V102H248V98H252V94H256V90H260V86H264V42H260V38H256V34H252V30H248V26H244V22Z" fill="#169FFF"/>
+                        <path d="M189 22H232V26H236V30H240V34H244V38H248V42H252V46H256V82H252V86H248V90H244V94H240V98H236V102H232V106H189V102H185V98H181V94H177V90H173V86H169V82H165V46H169V42H173V38H177V34H181V30H185V26H189V22Z" fill="white"/>
+                        <path d="M193 26V30H189V34H185V38H181V42H177V46H173V82H177V86H181V90H185V94H189V98H193V102H228V98H232V94H236V90H240V86H244V82H248V46H244V42H240V38H236V34H232V30H228V26H193Z" fill="black"/>
+                        <path d="M224 34H197V38H193V42H189V46H185V50H181V78H185V82H189V86H193V90H197V94H224V90H228V86H232V82H236V78H240V50H236V46H232V42H228V38H224V34Z" fill="white"/>
+                        <path d="M224 42H197V46H193V50H189V78H193V82H197V86H224V82H228V78H232V50H228V46H224V42Z" fill="black"/>
+                        <path class="bullseye" d="M220 50H201V54H197V74H201V78H220V74H224V54H220V50Z" fill="white"/>
+                        <path class="arrow-top" fill-rule="evenodd" clip-rule="evenodd" d="M159 66H209V70H175V74H167V78H147V74H155V70H159V66Z" fill="#45A894"/>
+                        <path class="arrow-bottom" fill-rule="evenodd" clip-rule="evenodd" d="M167 54H147V58H155V62H159V66H209V70H213V62H209H175V58H167V54Z" fill="#83D6C5"/>
+                        <rect class="arrow-shadow" x="205" y="70" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="201" y="74" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="197" y="78" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="193" y="82" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="189" y="86" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="185" y="90" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                        <rect class="arrow-shadow" x="181" y="94" width="8" height="4" fill="black" fill-opacity="0.4"/>
+                    </svg>       
                 </div>
                 <h2>Advertising and Design</h2>
                 <p>A selection of work from my 15+ year career in advertising, design, and marketing.</p>
             </a>
             <a href="https://www.are.na/miles-gilbert" class="link-card">
                 <div class="link-icon">
-                    <span class="material-symbols-outlined">person</span>
+                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="8" y="114" width="112" height="4" fill="white"/>
+                        <rect x="84" y="46" width="4" height="4" fill="white"/>
+                        <rect x="84" y="50" width="4" height="4" fill="white"/>
+                        <rect x="84" y="54" width="4" height="4" fill="white"/>
+                        <rect x="80" y="58" width="4" height="4" fill="white"/>
+                        <rect x="80" y="62" width="4" height="4" fill="white"/>
+                        <rect x="84" y="62" width="4" height="4" fill="white"/>
+                        <rect x="84" y="66" width="4" height="4" fill="white"/>
+                        <rect x="88" y="66" width="4" height="4" fill="white"/>
+                        <rect x="84" y="70" width="4" height="4" fill="white"/>
+                        <rect x="96" y="70" width="4" height="4" fill="white"/>
+                        <rect x="96" y="70" width="4" height="4" fill="white"/>
+                        <rect x="96" y="74" width="4" height="4" fill="white"/>
+                        <rect x="96" y="78" width="4" height="4" fill="white"/>
+                        <rect x="96" y="82" width="4" height="4" fill="white"/>
+                        <rect x="96" y="86" width="4" height="4" fill="white"/>
+                        <rect x="88" y="90" width="4" height="4" fill="white"/>
+                        <rect x="88" y="94" width="4" height="4" fill="white"/>
+                        <rect x="88" y="98" width="4" height="4" fill="white"/>
+                        <rect x="88" y="102" width="4" height="4" fill="white"/>
+                        <rect x="88" y="106" width="4" height="4" fill="white"/>
+                        <rect x="88" y="110" width="4" height="4" fill="white"/>
+                        <rect x="96" y="90" width="4" height="4" fill="white"/>
+                        <rect x="96" y="94" width="4" height="4" fill="white"/>
+                        <rect x="96" y="98" width="4" height="4" fill="white"/>
+                        <rect x="96" y="102" width="4" height="4" fill="white"/>
+                        <rect x="96" y="106" width="4" height="4" fill="white"/>
+                        <rect x="96" y="110" width="4" height="4" fill="white"/>
+                        <rect x="108" y="90" width="4" height="4" fill="white"/>
+                        <rect x="108" y="94" width="4" height="4" fill="white"/>
+                        <rect x="108" y="98" width="4" height="4" fill="white"/>
+                        <rect x="112" y="74" width="4" height="4" fill="white"/>
+                        <rect x="112" y="78" width="4" height="4" fill="white"/>
+                        <rect x="116" y="82" width="4" height="4" fill="white"/>
+                        <rect x="112" y="86" width="4" height="4" fill="white"/>
+                        <rect x="84" y="78" width="4" height="4" fill="white"/>
+                        <rect x="84" y="74" width="4" height="4" fill="white"/>
+                        <rect x="84" y="82" width="4" height="4" fill="white"/>
+                        <rect x="68" y="78" width="4" height="4" fill="white"/>
+                        <rect x="68" y="82" width="4" height="4" fill="white"/>
+                        <rect x="84" y="86" width="4" height="4" fill="white"/>
+                        <rect x="76" y="90" width="4" height="4" fill="white"/>
+                        <rect x="76" y="94" width="4" height="4" fill="white"/>
+                        <rect x="76" y="98" width="4" height="4" fill="white"/>
+                        <rect x="76" y="102" width="4" height="4" fill="white"/>
+                        <rect x="76" y="106" width="4" height="4" fill="white"/>
+                        <rect x="76" y="110" width="4" height="4" fill="white"/>
+                        <rect x="72" y="106" width="4" height="4" fill="white"/>
+                        <rect x="68" y="70" width="4" height="4" fill="white"/>
+                        <rect x="68" y="86" width="4" height="4" fill="white"/>
+                        <rect x="60" y="90" width="4" height="4" fill="white"/>
+                        <rect x="60" y="94" width="4" height="4" fill="white"/>
+                        <rect x="60" y="98" width="4" height="4" fill="white"/>
+                        <rect x="60" y="102" width="4" height="4" fill="white"/>
+                        <rect x="52" y="70" width="4" height="4" fill="white"/>
+                        <rect x="52" y="74" width="4" height="4" fill="white"/>
+                        <rect x="56" y="78" width="4" height="4" fill="white"/>
+                        <rect x="64" y="66" width="4" height="4" fill="white"/>
+                        <rect x="80" y="78" width="4" height="4" fill="white"/>
+                        <rect x="88" y="70" width="4" height="4" fill="white"/>
+                        <rect x="80" y="82" width="4" height="4" fill="white"/>
+                        <rect x="64" y="78" width="4" height="4" fill="white"/>
+                        <rect x="100" y="70" width="4" height="4" fill="white"/>
+                        <rect x="64" y="82" width="4" height="4" fill="white"/>
+                        <rect x="80" y="74" width="4" height="4" fill="white"/>
+                        <rect x="80" y="86" width="4" height="4" fill="white"/>
+                        <rect x="72" y="90" width="4" height="4" fill="white"/>
+                        <rect x="72" y="94" width="4" height="4" fill="white"/>
+                        <rect x="72" y="98" width="4" height="4" fill="white"/>
+                        <rect x="100" y="78" width="4" height="4" fill="white"/>
+                        <rect x="100" y="82" width="4" height="4" fill="white"/>
+                        <rect x="104" y="82" width="4" height="4" fill="white"/>
+                        <rect x="64" y="70" width="4" height="4" fill="white"/>
+                        <rect x="64" y="86" width="4" height="4" fill="white"/>
+                        <rect x="56" y="90" width="4" height="4" fill="white"/>
+                        <rect x="56" y="94" width="4" height="4" fill="white"/>
+                        <rect x="56" y="98" width="4" height="4" fill="white"/>
+                        <rect x="52" y="94" width="4" height="4" fill="white"/>
+                        <rect x="48" y="70" width="4" height="4" fill="white"/>
+                        <rect x="60" y="66" width="4" height="4" fill="white"/>
+                        <rect x="100" y="74" width="4" height="4" fill="white"/>
+                        <rect x="100" y="86" width="4" height="4" fill="white"/>
+                        <rect x="92" y="90" width="4" height="4" fill="white"/>
+                        <rect x="92" y="94" width="4" height="4" fill="white"/>
+                        <rect x="92" y="98" width="4" height="4" fill="white"/>
+                        <rect x="92" y="102" width="4" height="4" fill="white"/>
+                        <rect x="92" y="106" width="4" height="4" fill="white"/>
+                        <rect x="92" y="110" width="4" height="4" fill="white"/>
+                        <rect x="112" y="90" width="4" height="4" fill="white"/>
+                        <rect x="100" y="90" width="4" height="4" fill="white"/>
+                        <rect x="100" y="94" width="4" height="4" fill="white"/>
+                        <rect x="100" y="98" width="4" height="4" fill="white"/>
+                        <rect x="100" y="102" width="4" height="4" fill="white"/>
+                        <rect x="100" y="106" width="4" height="4" fill="white"/>
+                        <rect x="112" y="94" width="4" height="4" fill="white"/>
+                        <rect x="104" y="86" width="4" height="4" fill="white"/>
+                        <rect x="104" y="94" width="4" height="4" fill="white"/>
+                        <rect x="104" y="98" width="4" height="4" fill="white"/>
+                        <rect x="104" y="102" width="4" height="4" fill="white"/>
+                        <rect x="104" y="106" width="4" height="4" fill="white"/>
+                        <rect x="116" y="74" width="4" height="4" fill="white"/>
+                        <rect x="116" y="78" width="4" height="4" fill="white"/>
+                        <rect x="120" y="82" width="4" height="4" fill="white"/>
+                        <rect x="116" y="86" width="4" height="4" fill="white"/>
+                        <rect x="120" y="78" width="4" height="4" fill="white"/>
+                        <rect x="124" y="82" width="4" height="4" fill="white"/>
+                        <rect x="104" y="70" width="4" height="4" fill="white"/>
+                        <rect x="100" y="66" width="4" height="4" fill="white"/>
+                        <rect x="108" y="62" width="4" height="4" fill="white"/>
+                        <rect x="108" y="58" width="4" height="4" fill="white"/>
+                        <rect x="104" y="66" width="4" height="4" fill="white"/>
+                        <rect x="88" y="78" width="4" height="4" fill="white"/>
+                        <rect x="112" y="62" width="4" height="4" fill="white"/>
+                        <rect x="88" y="82" width="4" height="4" fill="white"/>
+                        <rect x="72" y="78" width="4" height="4" fill="white"/>
+                        <rect x="112" y="58" width="4" height="4" fill="white"/>
+                        <rect x="72" y="82" width="4" height="4" fill="white"/>
+                        <rect x="112" y="54" width="4" height="4" fill="white"/>
+                        <rect x="116" y="58" width="4" height="4" fill="white"/>
+                        <rect x="108" y="70" width="4" height="4" fill="white"/>
+                        <rect x="88" y="74" width="4" height="4" fill="white"/>
+                        <rect x="92" y="78" width="4" height="4" fill="white"/>
+                        <rect x="92" y="82" width="4" height="4" fill="white"/>
+                        <rect x="88" y="86" width="4" height="4" fill="white"/>
+                        <rect x="80" y="90" width="4" height="4" fill="white"/>
+                        <rect x="80" y="94" width="4" height="4" fill="white"/>
+                        <rect x="80" y="98" width="4" height="4" fill="white"/>
+                        <rect x="80" y="102" width="4" height="4" fill="white"/>
+                        <rect x="80" y="106" width="4" height="4" fill="white"/>
+                        <rect x="80" y="110" width="4" height="4" fill="white"/>
+                        <rect x="76" y="82" width="4" height="4" fill="white"/>
+                        <rect x="76" y="78" width="4" height="4" fill="white"/>
+                        <rect x="72" y="70" width="4" height="4" fill="white"/>
+                        <rect x="72" y="86" width="4" height="4" fill="white"/>
+                        <rect x="64" y="90" width="4" height="4" fill="white"/>
+                        <rect x="64" y="94" width="4" height="4" fill="white"/>
+                        <rect x="64" y="98" width="4" height="4" fill="white"/>
+                        <rect x="56" y="70" width="4" height="4" fill="white"/>
+                        <rect x="56" y="74" width="4" height="4" fill="white"/>
+                        <rect x="60" y="78" width="4" height="4" fill="white"/>
+                        <rect x="68" y="66" width="4" height="4" fill="white"/>
+                        <rect x="92" y="74" width="4" height="4" fill="white"/>
+                        <rect x="92" y="86" width="4" height="4" fill="white"/>
+                        <rect x="84" y="90" width="4" height="4" fill="white"/>
+                        <rect x="84" y="94" width="4" height="4" fill="white"/>
+                        <rect x="84" y="98" width="4" height="4" fill="white"/>
+                        <rect x="84" y="102" width="4" height="4" fill="white"/>
+                        <rect x="84" y="106" width="4" height="4" fill="white"/>
+                        <rect x="84" y="110" width="4" height="4" fill="white"/>
+                        <rect x="76" y="70" width="4" height="4" fill="white"/>
+                        <rect x="76" y="86" width="4" height="4" fill="white"/>
+                        <rect x="68" y="90" width="4" height="4" fill="white"/>
+                        <rect x="68" y="94" width="4" height="4" fill="white"/>
+                        <rect x="68" y="98" width="4" height="4" fill="white"/>
+                        <rect x="68" y="102" width="4" height="4" fill="white"/>
+                        <rect x="72" y="66" width="4" height="4" fill="white"/>
+                        <rect x="88" y="50" width="4" height="4" fill="white"/>
+                        <rect x="88" y="54" width="4" height="4" fill="white"/>
+                        <rect x="80" y="50" width="4" height="4" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 58)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 54)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 62)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 58)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 62)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 110)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 32 110)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 12 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 68 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 76 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 76 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 72 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 72 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 72 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 76 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 80 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 110)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 110)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 12 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 12 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 12 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 8 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 8 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 28 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 62)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 58)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 24 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 16 62)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 12 58)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 20 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 82)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 40 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 64 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 72 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 68 78)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 66)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 74)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 36 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 48 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 102)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 106)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 44 110)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 70)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 52 86)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 90)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 94)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 60 98)" fill="white"/>
+                        <rect width="4" height="4" transform="matrix(-1 0 0 1 56 66)" fill="white"/>
+                        <rect x="44" y="38" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="48" y="34" width="4" height="4" fill="#83D6C5"/>
+                        <rect class="flower-petal" x="48" y="18" width="4" height="4" fill="white"/>
+                        <rect class="flower-petal" x="52" y="14" width="4" height="4" fill="white"/>
+                        <rect class="flower-petal" x="56" y="10" width="4" height="4" fill="#169FFF"/>
+                        <rect class="flower-petal" x="48" y="10" width="4" height="4" fill="#169FFF"/>
+                        <rect class="flower-petal" x="44" y="14" width="4" height="4" fill="#169FFF"/>
+                        <rect class="flower-petal" x="44" y="22" width="4" height="4" fill="#169FFF"/>
+                        <rect x="52" y="34" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="52" y="38" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="42" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="38" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="56" y="42" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="46" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="50" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="50" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="48" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="48" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="48" y="50" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="44" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="44" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="44" y="50" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="40" y="54" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="40" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="36" y="58" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="36" y="62" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="60" y="42" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="60" y="46" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="50" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="62" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="68" y="62" width="4" height="4" fill="#61A497"/>
+                        <rect x="68" y="66" width="4" height="4" fill="#61A497"/>
+                        <rect x="64" y="66" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="64" y="70" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="66" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="70" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="74" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="78" width="4" height="46" fill="#61A497"/>
+                        <rect x="56" y="66" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="70" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="66" width="4" height="4" fill="#61A497"/>
+                        <rect x="48" y="66" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="48" y="70" width="4" height="4" fill="#61A497"/>
+                        <rect x="44" y="70" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="44" y="74" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="26" width="8" height="8" fill="#83D6C5"/>
+                        <rect x="64" y="42" width="4" height="4" fill="#61A497"/>
+                        <rect x="64" y="46" width="4" height="4" fill="#61A497"/>
+                        <rect x="64" y="50" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="52" y="18" width="12" height="12" fill="#169FFF"/>
+                        <rect x="60" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="56" y="62" width="4" height="4" fill="#61A497"/>
+                        <rect x="72" y="62" width="4" height="4" fill="#61A497"/>
+                        <rect x="52" y="18" width="4" height="4" fill="white"/>
+                        <rect x="52" y="22" width="4" height="4" fill="white"/>
+                        <rect x="56" y="18" width="4" height="4" fill="white"/>
+                        <rect x="72" y="58" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="68" y="42" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="68" y="46" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="68" y="50" width="4" height="4" fill="#61A497"/>
+                        <rect x="64" y="58" width="4" height="4" fill="#61A497"/>
+                        <rect x="60" y="62" width="4" height="4" fill="#61A497"/>
+                        <rect x="76" y="62" width="4" height="4" fill="#61A497"/>
+                        <rect x="80" y="62" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="80" y="66" width="4" height="4" fill="#61A497"/>
+                        <rect x="84" y="70" width="4" height="4" fill="white"/>
+                        <rect x="64" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="76" y="58" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="72" y="42" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="72" y="46" width="4" height="4" fill="#61A497"/>
+                        <rect x="72" y="50" width="4" height="4" fill="#61A497"/>
+                        <rect x="68" y="54" width="4" height="4" fill="#61A497"/>
+                        <rect x="76" y="38" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="80" y="42" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="64" y="38" width="4" height="4" fill="#83D6C5"/>
+                        <rect x="64" y="34" width="4" height="4" fill="#83D6C5"/>
+                    </svg>
                 </div>
                 <h2>Are.na</h2>
                 <p>As an early investor in Are.na, I have a special place in my heart for this platform. It embodies the ethos of a digital garden, a place where I can experiment, share, and learn.</p>
             </a>
-            <a href="../blog/" class="link-card">
-                <div class="link-icon">
-                    <span class="material-symbols-outlined">perm_media</span>
-                </div>
-                <h2>Collected Media</h2>
-                <p>Digital images, videos, and other media that would be on Tumblr if I were still on Tumblr.</p>
-            </a>
         </section>
     </div>
+
     <script>
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            setTheme(newTheme);
+        // Function to load the header component
+        async function loadHeader() {
+            try {
+                const response = await fetch('../components/header.html');
+                const html = await response.text();
+                
+                // Create a temporary container to parse the HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                
+                // Extract and append the header HTML
+                const header = temp.querySelector('.header');
+                document.querySelector('.header-container').appendChild(header);
+                
+                // Extract and append the styles
+                const styles = temp.querySelector('style');
+                if (styles) {
+                    document.head.appendChild(styles);
+                }
+                
+                // Extract and execute the scripts
+                const scripts = temp.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                });
+            } catch (error) {
+                console.error('Error loading header:', error);
+            }
         }
 
-        function setTheme(theme) {
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        }
-
-        // Initialize theme based on system preference or saved preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-        } else {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            setTheme(prefersDark ? 'dark' : 'light');
-        }
+        // Load the header when the page loads
+        document.addEventListener('DOMContentLoaded', loadHeader);
     </script>
 </body>
 </html>

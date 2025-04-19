@@ -1,20 +1,32 @@
-async function loadProjects() {
+let cachedProjects = null;
+
+export async function loadProjects() {
+  if (cachedProjects) {
+    return cachedProjects;
+  }
+
   try {
-    const response = await fetch('https://files.milesgilbert.xyz/js/projects.json');
+    let pathToJson;
+    if (window.location.host === '127.0.0.1:5500' || window.location.host === 'localhost:5500') {
+      pathToJson = '../js/projects.json';
+    } else {
+      pathToJson = 'https://files.milesgilbert.xyz/js/projects.json';
+    }
+    const response = await fetch(pathToJson);
     if (!response.ok) {
       throw new Error('Failed to load projects');
     }
-    const projects = await response.json();
-    return projects;
+    cachedProjects = await response.json();
+    return cachedProjects;
   } catch (error) {
     console.error('Error loading projects:', error);
     return [];
   }
 }
 
-function createProjectElement(project) {
+export function createProjectElement(project) {
   const wrapper = document.createElement('a');
-  wrapper.href = `./projects/${project.slug}/`;
+  wrapper.href = `./${project.slug}/`;
 
   const workImage = document.createElement('div');
   workImage.className = 'work-image';
@@ -34,22 +46,22 @@ function createProjectElement(project) {
   return wrapper;
 }
 
-async function renderProjects() {
+export async function renderProjects() {
   const container = document.getElementById('everything-container');
+  if (!container) return; // Don't render if container doesn't exist
+  
   const projects = await loadProjects();
   
   projects
-    .filter(project => project.visible !== false)  // Only render visible projects
+    .filter(project => project.visible === true)
     .forEach(project => {
       const projectElement = createProjectElement(project);
       container.appendChild(projectElement);
   });
 }
-
-// Initialize the portfolio when the DOM is loaded
-document.addEventListener('DOMContentLoaded', renderProjects);
   
-export const getRelatedProjects = (currentSlug, maxProjects = 3) => {
+export async function getRelatedProjects(currentSlug, maxProjects = 3) {
+  const projects = await loadProjects();
   const currentProject = projects.find(p => p.slug === currentSlug);
   if (!currentProject) return [];
   
@@ -73,4 +85,4 @@ export const getRelatedProjects = (currentSlug, maxProjects = 3) => {
     .slice(0, maxProjects);
 
   return scoredProjects;
-};
+}

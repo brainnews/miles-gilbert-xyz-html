@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miles Gilbert - Creative Director, Creative Manager, and Developer</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body class="dark">
+    <nav>
+        <a class="nav-link active">
+            <img class="logo" src="https://files.milesgilbert.xyz/images/wordmark.svg">
+        </a>
+        <a class="nav-link nav-link-hidden hide" href="#reel" data-target="reel">Reel</a>
+        <a class="nav-link nav-link-hidden hide" href="#info" data-target="info">Info</a>
+        <a class="nav-link nav-link-hidden hide" href="#projects" data-target="projects">Projects</a>
+        <!-- <div class="flourish top-flourish"></div> -->
+        <div class="flourish middle-flourish"></div>
+        <!-- <div class="flourish bottom-flourish"></div> -->
+    </nav>
+    <div class="container">
+        <section id="reel" class="target-section">
+            <div class="fresh-label">fresh work!</div>
+            <custom-video-player src="https://files.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4" autoplay loop no-pip></custom-video-player>
+        </section>
+        <section id="info" class="intro target-section">
+            <div class="intro-content">
+                <div class="intro-text">
+                    <h1 class="headline">Miles Gilbert</h1>
+                    <h1 class="headline" style="font-weight: normal; margin-bottom: 22px;">Creative Director, Design Manager</h1>
+                    <p class="subhead">I'm a creative director with a proven track record of making complex tech concepts feel approachable and engaging. Throughout my career, I've worked with major technology companies like IBM, HP, and Indeed, crafting brand experiences that resonate across both physical and digital environments.</p>
+                    <p>Today, I help lead creative initiatives at Indeed, the world's #1 job site. Beyond directing video series and experiential campaigns, I drive innovation through technology—recently prototyping an AI-powered tool that streamlines our creative feedback process, and helping evaluate AI solutions that enhance our team's efficiency. My work focuses on modernizing both our creative output and our workflows to help people find and succeed in meaningful work.</p>
+                    
+                </div>
+                <div class="intro-sidebar">
+                  <div class="intro-image arch-image">
+                      <div class="thought-bubble">
+                        <div class="texts-to-myself"></div>
+                    </div>
+                    <img src="https://files.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
+                    <div class="flourish portrait-ledge">
+                      <div class="flourish ledge-flourish-left"></div>
+                      <div class="flourish ledge-flourish-right"></div>
+                    </div>
+                  </div>
+                  <ul class="list-unstyled">
+                    <a href="https://www.linkedin.com/in/milesmilesmiles/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/linkedin-icon.svg" alt="LinkedIn" class="list-icon">LinkedIn</li></a>
+                    <a href="https://www.are.na/miles-gilbert/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/arena-icon.svg" alt="Are.na" class="list-icon">Are.na</li></a>
+                    <a href="https://www.milesgilbert.xyz/blog/" target="_blank"><li><img src="https://files.milesgilbert.xyz/images/tumblr-icon.png" alt="Tumblr*" class="list-icon">Tumblr<sup style="font-weight: 400;">*</sup></li></a>
+                    <a href="./resume"><li><img src="https://files.milesgilbert.xyz/images/resume-icon.svg" alt="Resume" class="list-icon">Resume</li></a>
+                    <a href="./writing"><li>Writing</li></a>
+                    <p style="font-size: 10px;"><sup style="font-weight: 400;">*</sup>Tumblr is more of a state of mind at this point. My "image blog" runs on a custom platform powered by <a href="https://www.are.na" target="_blank">Are.na</a>.</p>
+                  </ul>
+                </div>
+            </div>
+        </section>
+        <section id="projects" class="target-section">
+            <h2>Projects</h2>
+            <div id="everything-container" class="everything-container">
+                <!-- Projects will be dynamically inserted here -->
+            </div>
+        </section>
+    </div>
+    <script src="./js/video-player.js"></script>
+    <script src="./js/texts-to-myself.js"></script>
+    <script src="./js/main.js"></script>
+    <script type="module" src="./js/projects.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const TARGET_OFFSET = 60; // Distance from top of viewport in pixels
+        const sections = document.querySelectorAll('.target-section');
+        const flourish = document.querySelector('.middle-flourish');
+        let lastActiveSection = null;
+
+        // Function to update section states
+        const updateSectionStates = () => {
+          sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            // Check if section's top edge is at or has passed our target position
+            if (Math.abs(rect.top - TARGET_OFFSET) < 20) { // Using a small threshold for better detection
+              if (section !== lastActiveSection) {
+                // Only remove active class from previous link
+                if (lastActiveSection) {
+                  const previousLink = document.querySelector(`a[href="#${lastActiveSection.id}"]`);
+                  if (previousLink) {
+                    previousLink.classList.remove('active');
+                  }
+                }
+                
+                // Add active class to new corresponding link
+                const correspondingLink = document.querySelector(`a[href="#${section.id}"]`);
+                if (correspondingLink) {
+                  correspondingLink.classList.add('active');
+                }
+                
+                // Update flourish position based on current section
+                if (flourish) {
+                  console.log('flourish 1');
+                  switch(section.id) {
+                    case 'reel':
+                      flourish.style.bottom = '63px';
+                      break;
+                    case 'info':
+                      flourish.style.bottom = '40px';
+                      break;
+                    case 'projects':
+                      flourish.style.bottom = '20px';
+                      break;
+                  }
+                }
+                lastActiveSection = section;
+              }
+            }
+          });
+        };
+        
+        // Throttle scroll handler for better performance
+        let ticking = false;
+        document.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              updateSectionStates();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+        
+        // Initial check
+        updateSectionStates();
+        
+        // Handle click events on navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').slice(1);
+            const targetSection = document.getElementById(targetId);
+            const flourish = document.querySelector('.middle-flourish');
+            if (targetSection) {
+              const targetPosition = targetSection.offsetTop - TARGET_OFFSET;
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+              updateSectionStates();
+            }
+          });
+        });
+      });
+    </script>
+</body>
+</html>
