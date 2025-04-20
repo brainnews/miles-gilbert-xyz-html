@@ -6,7 +6,7 @@
     <title>Miles Gilbert | Work</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../css/styles.css">
     <style>
@@ -23,6 +23,11 @@
             background-color: white;
             flex-shrink: 0;
             border: 2px solid var(--border);
+            @media (max-width: 768px) {
+                width: 100px;
+                height: 100px;
+                margin-left: 0.5rem;
+            }
         }
         .headshot-container img {
             width: 100%;
@@ -35,12 +40,13 @@
             width: 100%;
             justify-content: space-between;
             @media (max-width: 768px) {
-                flex-direction: column;
+                flex-direction: column-reverse;
             }
         }
         
         .intro-text {
             max-width: 800px;
+            padding: 0 0.5rem;
         }
         
         .intro-text p {

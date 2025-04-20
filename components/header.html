@@ -3,10 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         :root {
             /* Monochrome color palette */
@@ -90,15 +86,16 @@
         .breadcrumbs {
             font-size: 1rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.5rem;
             font-weight: 700;
             justify-content: center;
+            padding: 0 0.5rem;
         }
 
         .breadcrumbs span, .breadcrumbs a {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
 
@@ -147,7 +144,7 @@
             <a href="https://milesgilbert.xyz">Miles Gilbert</a><span id="parent-page"></span> <span id="current-page"></span>
         </div>
         <div class="theme-toggle">
-            <button onclick="toggleTheme()" class="theme-button">
+            <button onclick="toggleTheme()" class="theme-button" style="display: none;">
                 <span class="material-symbols-outlined light-icon">light_mode</span>
                 <span class="material-symbols-outlined dark-icon">dark_mode</span>
             </button>
