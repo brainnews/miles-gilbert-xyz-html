@@ -6,13 +6,19 @@
     <title>Miles Gilbert | Writing | A Certification for Algorithm-Free Platforms</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="header-container"></div>
+        <div class="header-container">
+            <div class="header">
+                <div class="breadcrumbs">
+                    <a class="breadcrumbs-link" href="https://milesgilbert.xyz">Miles Gilbert</a><span class="material-symbols-outlined">line_end</span><a class="breadcrumbs-link" href="../">Writing</a><span class="material-symbols-outlined">line_end</span>A Certification for Algorithm-Free Platforms</div>
+                </div>
+            </div>
+        </div>
         <section class="essay">
             <div class="essay-text">
                 <div class="date">February 4, 2025</div> 
@@ -54,45 +60,5 @@
             </div>
         </section>
     </div>
-
-    <script type="module">
-
-        // Load the header when the page loads
-        async function loadHeader() {
-            try {
-                const response = await fetch('../../components/header.html');
-                const html = await response.text();
-                
-                // Create a temporary container to parse the HTML
-                const temp = document.createElement('div');
-                temp.innerHTML = html;
-                
-                // Extract and append the header HTML
-                const header = temp.querySelector('.header');
-                document.querySelector('.header-container').appendChild(header);
-                
-                // Extract and append the styles
-                const styles = temp.querySelector('style');
-                if (styles) {
-                    document.head.appendChild(styles);
-                }
-                
-                // Extract and execute the scripts
-                const scripts = temp.querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    newScript.textContent = script.textContent;
-                    document.body.appendChild(newScript);
-                });
-            } catch (error) {
-                console.error('Error loading header:', error);
-            }
-        }
-
-        // Initialize everything when the page loads
-        window.addEventListener('load', async () => {
-            await loadHeader();
-        });
-    </script>
 </body>
 </html> 

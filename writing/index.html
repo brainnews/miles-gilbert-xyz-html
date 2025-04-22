@@ -12,7 +12,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="header-container"></div>
+        <div class="header-container">
+            <div class="header">
+                <div class="breadcrumbs">
+                    <a class="breadcrumbs-link" href="https://milesgilbert.xyz">Miles Gilbert</a><span class="material-symbols-outlined">line_end</span>Writing</div>
+                </div>
+            </div>
+        </div>
         <section class="links">
             <a href="./a-certification-for-algorithm-free-platforms/" class="link-card">
                 <div class="link-icon">
@@ -96,44 +102,5 @@
             </a>
         </section>
     </div>
-
-    <script type="module">
-        // Load the header when the page loads
-        async function loadHeader() {
-            try {
-                const response = await fetch('../components/header.html');
-                const html = await response.text();
-                
-                // Create a temporary container to parse the HTML
-                const temp = document.createElement('div');
-                temp.innerHTML = html;
-                
-                // Extract and append the header HTML
-                const header = temp.querySelector('.header');
-                document.querySelector('.header-container').appendChild(header);
-                
-                // Extract and append the styles
-                const styles = temp.querySelector('style');
-                if (styles) {
-                    document.head.appendChild(styles);
-                }
-                
-                // Extract and execute the scripts
-                const scripts = temp.querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    newScript.textContent = script.textContent;
-                    document.body.appendChild(newScript);
-                });
-            } catch (error) {
-                console.error('Error loading header:', error);
-            }
-        }
-
-        // Initialize everything when the page loads
-        window.addEventListener('load', async () => {
-            await loadHeader();
-        });
-    </script>
 </body>
 </html> 
