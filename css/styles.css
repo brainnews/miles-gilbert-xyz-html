@@ -70,7 +70,7 @@ section {
 
 .links {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
     max-width: 1200px;
     padding: 2rem 0.75rem;
@@ -86,7 +86,38 @@ section {
     gap: 1rem;
     min-height: 250px;
     border-radius: 12px;
-    background-color: var(--bg);
+    background-color: #111;
+    border: 2px solid var(--border);
+    padding: 2rem;
+    position: relative;
+}
+
+.link-card::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 12px;
+    border: 3px solid transparent;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.link-card:hover::before {
+    border-color: #00ff00;
+    box-shadow: 0 0 15px #00ff00;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #00ff00;
+    }
+    to {
+        box-shadow: 0 0 20px #00ff00;
+    }
 }
 .link-image {
     overflow: hidden;
