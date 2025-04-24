@@ -127,18 +127,28 @@ section {
     border-radius: 4px;
     margin-left: 5px;
 }
-.link-icon {
+.link-icon, .link-image {
     align-self: flex-end;
     transition: all 0.2s ease;
 }
 .link-card:hover .link-icon {
     filter: saturate(1);
 }
-
 .link-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-color: var(--hover);
+}
+.link-image {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+}
+.link-image img {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 section.essay {
@@ -230,9 +240,18 @@ section.essay {
     max-width: 100%;
     justify-self: flex-end;
 }
+.arena-embed {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 4rem;
+}
 
 @media (max-width: 600px) {
     .links, .everything-container {
         grid-template-columns: 1fr;
+    }
+    .arena-embed {
+        padding-top: 1rem;
     }
 } 
