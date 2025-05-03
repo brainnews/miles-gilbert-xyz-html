@@ -127,9 +127,12 @@ section {
     border-radius: 4px;
     margin-left: 5px;
 }
-.link-icon, .link-image {
+.link-icon {
     align-self: flex-end;
     transition: all 0.2s ease;
+}
+.link-icon svg {
+    height: 128px;
 }
 .link-card:hover .link-icon {
     filter: saturate(1);
@@ -140,8 +143,6 @@ section {
     border-color: var(--hover);
 }
 .link-image {
-    width: 128px;
-    height: 128px;
     object-fit: cover;
 }
 .link-image img {

@@ -1,0 +1,70 @@
+@keyframes glitch {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(-0.2px);
+    opacity: 0.98;
+  }
+  50% {
+    transform: translateX(0.2px);
+    opacity: 0.99;
+  }
+  75% {
+    transform: translateX(-0.1px);
+    opacity: 0.98;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Apply different animation delays to each row of pixels */
+svg rect:nth-child(n+2):nth-child(-n+12) { /* Bottom row */
+  animation: glitch 0.8s infinite;
+  animation-delay: 0s;
+}
+
+svg rect:nth-child(n+13):nth-child(-n+16) { /* Right side */
+  animation: glitch 0.8s infinite;
+  animation-delay: 0.2s;
+}
+
+svg rect:nth-child(n+17):nth-child(-n+28) { /* Middle section */
+  animation: glitch 0.8s infinite;
+  animation-delay: 0.4s;
+}
+
+svg rect:nth-child(n+29):nth-child(-n+40) { /* Top section */
+  animation: glitch 0.8s infinite;
+  animation-delay: 0.6s;
+}
+
+svg rect:nth-child(n+41):nth-child(-n+52) { /* Middle section */
+  animation: glitch 0.8s infinite;
+  animation-delay: 0.8s;
+}
+
+svg rect:nth-child(n+53):nth-child(-n+64) { /* Bottom section */
+  animation: glitch 0.8s infinite;
+  animation-delay: 1s;
+}
+
+/* Add a very subtle color shift effect */
+@keyframes colorShift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(1deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+svg {
+  animation: colorShift 4s infinite;
+} 
