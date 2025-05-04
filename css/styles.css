@@ -12,7 +12,8 @@
     --neon-green: #00ff00;
 
     /* Default to system theme */
-    --bg: var(--gray-900);
+    --bg: #1c1c1c;
+    --bg-alt: #2c2c2c;
     --text: var(--gray-100);
     --link: var(--gray-400);
     --hover: var(--gray-100);
@@ -86,7 +87,7 @@ section {
     gap: 0.5rem;
     min-height: 250px;
     border-radius: 12px;
-    background-color: #111;
+    background-color: var(--bg-alt);
     border: 2px solid var(--border);
     padding: 2rem;
     position: relative;
