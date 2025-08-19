@@ -154,8 +154,8 @@ section {
 }
 
 section.essay {
-    border-top: 2px solid var(--border);
-    margin-top: 2rem;
+    border-top: 2px solid #272727;
+    margin: 2rem auto;
 }
 .essay-text {
     max-width: 800px;
