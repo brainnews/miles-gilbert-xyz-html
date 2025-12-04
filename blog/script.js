@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     channelContent = document.getElementById('channel-content');
     loadMoreButton = document.getElementById('load-more');
 
-    fetch(`http://api.are.na/v2/channels/${CHANNEL_SLUG}`)
+    fetch(`https://api.are.na/v2/channels/${CHANNEL_SLUG}`)
         .then(response => response.json())
         .then(data => {
             // Set browser tab title only
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchAllBlocks() {
     // First get the channel info to know total block count
-    const channelResponse = await fetch(`http://api.are.na/v2/channels/${CHANNEL_SLUG}`);
+    const channelResponse = await fetch(`https://api.are.na/v2/channels/${CHANNEL_SLUG}`);
     const channelData = await channelResponse.json();
     const totalBlocks = channelData.length;
     const blocksPerPage = 100;
@@ -93,7 +93,7 @@ async function fetchAllBlocks() {
     do {
         try {
             console.log(`Fetching page ${currentPage}/${totalPages}...`);
-            const response = await fetch(`http://api.are.na/v2/channels/${CHANNEL_SLUG}/contents?page=${currentPage}&per=${blocksPerPage}`);
+            const response = await fetch(`https://api.are.na/v2/channels/${CHANNEL_SLUG}/contents?page=${currentPage}&per=${blocksPerPage}`);
             const data = await response.json();
             
             console.log(`Page ${currentPage}: ${data.contents.length} blocks received`);
