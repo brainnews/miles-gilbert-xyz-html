@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improving Creative Feedback with AI | Miles Gilbert</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="icon" type="image/x-icon" href="https://media.milesgilbert.xyz/favicon-96x96.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumbs">
+                <a href="/">Miles Gilbert</a><span> / </span><a href="../">Creative Technology</a><span> / </span><span>Improving Creative Feedback with AI</span>
+            </div>
+        </header>
+        <section class="project-section">
+            <div class="project-header">
+                <h1 class="project-title">Improving Creative Feedback with AI</h1>
+                <p class="project-subhead">Building a Chrome extension to help creative teams process feedback more effectively</p>
+                <div class="project-meta">
+                    <span class="role">Creative Technologist</span> •
+                    <span class="client">Indeed</span> •
+                    <span class="year">2024</span>
+                </div>
+                <div class="project-meta">
+                    <span>In colllaboration with: Liz Matejasic, Tim Chow, and the development team at <a href="https://www.civilization.agency/" target="_blank">Civilization</a></span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p>Creative review at Indeed was overwhelming. A typical project generated 42+ comments from six different stakeholder groups—brand, marketing, legal, product, creative leadership—scattered across Google Slides and Frame.io. Teams spent hours manually consolidating feedback, prioritizing contradictory requests, and guessing at vague comments.</p>
+
+                <p>I built Finn, a Chrome extension that uses AI to organize feedback so creatives can focus on craft instead of administrative work.</p>
+
+                <h2>The Challenge</h2>
+
+                <p>Indeed Creative supports hundreds of projects annually—from national TV campaigns to internal communications reaching 12,000+ employees. Four core problems emerged:</p>
+
+                <ul>
+                    <li><strong>Decision fatigue:</strong> Processing 42+ comments from six stakeholder groups while mentally exhausted</li>
+                    <li><strong>Lack of confidence to push back:</strong> Junior designers couldn't challenge senior stakeholders even when feedback would compromise brand guidelines</li>
+                    <li><strong>Unclear feedback:</strong> Vague comments like "this feels off" caused multiple unnecessary revision cycles</li>
+                    <li><strong>Contradicting feedback:</strong> Marketing wanted more copy, Brand wanted less, Legal needed compliance language, Creative wanted simplicity—no way to surface conflicts</li>
+                </ul>
+
+                <h2>Experiments with ChatGPT</h2>
+
+                <p>I tested ChatGPT with real Indeed feedback from Frame.io, asking it to provide solutions, craft diplomatic pushback, judge sentiment, and assess clarity.</p>
+
+                <!-- Image: ChatGPT experiments screenshot from Feedback Assistant PDF page 4 -->
+                <img src="https://media.milesgilbert.xyz/creative-technology/finn-feedback-assistant/images/early-chatgpt-test.png" alt="Testing ChatGPT's ability to provide solutions to creative feedback">
+                <figcaption>Early experiments (January of 2024) with ChatGPT to understand how AI could assist with creative feedback</figcaption>
+
+                <p>ChatGPT showed promise but wasn't practical. Copy-pasting 42 comments was too much friction, it lacked Indeed brand context, and we couldn't ensure consistent responses across teams. We needed a purpose-built tool.</p>
+
+                <h2>Why Build a Custom Tool?</h2>
+
+                <p>Five reasons to build instead of using ChatGPT directly:</p>
+
+                <ul>
+                    <li><strong>Consistent communication:</strong> Standardized responses to stakeholders across Healthcare, Tech & IT, and performance marketing campaigns</li>
+                    <li><strong>Lower friction:</strong> Chrome extension works directly in Google Slides and Frame.io—no copy-pasting required</li>
+                    <li><strong>Shape AI perception:</strong> Frame AI as assistant for tedious work, not replacement for creative judgment</li>
+                    <li><strong>Gather insights:</strong> Analyze patterns across hundreds of campaigns to identify which stakeholder groups contradict most, which briefs confuse teams</li>
+                    <li><strong>Build toward custom model:</strong> Foundation for training on Indeed's brand guidelines and compliance requirements</li>
+                </ul>
+
+                <h2>The Solution: Finn</h2>
+
+                <p>Finn is a Chrome extension that works directly in Google Slides and Frame.io. It's trained on Indeed's brand guidelines and allows the user to:</p>
+
+                <ul>
+                    <li>Upload project brief for context</li>
+                    <li>Auto-extract and categorize all comments</li>
+                    <li>Identify patterns and flag contradictions</li>
+                    <li>Generate structured action items by priority</li>
+                </ul>
+
+                <img src="https://media.milesgilbert.xyz/creative-technology/finn-feedback-assistant/images/welcome-screen.png" alt="Finn's welcome screen in the Chrome extension">
+                <figcaption>Finn's welcome screen and initial summary generation</figcaption>
+
+                <h2>How Finn Organizes Feedback</h2>
+
+                <p>Finn categorizes all comments into four sections:</p>
+
+                <ul>
+                    <li><strong>What's Working:</strong> Positive feedback to preserve and build upon</li>
+                    <li><strong>What's Not Working:</strong> Issues organized by theme, not individual comments</li>
+                    <li><strong>Universal Feedback:</strong> Comments applying to overall project</li>
+                    <li><strong>Contradicting Feedback:</strong> Explicit callout when reviewers disagree</li>
+                </ul>
+
+                <!-- Image: Feedback summary from Finn Handbook PDF page 9 -->
+                <img src="https://media.milesgilbert.xyz/creative-technology/finn-feedback-assistant/images/feedback-screen.png" alt="Finn's organized feedback summary">
+                <figcaption>Feedback organized into What's Working, What's Not Working, Universal Feedback, and Contradicting Feedback</figcaption>
+
+                <h2>Interactive Features</h2>
+
+                <p>Hover over any feedback for three options:</p>
+
+                <ul>
+                    <li><strong>Clarify:</strong> Unpack vague comments like "this feels off"</li>
+                    <li><strong>Pushback:</strong> Generate diplomatic, evidence-based responses</li>
+                    <li><strong>Copy:</strong> Move text to clipboard</li>
+                </ul>
+
+                <div style="width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; background-color: #f1f1f1; padding-bottom: 20px;">
+                    <img src="https://media.milesgilbert.xyz/creative-technology/finn-feedback-assistant/images/finn-gif.gif" style="width: 276px; height: 150px; border-radius: 8px;" alt="Interactive hover state showing Clarify and Pushback options">
+                </div>
+                <figcaption>Hovering over feedback reveals options to Clarify intent or Pushback strategically</figcaption>
+
+                <h2>Quick Prompts and Custom Chat</h2>
+
+                <p>Four quick reorganization options:</p>
+
+                <ul>
+                    <li><strong>Slide-by-Slide Analysis:</strong> Comments per slide with clickable links</li>
+                    <li><strong>Organize by Commenter:</strong> Group by stakeholder</li>
+                    <li><strong>Organize by Resource:</strong> Sort by content type (copy, design, video)</li>
+                    <li><strong>Magic Question:</strong> AI-generated contextual question for reflection</li>
+                </ul>
+
+                <p>Chat interface for custom queries: reorganize by complexity, priority, quick fixes vs. discussion items, etc.</p>
+
+                <!-- Image: Chat interface from Finn Handbook PDF page 12 -->
+                <img src="https://media.milesgilbert.xyz/creative-technology/finn-feedback-assistant/images/custom-question-screen.png" alt="Chat interface showing custom question about organizing feedback">
+                <figcaption>The chat interface allows for custom queries to organize feedback any way you need</figcaption>
+
+                <h2>AI That Augments, Not Replaces</h2>
+
+                <p>Finn doesn't make creative decisions—it handles tedious organizational work so designers can focus on craft. When a designer receives 42 comments, Finn organizes them in 2 minutes, freeing mental energy for actual creative problem-solving.</p>
+
+                <p>By building our own tool, we ensured it serves Indeed's needs: understands brand guidelines, works in existing tools (Google Slides/Frame.io), frames AI as assistant not replacement.</p>
+
+                <p>The framework—reduce cognitive load, increase confidence, promote objectivity, gather insights—can guide AI adoption across Indeed Creative's entire production process.</p>
+            </div>
+        </section>
+    </div>
+    <script src="../../components/lightbox.js"></script>
+</body>
+</html>

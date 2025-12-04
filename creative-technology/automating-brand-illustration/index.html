@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automating Brand Illustration | Miles Gilbert</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="icon" type="image/x-icon" href="https://media.milesgilbert.xyz/favicon-96x96.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumbs">
+                <a href="/">Miles Gilbert</a><span> / </span><a href="../">Creative Technology</a><span> / </span><span>Automating Brand Illustration with AI</span>
+            </div>
+        </header>
+        <section class="project-section">
+            <div class="project-header">
+                <h1 class="project-title">Automating Brand Illustration with AI</h1>
+                <p class="project-subhead">Operationalizing AI to scale Indeed's illustration system</p>
+                <div class="project-meta">
+                    <span class="role">Creative Technologist</span> •
+                    <span class="client">Indeed</span> •
+                    <span class="year">2025</span>
+                </div>
+            </div>
+            <div class="project-content">
+                <p>When the Employee Communications team at Indeed needed 30 custom illustrations for an internal campaign, the math didn't work. Our in-house illustrators create beautiful work, but dedicating weeks of their time to illustrations for a non-revenue channel wasn't sustainable. We needed to find a way to maintain our distinctive paper cut illustration style while making the production process more efficient.</p>
+
+                <p>As Creative Technologist on the Indeed Creative team, I partnered with two designers to explore how AI could help operationalize our illustration production without compromising quality.</p>
+
+                <h2>The Approach</h2>
+
+                <p>We evaluated three different AI technologies, each with distinct strengths and tradeoffs:</p>
+
+                <p><strong>A LoRA Model + ComfyUI</strong> offered the highest potential accuracy in replicating our paper cut style. By training a custom LoRA (Low-Rank Adaptation) model on our existing illustrations and using ComfyUI for generation, we could achieve remarkably faithful reproductions. However, the technical complexity and time investment required for setup and iteration made this approach impractical for our timeline.</p>
+
+                <p><strong>A Gemini Gem</strong> provided the best balance of quality and usability. Google's Gemini with custom gems allowed us to create illustrations that stayed true to our brand style with minimal technical overhead. The interface was accessible to our design team, and the results were consistently high quality.</p>
+
+                <p><strong>A trained model in Pencil</strong> met our compliance requirements but struggled with consistency and quality. While it offered a compliant solution, the underlying model (Bria 2.3) couldn't match the sophistication of our paper cut style.</p>
+                <img src="https://media.milesgilbert.xyz/creative-technology/automating-brand-illustration/images/ai-illustration-01.png" alt="Example of Indeed's paper cut style brand illustration">
+                <figcaption>Examples of Indeed's paper cut style brand illustration</figcaption>
+
+                <img src="https://media.milesgilbert.xyz/creative-technology/automating-brand-illustration/images/ai-illustration-03.png" alt="The Gemini interface for generating illustrations">
+                <figcaption>The Gemini interface for generating illustrations</figcaption>
+
+                <p><strong>The Gemini Gem emerged as the clear winner</strong> – with one important caveat.</p>
+
+                <h2>What Worked</h2>
+                <ul>
+                    <li>No distortion of forms or composition</li>
+                    <li>Strong paper cut style representation with appropriate shadows and layering</li>
+                    <li>Simplified yet legible shapes that matched our brand guidelines</li>
+                    <li>Natural and dynamic poses in character illustrations</li>
+                    <li>Good balance of hard edges and smooth curves</li>
+                    <li>Sophisticated color palettes that felt authentically Indeed</li>
+                </ul>
+                <br/>
+                <h2>An Important Caveat</h2>
+                <p>While working with the gem, we found its facial features were generic and couldn't match our brand style, though it successfully generated other brand-consistent elements. We embraced this limitation as an opportunity for human collaboration. Designers used AI to establish form, color, and pose, then manually refined faces—creating finished illustrations in 20-30 minutes through this hybrid approach.</p>
+
+                <img src="https://media.milesgilbert.xyz/creative-technology/automating-brand-illustration/images/ai-illustration-05.png" alt="Example illustrations generated by the custom Gemini Gem">
+                <figcaption>(Left prompt) a black nurse, short, wearing pink scrubs, walking briskly in side profile. (Right prompt) a 55 year old physical therapist sitting on an exercise ball.</figcaption>
+                <img src="https://media.milesgilbert.xyz/creative-technology/automating-brand-illustration/images/ai-illustration-06.png" alt="Example illustrations generated by the custom Gemini Gem">
+                <figcaption>Additional examples from the custom Gemini Gem</figcaption>
+
+                <h2>The Workflow</h2>
+
+                <p>We established a production workflow that maintained quality control while dramatically reducing time investment:</p>
+
+                <ol>
+                    <li><strong>Briefing in Asana:</strong> The Employee Comms team submits requests with requirements and reference materials</li>
+                    <li><strong>Generation in Gemini Gem:</strong> Designers use natural language prompts to create initial illustrations</li>
+                    <li><strong>Refinement in Adobe Illustrator:</strong> Illustrations are imported, auto-traced to vectors, facial features are added manually, compositions are tweaked, and paper texture is applied</li>
+                    <li><strong>Storage in Figma:</strong> Completed illustrations are added to our component library for reuse</li>
+                    <li><strong>Delivery via Asana:</strong> Final assets are delivered back to the requesting team</li>
+                </ol>
+
+                <img src="https://media.milesgilbert.xyz/creative-technology/automating-brand-illustration/images/ai-illustration-07.png" alt="Illustration production workflow diagram">
+                <figcaption>The end-to-end workflow from request to delivery</figcaption>
+
+                <p>This hybrid approach preserves the designer's role in quality control and finishing while using AI to handle the time-intensive initial creation phase. The result is illustrations that maintain our brand standards in a fraction of the time.</p>
+
+                <h2>The Impact</h2>
+
+                <p>By operationalizing brand illustration with AI, we transformed what would have been weeks of manual illustration work into a scalable, efficient process. The Employee Communications team got the 30 custom illustrations they needed, our design team learned new workflows that they can apply to future projects, and we established a framework for thoughtfully integrating AI tools into creative production.</p>
+
+                <p>This project demonstrated that AI doesn't have to replace creative work—it can augment it, handling the heavy lifting while designers focus on the refinement and craft that makes illustrations distinctively Indeed.</p>
+            </div>
+        </section>
+    </div>
+    <script src="../../components/lightbox.js"></script>
+</body>
+</html>

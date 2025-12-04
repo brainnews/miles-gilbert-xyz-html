@@ -75,7 +75,7 @@ class CustomVideoPlayer extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['src', 'poster', 'autoplay', 'show-progress', 'loop', 'no-pip'];
+        return ['src', 'poster', 'autoplay', 'show-progress', 'loop', 'no-pip', 'hide-timecode'];
     }
 
     connectedCallback() {
@@ -86,7 +86,8 @@ class CustomVideoPlayer extends HTMLElement {
         const showProgress = this.hasAttribute('show-progress');
         const loop = this.hasAttribute('loop');
         const noPip = this.hasAttribute('no-pip');
-        this.initializePlayer(initialSrc, initialPoster, autoplay, showProgress, loop, noPip);
+        const hideTimecode = this.hasAttribute('hide-timecode');
+        this.initializePlayer(initialSrc, initialPoster, autoplay, showProgress, loop, noPip, hideTimecode);
     }
 
     render() {
@@ -99,7 +100,6 @@ class CustomVideoPlayer extends HTMLElement {
                 .video-container {
                     position: relative;
                     width: 100%;
-                    margin-bottom: 2rem;
                     transition: all 0.3s ease;
                     border-radius: 10px;
                     overflow: hidden;
@@ -174,6 +174,10 @@ class CustomVideoPlayer extends HTMLElement {
 
                 .video-container.pip .progress-container,
                 .video-container.pip .timecode {
+                    display: none;
+                }
+
+                .timecode.hide {
                     display: none;
                 }
 
@@ -300,7 +304,7 @@ class CustomVideoPlayer extends HTMLElement {
         `;
     }
 
-    initializePlayer(initialSrc, initialPoster, autoplay, showProgress, loop, noPip) {
+    initializePlayer(initialSrc, initialPoster, autoplay, showProgress, loop, noPip, hideTimecode) {
         const video = this.shadowRoot.querySelector('video');
         const source = this.shadowRoot.querySelector('source');
         const bigPlayBtn = this.shadowRoot.querySelector('.big-play-button');
@@ -316,6 +320,7 @@ class CustomVideoPlayer extends HTMLElement {
         if (initialSrc) source.src = initialSrc;
         if (initialPoster) video.poster = initialPoster;
         if (showProgress) progressContainer.classList.add('show');
+        if (hideTimecode) timeDisplay.classList.add('hide');
 
         // Set initial muted state for autoplay
         video.muted = autoplay;
@@ -468,6 +473,14 @@ class CustomVideoPlayer extends HTMLElement {
                 // Force removal of pip if disabled
                 if (this.hasAttribute('no-pip')) {
                     this.shadowRoot.querySelector('.video-container').classList.remove('pip');
+                }
+                break;
+            case 'hide-timecode':
+                const timecodeEl = this.shadowRoot.querySelector('.timecode');
+                if (this.hasAttribute('hide-timecode')) {
+                    timecodeEl.classList.add('hide');
+                } else {
+                    timecodeEl.classList.remove('hide');
                 }
                 break;
         }

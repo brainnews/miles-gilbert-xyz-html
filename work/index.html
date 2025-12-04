@@ -4,74 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miles Gilbert | Work</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        
-        .headshot-container {
-            width: 200px;
-            height: 200px;
-            overflow: hidden;
-            border-radius: 100%;
-            background-color: white;
-            flex-shrink: 0;
-            border: 2px solid var(--border);
-            @media (max-width: 768px) {
-                width: 100px;
-                height: 100px;
-                margin-left: 0.5rem;
-            }
-        }
-        .headshot-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .intro {
-            display: flex;
-            justify-content: space-between;
-            gap: 2rem;
-        }
-        
-        .intro-text {
-            max-width: 800px;
-        }
-        
-        .intro-text p {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-    </style>
+    <link rel="icon" type="image/x-icon" href="https://media.milesgilbert.xyz/favicon-96x96.png">
 </head>
 <body>
     <div class="container">
-        <div class="header-container">
-            <div class="header">
-                <div class="breadcrumbs">
-                    <a class="breadcrumbs-link" href="https://milesgilbert.xyz">Miles Gilbert</a><span class="material-symbols-outlined">line_end</span>Work</div>
-                </div>
+        <header>
+            <div class="breadcrumbs">
+                <a href="/">Miles Gilbert</a><span> / </span>Work
             </div>
-        </div>
-        <section class="intro">
+        </header>
+        <section class="intro-with-headshot">
             <div class="intro-text">
                 <p>I'm a creative director with a proven track record of making complex tech concepts feel approachable and engaging. Throughout my career, I've worked with major technology companies like IBM, HP, and Indeed, crafting brand experiences that resonate across both physical and digital environments.</p>
                 <p>Today, I help lead creative initiatives at Indeed, the world's #1 job site. Beyond directing video series and experiential campaigns, I drive innovation through technology—recently prototyping an AI-powered tool that streamlines our creative feedback process, and helping evaluate AI solutions that enhance our team's efficiency. My work focuses on modernizing both our creative output and our workflows to help people find and succeed in meaningful work.</p>
                 <p>Check out my reel below. If you'd like to see more work, <a href="mailto:miles.gilbert@gmail.com">email me</a> or get in touch on <a href="https://www.linkedin.com/in/milesmilesmiles/">LinkedIn</a>.</p>
             </div>
-            <div class="headshot-container">
-                <img src="https://files.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
+            <div class="headshot">
+                <img src="https://media.milesgilbert.xyz/images/headshot.png" alt="Miles Gilbert">
             </div>
         </section>
-        <section class="video-section">
-            <div class="video-container">
-                <custom-video-player src="https://files.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4" autoplay loop no-pip></custom-video-player>
-            </div>
-            <!-- <div id="everything-container" class="everything-container">
-            </div> -->
+        <section>
+            <custom-video-player src="https://media.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4" autoplay loop no-pip></custom-video-player>
         </section>
     </div>
     <script src="../components/video-player.js"></script>

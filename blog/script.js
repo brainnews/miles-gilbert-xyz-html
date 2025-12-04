@@ -1,38 +1,27 @@
-const CHANNEL_SLUG = 'collected-media';
+const CHANNEL_SLUG = 'creative-technology-now';
 const BLOCKS_PER_PAGE = 12;
 
 let allBlocks = [];
 let currentPage = 0;
 let channelContent;
 let loadMoreButton;
-let viewToggle;
+let currentView = 'cloud'; // Default to cloud view
+let nodeCloudInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     channelContent = document.getElementById('channel-content');
-    const channelTitle = document.getElementById('channel-title');
     loadMoreButton = document.getElementById('load-more');
-    viewToggle = document.getElementById('view-toggle');
-
-    // Load saved view preference
-    const savedView = localStorage.getItem('arenaViewMode');
-    if (savedView === 'list') {
-        viewToggle.checked = true;
-        channelContent.classList.add('list-view');
-    }
-
-    // Add toggle event listener
-    viewToggle.addEventListener('change', handleViewToggle);
 
     fetch(`http://api.are.na/v2/channels/${CHANNEL_SLUG}`)
         .then(response => response.json())
         .then(data => {
-            channelTitle.textContent = data.title;
+            // Set browser tab title only
             document.title = data.title;
+
             console.log(`Channel has ${data.length} total blocks`);
         })
         .catch(error => {
             console.error('Error fetching channel data:', error);
-            channelTitle.textContent = 'Error loading channel.';
         });
 
     fetchAllBlocks()
@@ -43,8 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hasContent = block.title || block.content || block.embed || block.image;
                 if (!hasContent) {
                     console.log('Excluding block:', block.id, block.class, 'No displayable content');
+                    return false;
                 }
-                return hasContent;
+
+                // Filter out TikTok embeds (often show "Video currently unavailable")
+                const isTikTok = block.embed && block.embed.provider_name === 'TikTok';
+                if (isTikTok) {
+                    console.log('Excluding block:', block.id, 'TikTok embed');
+                    return false;
+                }
+
+                return true;
             });
             
             console.log(`After filtering: ${filteredBlocks.length} blocks`);
@@ -58,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Final sorted blocks: ${allBlocks.length}`);
             loadBlocks();
             updateLoadMoreButton();
+
+            // Show cloud view by default
+            showCloudView();
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -69,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadBlocks();
         updateLoadMoreButton();
     });
+
+    // Initialize view toggle
+    initViewToggle();
 });
 
 async function fetchAllBlocks() {
@@ -382,12 +386,279 @@ function updateLoadMoreButton() {
     }
 }
 
-function handleViewToggle() {
-    if (viewToggle.checked) {
-        channelContent.classList.add('list-view');
-        localStorage.setItem('arenaViewMode', 'list');
+// View Toggle Functions
+function initViewToggle() {
+    const toggleButtons = document.querySelectorAll('.view-toggle button');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const view = button.dataset.view;
+            switchView(view);
+        });
+    });
+}
+
+function switchView(view) {
+    if (currentView === view) return;
+
+    currentView = view;
+
+    // Update button states
+    document.querySelectorAll('.view-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    if (view === 'cloud') {
+        showCloudView();
     } else {
-        channelContent.classList.remove('list-view');
-        localStorage.setItem('arenaViewMode', 'grid');
+        showListView();
     }
 }
+
+function showCloudView() {
+    // Hide list view elements
+    channelContent.style.display = 'none';
+    loadMoreButton.style.display = 'none';
+
+    // Show cloud view
+    const cloudContainer = document.getElementById('cloud-view');
+    cloudContainer.style.display = 'block';
+
+    // Create cloud instance if not exists
+    if (!nodeCloudInstance) {
+        nodeCloudInstance = new NodeCloud(allBlocks, cloudContainer);
+    } else {
+        nodeCloudInstance.start();
+    }
+}
+
+function showListView() {
+    // Show list view elements
+    channelContent.style.display = 'flex';
+    updateLoadMoreButton();
+
+    // Hide cloud view
+    const cloudContainer = document.getElementById('cloud-view');
+    cloudContainer.style.display = 'none';
+
+    // Pause cloud instance
+    if (nodeCloudInstance) {
+        nodeCloudInstance.pause();
+    }
+}
+
+// NodeCloud Class
+class NodeCloud {
+    constructor(blocks, container) {
+        this.blocks = blocks;
+        this.container = container;
+        this.nodes = [];
+
+        this.init();
+    }
+
+    init() {
+        this.createNodes();
+    }
+
+    createNodes() {
+        const padding = 100;
+        const width = window.innerWidth - padding * 2;
+        const height = window.innerHeight - padding * 2;
+
+        this.blocks.forEach((block, index) => {
+            const element = document.createElement('div');
+            element.className = 'cloud-node';
+
+            // Random position
+            const baseX = padding + Math.random() * width;
+            const baseY = padding + Math.random() * height;
+
+            // Add image if available
+            if (block.image && block.image.display && block.image.display.url) {
+                const img = document.createElement('img');
+                img.src = block.image.thumb?.url || block.image.display.url;
+                img.alt = block.title || '';
+                element.appendChild(img);
+            } else if (block.class === 'Text') {
+                // For text blocks, create a colored background
+                element.classList.add('cloud-node-text');
+                const textPreview = document.createElement('div');
+                textPreview.className = 'cloud-node-text-preview';
+                textPreview.textContent = block.title || (block.content ? block.content.substring(0, 100) : '');
+                element.appendChild(textPreview);
+            }
+
+            // Add title overlay
+            if (block.title) {
+                const title = document.createElement('div');
+                title.className = 'cloud-node-title';
+                title.textContent = block.title;
+                element.appendChild(title);
+            }
+
+            // Add click handler to open lightbox
+            element.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openNodeLightbox(block);
+            });
+            element.style.cursor = 'pointer';
+
+            this.container.appendChild(element);
+
+            // Position element at random location (no physics, just static placement)
+            element.style.transform = `translate(${baseX}px, ${baseY}px)`;
+
+            const node = {
+                element,
+                block
+            };
+
+            this.nodes.push(node);
+        });
+    }
+
+    start() {
+        // No animation needed - nodes are static
+    }
+
+    pause() {
+        // No animation to pause
+    }
+
+    destroy() {
+        this.container.innerHTML = '';
+        this.nodes = [];
+    }
+}
+
+// Node Lightbox Functions
+function openNodeLightbox(block) {
+    const lightbox = document.getElementById('node-lightbox');
+    const lightboxBody = document.getElementById('node-lightbox-body');
+
+    // Clear previous content
+    lightboxBody.innerHTML = '';
+
+    // Check if this is an Image block (pure photo)
+    const isImageBlock = block.class === 'Image';
+    const hasImage = block.image && block.image.display && block.image.display.url;
+    const hasEmbed = block.embed && block.embed.html;
+
+    // For video/embed content: show embed first (no thumbnail)
+    // For other content: show image first
+    if (hasEmbed) {
+        // Video content: embed goes first
+        const embedContainer = document.createElement('div');
+        embedContainer.className = 'embed-container';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = block.embed.html;
+        const iframes = tempDiv.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            const newIframe = document.createElement('iframe');
+            ['src', 'width', 'height', 'frameborder', 'allowfullscreen'].forEach(attr => {
+                if (iframe.hasAttribute(attr)) {
+                    newIframe.setAttribute(attr, iframe.getAttribute(attr));
+                }
+            });
+            embedContainer.appendChild(newIframe);
+        });
+        lightboxBody.appendChild(embedContainer);
+    } else if (hasImage) {
+        // Non-video content with image: show image first
+        const img = document.createElement('img');
+        img.src = block.image.display.url;
+        img.alt = isImageBlock ? '' : (block.title || '');
+        lightboxBody.appendChild(img);
+    }
+
+    // Only show text content if it's NOT an Image block
+    if (!isImageBlock) {
+        if (block.title) {
+            const title = document.createElement('h2');
+            title.textContent = block.title;
+            lightboxBody.appendChild(title);
+        }
+
+        if (block.description) {
+            const description = document.createElement('div');
+            description.className = 'lightbox-description';
+            description.textContent = block.description;
+            lightboxBody.appendChild(description);
+        }
+
+        if (block.content_html) {
+            const content = document.createElement('div');
+            content.className = 'lightbox-content';
+            content.innerHTML = block.content_html;
+            lightboxBody.appendChild(content);
+        } else if (block.content) {
+            const content = document.createElement('div');
+            content.className = 'lightbox-content';
+            content.textContent = block.content;
+            lightboxBody.appendChild(content);
+        }
+
+        // Add provider badge if available
+        if (block.source && block.source.provider && block.source.provider.name) {
+            const provider = document.createElement('div');
+            provider.className = 'lightbox-provider';
+            provider.textContent = 'via ' + block.source.provider.name;
+            lightboxBody.appendChild(provider);
+        }
+
+        // Add link to source if available
+        if (block.source && block.source.url) {
+            const link = document.createElement('a');
+            link.href = block.source.url;
+            link.target = '_blank';
+            link.className = 'lightbox-link';
+            link.textContent = 'View Original';
+            lightboxBody.appendChild(link);
+        }
+    }
+
+    // Show lightbox
+    lightbox.style.display = 'flex';
+    setTimeout(() => {
+        lightbox.classList.add('active');
+    }, 10);
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeNodeLightbox() {
+    const lightbox = document.getElementById('node-lightbox');
+    lightbox.classList.remove('active');
+
+    setTimeout(() => {
+        lightbox.style.display = 'none';
+    }, 300);
+
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+// Initialize lightbox close handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('node-lightbox');
+    const closeButton = document.querySelector('.node-lightbox-close');
+
+    // Close on button click
+    closeButton.addEventListener('click', closeNodeLightbox);
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeNodeLightbox();
+        }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeNodeLightbox();
+        }
+    });
+});
+
