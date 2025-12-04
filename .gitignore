@@ -1,0 +1,14 @@
+
+# Local media files (hosted on R2)
+creative-technology/*/images/
+creative-technology/*/videos/
+creative-technology/thumbs/
+design/*/images/
+design/thumbs/
+software/*/images/
+thinking/thumbs/
+temp/
+backup-*/
+.wrangler/
+node_modules/
+*.sh
