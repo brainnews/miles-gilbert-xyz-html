@@ -1,0 +1,992 @@
+{
+  "meta": {
+    "version": "1.0",
+    "lastUpdated": "2025-12-24",
+    "description": "Comprehensive portfolio data for Miles Gilbert"
+  },
+  "personal": {
+    "name": "Miles Gilbert",
+    "title": "Creative Technologist",
+    "alternateTitle": "Creative Director, Design Manager",
+    "bio": {
+      "short": "I'm a creative technologist who believes great work happens when human creativity and AI-enabled tools work in tandem.",
+      "full": "I'm a creative technologist who believes great work happens when human creativity and AI-enabled tools work in tandem. With a background in web development, creative direction, design, and marketing, I help Indeed's in-house agency build smarter creative workflows—from growth marketing and video production to illustration and social media. I think about the creative process holistically: where do humans make the irreplaceable decisions? Where can technology amplify what we do best? That's the sweet spot I'm always looking for. And it's always shifting. As new technologies emerge, that balance evolves, and staying effective means adapting alongside it.",
+      "professional": "Experienced creative director focusing on translating complex technical concepts into compelling and accessible experiences across physical and digital spaces for global technology companies such as IBM, HP, and Indeed. Proven track record of building and leading cross-functional teams within large organizations and bringing cohesiveness to technology brands."
+    },
+    "location": "United States",
+    "headshot": "https://media.milesgilbert.xyz/images/headshot.png",
+    "reel": "https://media.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4"
+  },
+  "contact": {
+    "email": "miles.gilbert@gmail.com",
+    "phone": "917-805-2747",
+    "website": "https://milesgilbert.xyz",
+    "linkedin": "https://www.linkedin.com/in/milesmilesmiles/",
+    "github": "https://github.com/brainnews"
+  },
+  "socialLinks": [
+    {
+      "platform": "LinkedIn",
+      "url": "https://www.linkedin.com/in/milesmilesmiles/",
+      "primary": true
+    },
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/brainnews",
+      "primary": false
+    },
+    {
+      "platform": "Email",
+      "url": "mailto:miles.gilbert@gmail.com",
+      "primary": true
+    }
+  ],
+  "education": {
+    "school": "Rhode Island School of Design",
+    "shortName": "RISD",
+    "degree": "BFA, Graphic Design",
+    "degreeType": "Bachelor of Fine Arts",
+    "field": "Graphic Design"
+  },
+  "skills": [
+    "Event Design & Creative Direction",
+    "Creative Management",
+    "Cross-functional Leadership",
+    "Technical Concept Visualization",
+    "Brand System Development",
+    "Environmental Design",
+    "Agency & Vendor Management",
+    "AI-Powered Creative Workflows",
+    "Web Development",
+    "Motion Graphics",
+    "Video Production",
+    "Art Direction"
+  ],
+  "experience": [
+    {
+      "company": "Indeed",
+      "title": "Creative Director",
+      "period": "2020 – Present",
+      "startDate": "2020",
+      "endDate": "Present",
+      "current": true,
+      "achievements": [
+        "Managed a team of 8 creatives while collaborating cross-functionally with marketing, product, and executive stakeholders",
+        "Led creative direction for the Indeed Job Market series of events, reimagining job fairs to center and uplift job seekers through accessible experiential design",
+        "Led creative direction for the Careers in Care: Off the Clock in person event, celebrating healthcare workers and amplifying Indeed's presence in the industry",
+        "Led creative strategy and direction for a complete refresh of Indeed's YouTube presence, leading to significant growth in subscribers and watch time",
+        "Prototyped and led the development and adoption of AI-powered tools to improve internal processes and reimagine how creative is made"
+      ]
+    },
+    {
+      "company": "R/GA Austin",
+      "title": "Associate Creative Director",
+      "period": "2018 – 2020",
+      "startDate": "2018",
+      "endDate": "2020",
+      "current": false,
+      "achievements": [
+        "Concepted and produced campaigns for Racetrac and Off the Eaten Path",
+        "Mentored junior creatives and maintained high design standards in a fast-paced setting",
+        "Drove new business initiatives through creative pitch development"
+      ]
+    },
+    {
+      "company": "T3",
+      "title": "Senior Art Director",
+      "period": "2016 – 2018",
+      "startDate": "2016",
+      "endDate": "2018",
+      "current": false,
+      "achievements": [
+        "Partnered with UX teams to improve the existing customer experience across Allstate's products",
+        "Developed new products to address the changing expectations of insurance customers",
+        "Mentored junior designers to create a collaborative and inclusive culture of design criticism and iterative experimentation"
+      ]
+    },
+    {
+      "company": "BBDO",
+      "title": "Senior Art Director",
+      "period": "2011 – 2016",
+      "startDate": "2011",
+      "endDate": "2016",
+      "current": false,
+      "achievements": [
+        "Partnered with multiple agencies to unify HP's brand identity across global markets",
+        "Transformed technical product features into compelling narratives for Mobil 1 Motorsports",
+        "Created innovative short-form content for Lowe's \"Fix in Six\" campaign"
+      ]
+    },
+    {
+      "company": "Ogilvy & Mather",
+      "title": "Senior Art Director",
+      "period": "2008 – 2011",
+      "startDate": "2008",
+      "endDate": "2011",
+      "current": false,
+      "achievements": [
+        "Led creative direction for the IBM Watson identity and campaign, creating an accessible narrative that effectively communicated IBM's capabilities to a mainstream audience",
+        "Collaborated directly with IBM researchers to translate complex machine-learning concepts into accessible visual experiences for enterprise customers",
+        "Created environmental designs for IBM's Smarter Planet campaign, ranging from human-scale to building-sized installations"
+      ]
+    }
+  ],
+  "projects": {
+    "creativeTechnology": [
+      {
+        "id": "automating-brand-illustration",
+        "title": "Automating Brand Illustration with AI",
+        "slug": "automating-brand-illustration",
+        "category": "Creative Technology",
+        "tagline": "Operationalizing AI to scale Indeed's illustration system",
+        "description": "Operationalizing AI to scale Indeed's illustration system",
+        "year": "2024",
+        "role": "Creative Technologist",
+        "client": "Indeed",
+        "thumbnail": "https://media.milesgilbert.xyz/creative-technology/thumbs/ai-illustration-thumb.png",
+        "url": "/creative-technology/automating-brand-illustration/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "AI",
+          "automation",
+          "illustration",
+          "brand design",
+          "creative tools",
+          "workflow optimization"
+        ]
+      },
+      {
+        "id": "podcast-visualizer",
+        "title": "Scaling Asset Creation for YouTube Shorts with a Custom App",
+        "slug": "podcast-visualizer",
+        "category": "Creative Technology",
+        "tagline": "How creating our own tools allowed us to test and learn faster",
+        "description": "How creating our own tools allowed us to test and learn faster",
+        "year": "2024",
+        "role": "Creative Technologist",
+        "client": "Indeed",
+        "thumbnail": "https://media.milesgilbert.xyz/creative-technology/thumbs/podcast-visualizer-thumb.png",
+        "url": "/creative-technology/podcast-visualizer/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "video production",
+          "automation",
+          "YouTube",
+          "social media",
+          "creative tools",
+          "audio visualization"
+        ]
+      },
+      {
+        "id": "growth-marketing-design-system",
+        "title": "Engineering Brand Consistency for Performance Marketing",
+        "slug": "growth-marketing-design-system",
+        "category": "Creative Technology",
+        "tagline": "Creating systematic approaches to design at scale",
+        "description": "Creating systematic approaches to design at scale",
+        "year": "2023",
+        "role": "Creative Technologist",
+        "client": "Indeed",
+        "thumbnail": "https://media.milesgilbert.xyz/creative-technology/thumbs/growth-design-thumb.png",
+        "url": "/creative-technology/growth-marketing-design-system/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "design systems",
+          "brand consistency",
+          "performance marketing",
+          "automation",
+          "scalability"
+        ]
+      },
+      {
+        "id": "finn-feedback-assistant",
+        "title": "Improving Creative Feedback with an AI-powered Chrome Extension",
+        "slug": "finn-feedback-assistant",
+        "category": "Creative Technology",
+        "tagline": "Building a Chrome extension to help creative teams process feedback more effectively",
+        "description": "Building a Chrome extension to help creative teams process feedback more effectively",
+        "year": "2024",
+        "role": "Creative Technologist",
+        "client": "Indeed",
+        "thumbnail": "https://media.milesgilbert.xyz/creative-technology/thumbs/finn-thumb.png",
+        "url": "/creative-technology/finn-feedback-assistant/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "AI",
+          "Chrome extension",
+          "creative feedback",
+          "workflow optimization",
+          "productivity tools"
+        ]
+      }
+    ],
+    "software": [
+      {
+        "id": "not-my-first-radio",
+        "title": "Not My First Radio",
+        "slug": "not-my-first-radio",
+        "category": "Software",
+        "tagline": "A lightweight, private, local first radio player",
+        "description": "A lightweight, private, local first radio player",
+        "year": "2024",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/nmfr-thumb.png",
+        "url": "https://notmyfirstradio.com",
+        "external": true,
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "web development",
+          "radio",
+          "privacy",
+          "local-first",
+          "music",
+          "streaming"
+        ]
+      },
+      {
+        "id": "metitate-art",
+        "title": "metitate.art",
+        "slug": "metitate-art",
+        "category": "Software",
+        "tagline": "A daily art discovery platform that curates works from The Met using a custom algorithm",
+        "description": "A daily art discovery platform that curates works from The Met using a custom algorithm",
+        "year": "2023",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/metitate-thumb.png",
+        "url": "/software/metitate-art/",
+        "externalUrl": "https://www.metitate.art",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "web development",
+          "art",
+          "curation",
+          "algorithm",
+          "museum API",
+          "daily discovery"
+        ]
+      },
+      {
+        "id": "shooot",
+        "title": "Shooot",
+        "slug": "shooot",
+        "category": "Software",
+        "tagline": "The camera for happy accidents",
+        "description": "The camera for happy accidents",
+        "year": "2022",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/shooot-thumb.png",
+        "url": "/software/shooot/",
+        "hashtag": "#shotwithshooot",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "iOS app",
+          "camera",
+          "photography",
+          "mobile development",
+          "creative tools"
+        ]
+      },
+      {
+        "id": "bubbleshop",
+        "title": "Bubbleshop",
+        "slug": "bubbleshop",
+        "category": "Software",
+        "tagline": "A physics-based drawing tool",
+        "description": "A physics-based drawing tool",
+        "year": "2023",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/bubbleshop-thumb.png",
+        "url": "https://brainnews.github.io/bubbleshop/",
+        "external": true,
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "web development",
+          "physics",
+          "drawing tool",
+          "creative tools",
+          "interactive"
+        ]
+      },
+      {
+        "id": "claude-monet-pond-simulator",
+        "title": "Claude Monet's Pond Simulator",
+        "slug": "waterlilies",
+        "category": "Software",
+        "tagline": "Inspire Claude Monet by simulating his pond",
+        "description": "Inspire Claude Monet by simulating his pond",
+        "year": "2023",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/monet-thumb.png",
+        "url": "https://www.milesgilbert.xyz/playground/waterlilies/",
+        "external": true,
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "web development",
+          "art",
+          "simulation",
+          "creative tools",
+          "interactive"
+        ]
+      },
+      {
+        "id": "creative-camera",
+        "title": "Creative Camera",
+        "slug": "creative-camera",
+        "category": "Software",
+        "tagline": "An experimental camera that 'develops' photos into interactive experiences using AI",
+        "description": "An experimental camera that 'develops' photos into interactive experiences using AI",
+        "year": "2024",
+        "role": "Developer, Designer",
+        "client": "Personal Project",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/creative-camera-thumb.png",
+        "url": "https://milesgilbert.xyz/playground/camera/",
+        "external": true,
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "AI",
+          "web development",
+          "camera",
+          "interactive experiences",
+          "creative tools"
+        ]
+      }
+    ],
+    "design": [
+      {
+        "id": "ibm-watson",
+        "title": "IBM Watson",
+        "slug": "ibm-watson",
+        "category": "Design & Creative Direction",
+        "role": "Senior Art Director",
+        "client": "IBM",
+        "year": "2011",
+        "tagline": "An enduring identity for artificial intelligence",
+        "description": "Creating the original avatar for IBM's Jeopardy! Juggernaut",
+        "summary": "The visual identity for IBM Watson, the groundbreaking natural language processing computer, was a pioneering effort that broke away from the fictional portrayals of AI often seen in popular culture. As the lead art director, I spearheaded a team that developed a unique blend of design and code, resulting in a visually striking identity that continues to inspire interactive experiences. The project was the culmination of a year of embedded research with the IBM team and collaboration with renowned visual artist Joshua Davis. The final product was prominently featured on the game show Jeopardy, where Watson famously competed against human champions, as well as in television commercials, an extended documentary, and print ads around the world, captivating global audiences. Over a decade later, the Watson identity remains an integral part of IBM's brand, a testament to its lasting impact and enduring relevance.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/ibm-watson-thumb.png",
+        "url": "/design/ibm-watson/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "Art Direction",
+          "Visual Identity Design",
+          "Brand Development",
+          "Natural Language Processing",
+          "Artificial Intelligence",
+          "IBM Watson",
+          "Jeopardy",
+          "Television Advertising",
+          "Global Audience Engagement"
+        ]
+      },
+      {
+        "id": "rising-voices-by-indeed",
+        "title": "Rising Voices by Indeed",
+        "slug": "rising-voices-by-indeed",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed",
+        "year": "2024",
+        "tagline": "Celebrating underrepresented filmmakers with a joyful visual identity",
+        "description": "Celebrating underrepresented filmmakers with a joyful visual identity",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/rising-voices-thumb.png",
+        "url": "/design/rising-voices-by-indeed/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "brand identity",
+          "diversity and inclusion",
+          "film",
+          "creative direction",
+          "visual design"
+        ]
+      },
+      {
+        "id": "rising-voices-tribeca",
+        "title": "Rising Voices Tribeca",
+        "slug": "rising-voices-tribeca",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed Creative",
+        "year": "2021",
+        "tagline": "Rise above the status quo",
+        "summary": "Installation concept and creative direction for the premiere of Rising Voices Season 1, Tribeca Film Festival. A pyramid, skeletal and loose, built of director's chairs. All bone white, save for one defiant splash of blue at the peak, straining upwards. Like those bicycle sculptures of Ai Weiwei, but this, a rebellion of underrepresented voices. A lone chair, bright and poised, rising above the rest.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/rising-voices-tribeca-thumb.png",
+        "url": "/design/rising-voices-tribeca/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "creative-direction",
+          "installation-art",
+          "public-art",
+          "film-festival",
+          "diversity-and-inclusion",
+          "visual-storytelling"
+        ]
+      },
+      {
+        "id": "godmode-records",
+        "title": "Godmode Records",
+        "slug": "godmode-records",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Godmode Records",
+        "year": "2013",
+        "tagline": "An identity for the unidentifiable",
+        "description": "Defining an independent music label's visual identity",
+        "summary": "Hand drawn identity for the Los Angeles based record label, Godmode.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/godmode-records-thumb.png",
+        "url": "/design/godmode-records/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "graphic design",
+          "branding",
+          "logo design",
+          "illustration",
+          "hand-drawn",
+          "record label",
+          "music industry"
+        ]
+      },
+      {
+        "id": "the-dufferettes",
+        "title": "The Dufferettes",
+        "slug": "dufferettes",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "The Dufferettes",
+        "year": "2023",
+        "tagline": "Crafting a scalable identity for a black women's golf community",
+        "description": "Crafting a scalable identity for a black women's golf community",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/dufferettes-thumb.png",
+        "url": "/design/dufferettes/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "brand identity",
+          "community",
+          "sports",
+          "golf",
+          "diversity",
+          "visual design"
+        ]
+      },
+      {
+        "id": "indeed-job-market",
+        "title": "Indeed Job Market",
+        "slug": "indeed-job-market",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed Creative",
+        "year": "2019",
+        "tagline": "Reimagining the job fair for the modern age",
+        "summary": "As a creative consultant and designer, I worked closely with the marketing team at Indeed to reinvent the traditional job fair and launch the Indeed Job Market. This series of eight unique events across the United States aimed to provide job seekers with a more engaging and memorable experience. I led the design and creation of a wide range of materials for the event spaces, bringing the overall vision to life and ensuring a memorable experience for attendees nationwide.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/indeed-job-market-thumb.png",
+        "url": "/design/indeed-job-market/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "marketing",
+          "event design",
+          "event planning",
+          "job fair",
+          "user experience",
+          "branding",
+          "graphic design",
+          "creative consulting"
+        ]
+      },
+      {
+        "id": "careers-in-care-by-indeed",
+        "title": "Careers in Care by Indeed",
+        "slug": "careers-in-care-by-indeed",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed",
+        "year": "2024",
+        "tagline": "Healthcare workers need help, not hype",
+        "summary": "As the healthcare industry grappled with the aftermath of the pandemic, Indeed recognized the urgency to address the challenges faced by its workforce: widespread burnout, dissatisfaction, and mass resignations. In response to these challenges, we launched Careers in Care, a comprehensive initiative designed to support healthcare professionals at every stage of their career. I led a team of designers, writers, photographers, and videographers to create a campaign that showed healthcare workers as people, not heroes.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/careers-in-care-thumb.png",
+        "url": "/design/careers-in-care-by-indeed/",
+        "featured": true,
+        "visible": false,
+        "tags": [
+          "healthcare",
+          "career development",
+          "human resources",
+          "marketing",
+          "branding",
+          "content creation",
+          "photography",
+          "videography"
+        ]
+      },
+      {
+        "id": "work-sounds-by-indeed",
+        "title": "Work Sounds by Indeed",
+        "slug": "work-sounds-by-indeed",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director, Designer",
+        "client": "Indeed",
+        "year": "2023",
+        "tagline": "Harmonizing work and sound",
+        "summary": "Collaborating closely with my team and producers at You Had Me at Black, I played a key role in the development of Work Sounds, an original album designed to enhance the workday. I helped shape the album's narrative, which combines workplace recordings with melodic instrumentals. Leading the visual component of the project, I conceptualized, produced, and edited videos for YouTube and TikTok.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/work-sounds-thumb.png",
+        "url": "/design/work-sounds-by-indeed/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "music production",
+          "album production",
+          "video production",
+          "social media marketing",
+          "workplace wellness",
+          "YouTube",
+          "TikTok"
+        ]
+      },
+      {
+        "id": "work-wellbeing-series",
+        "title": "Work Wellbeing Series",
+        "slug": "work-wellbeing-series",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed",
+        "year": "2020",
+        "tagline": "Illustrating the modern philosophy of happiness at work",
+        "summary": "Collaborating with Indeed's design team, I helped develop the Work Wellbeing Series, a project inspired by Indeed's three-year study on how people feel at work — the largest of its kind. I conceptualized and created motion graphics based on research insights to illustrate workplace happiness.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/work-wellbeing-thumb.png",
+        "url": "/design/work-wellbeing-series/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "motion graphics",
+          "illustration",
+          "brand guidelines",
+          "video production",
+          "data visualization",
+          "workplace wellbeing"
+        ]
+      },
+      {
+        "id": "indeed-on-youtube",
+        "title": "Indeed on Youtube",
+        "slug": "indeed-on-youtube",
+        "category": "Design & Creative Direction",
+        "role": "Creative Director",
+        "client": "Indeed",
+        "year": "2024",
+        "tagline": "Making the job search more accessible one Youtube video at a time",
+        "summary": "As the creative lead, I was part of a collaborative effort to modernize and grow Indeed's YouTube presence. I worked closely with a cross functional team to carefully select the right agency partner that could bring our vision to life. Together, we developed four engaging video series, each with its own distinct creative direction.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/indeed-youtube-thumb.png",
+        "url": "/design/indeed-on-youtube/",
+        "externalUrl": "https://www.youtube.com/indeed",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "video production",
+          "content creation",
+          "creative consulting",
+          "job search",
+          "marketing strategy",
+          "YouTube"
+        ]
+      },
+      {
+        "id": "lowes-fix-in-six",
+        "title": "Lowe's Fix in Six",
+        "slug": "lowes-fix-in-six",
+        "category": "Design & Creative Direction",
+        "role": "Senior Art Director",
+        "client": "Lowe's",
+        "year": "2013",
+        "tagline": "A Vine legend",
+        "summary": "As an art director, I was part of the team tasked with expanding the groundbreaking success of the Lowe's \"Fix in Six\" campaign. Our challenge was to elevate the concept, crafting a second 'season' of videos that were more intricate and unforgettable than the first batch – all within the six-second Vine format. Collaborating with a talented group of animators, puppeteers, and stop-motion directors, we transformed everyday home improvement hacks into captivating miniature worlds.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/lowes-fix-thumb.png",
+        "url": "/design/lowes-fix-in-six/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "social media campaigns",
+          "art direction",
+          "stop-motion animation",
+          "Vine videos",
+          "creative advertising"
+        ]
+      },
+      {
+        "id": "mobil-1-motorsports",
+        "title": "Mobil 1 Motorsports",
+        "slug": "mobil-1-motorsports",
+        "category": "Design & Creative Direction",
+        "role": "Senior Art Director",
+        "client": "Mobil 1",
+        "year": "2012",
+        "tagline": "When a second matters, science matters",
+        "summary": "As art director for Mobil 1's motorsports campaign, I brought scientific sophistication to the world of high-performance racing. Leading both NASCAR and Formula 1 initiatives, I developed a visual narrative that transformed complex engineering into compelling storytelling.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/mobil-1-thumb.png",
+        "url": "/design/mobil-1-motorsports/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "graphic design",
+          "art direction",
+          "motorsports",
+          "NASCAR",
+          "Formula 1"
+        ]
+      },
+      {
+        "id": "hp-the-power-of-touch",
+        "title": "HP: The Power of Touch",
+        "slug": "hp-the-power-of-touch",
+        "category": "Design & Creative Direction",
+        "role": "Senior Art Director",
+        "client": "HP",
+        "year": "2012",
+        "tagline": "Humanizing technology through touch",
+        "summary": "As Art Director for HP's global consumer PC and laptop campaigns, I developed a creative concept centered on the power of human touch, showcasing the brand's innovative touchscreen technology through emotional storytelling. The campaign featured two distinct yet complementary approaches: a television commercial following Robbie Wilde, a deaf DJ who experiences music through touch, and a minimalist print campaign featuring ethereal, floating hands emerging from white space to engage with HP's touchscreen devices.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/hp-touch-thumb.png",
+        "url": "/design/hp-the-power-of-touch/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "graphic design",
+          "art direction",
+          "campaign development",
+          "touchscreen technology",
+          "global marketing"
+        ]
+      },
+      {
+        "id": "ibm-smarter-planet-series",
+        "title": "IBM Smarter Planet Series",
+        "slug": "ibm-smarter-planet-series",
+        "category": "Design & Creative Direction",
+        "role": "Art Director",
+        "client": "IBM",
+        "year": "2010",
+        "tagline": "What will it take to build a smarter planet?",
+        "summary": "I led art direction for IBM's Smarter Planet Expert Series, creating interviews that brought IBM's experts and their ideas to light. By designing a focused on-set environment, I enabled direct conversations about security, healthcare, energy, and IoT while maintaining the campaign's visual identity.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/ibm-expert-series-thumb.png",
+        "url": "/design/ibm-smarter-planet-series/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "strategic content creation",
+          "technical visual design",
+          "thought leadership",
+          "brand alignment"
+        ]
+      },
+      {
+        "id": "ibm-smarter-planet",
+        "title": "IBM Smarter Planet",
+        "slug": "ibm-smarter-planet",
+        "category": "Design & Creative Direction",
+        "role": "Senior Art Director",
+        "client": "IBM",
+        "year": "2010",
+        "tagline": "A global vision for a smarter planet",
+        "summary": "I worked closely with the great team at Office to bring their Paul Rand-inspired smart icon illustrations to life in a global out of home campaign that helped launch IBM's Smarter Planet initiative. The campaign was displayed on various platforms, from simple bus shelters to entire building facades.",
+        "thumbnail": "https://media.milesgilbert.xyz/design/thumbs/ibm-smarter-planet-thumb.png",
+        "url": "/design/ibm-smarter-planet/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "graphic design",
+          "illustration",
+          "branding",
+          "out of home advertising",
+          "IBM"
+        ]
+      }
+    ],
+    "thinking": [
+      {
+        "id": "when-the-world-ends",
+        "title": "When the World Ends, You'll Be Glad You Can Build a Radio",
+        "slug": "when-the-world-ends-youll-be-glad-you-can-build-a-radio",
+        "category": "Writing & Thinking",
+        "tagline": "Why (and how) I Built a Radio with AI Coding Tools",
+        "description": "Why (and how) I Built a Radio with AI Coding Tools",
+        "year": "2024",
+        "type": "essay",
+        "thumbnail": "https://media.milesgilbert.xyz/thinking/thumbs/ai-radio-thumb.png",
+        "url": "/thinking/when-the-world-ends-youll-be-glad-you-can-build-a-radio/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "AI",
+          "coding",
+          "radio",
+          "web development",
+          "personal reflection"
+        ]
+      },
+      {
+        "id": "certification-algorithm-free",
+        "title": "A Certification for Algorithm-Free Platforms",
+        "slug": "a-certification-for-algorithm-free-platforms",
+        "category": "Writing & Thinking",
+        "tagline": "Thoughts on transparency and trust on an internet built of algorithmically-driven platforms",
+        "description": "Thoughts on transparency and trust on an internet built of algorithmically-driven platforms",
+        "year": "2024",
+        "type": "essay",
+        "thumbnail": "https://media.milesgilbert.xyz/thinking/thumbs/non-algo-thumb.png",
+        "url": "/thinking/a-certification-for-algorithm-free-platforms/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "algorithms",
+          "social media",
+          "transparency",
+          "technology ethics"
+        ]
+      },
+      {
+        "id": "end-of-the-road",
+        "title": "The End of the Road",
+        "slug": "the-end-of-the-road",
+        "category": "Writing & Thinking",
+        "tagline": "An interrogation of the limits of digital maps",
+        "description": "An interrogation of the limits of digital maps",
+        "year": "2023",
+        "type": "visual essay",
+        "thumbnail": "https://media.milesgilbert.xyz/thinking/thumbs/teotr-thumb.png",
+        "url": "/thinking/the-end-of-the-road/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "maps",
+          "technology",
+          "visual essay",
+          "exploration"
+        ]
+      },
+      {
+        "id": "creative-technology-now-blog",
+        "title": "Creative Technology Now",
+        "slug": "blog",
+        "category": "Writing & Thinking",
+        "tagline": "A wandering collection of contemporary creative acts",
+        "description": "A wandering collection of contemporary creative acts",
+        "year": "2024",
+        "type": "blog",
+        "thumbnail": "https://media.milesgilbert.xyz/creative-technology/thumbs/blog-thumb.png",
+        "url": "/blog/",
+        "dataSource": "Are.na API",
+        "arenaChannel": "creative-technology-now",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "blog",
+          "curation",
+          "creative technology",
+          "contemporary art"
+        ]
+      }
+    ],
+    "playground": [
+      {
+        "id": "creative-camera",
+        "title": "Creative Camera",
+        "slug": "camera",
+        "category": "Playground",
+        "tagline": "An experimental camera that 'develops' photos into interactive experiences using AI",
+        "description": "An experimental camera that 'develops' photos into interactive experiences using AI",
+        "year": "2024",
+        "type": "interactive experiment",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/creative-camera-thumb.png",
+        "url": "/playground/camera/",
+        "featured": true,
+        "visible": true,
+        "tags": [
+          "AI",
+          "camera",
+          "interactive",
+          "web experiment"
+        ]
+      },
+      {
+        "id": "waterlilies",
+        "title": "Claude Monet's Pond Simulator",
+        "slug": "waterlilies",
+        "category": "Playground",
+        "tagline": "Inspire Claude Monet by simulating his pond",
+        "description": "Inspire Claude Monet by simulating his pond",
+        "year": "2023",
+        "type": "interactive experiment",
+        "thumbnail": "https://media.milesgilbert.xyz/software/thumbs/monet-thumb.png",
+        "url": "/playground/waterlilies/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "art",
+          "simulation",
+          "interactive",
+          "web experiment"
+        ]
+      },
+      {
+        "id": "popcorn",
+        "title": "Popcorn Simulator",
+        "slug": "popcorn",
+        "category": "Playground",
+        "tagline": "A relaxing popcorn popping experience",
+        "description": "A relaxing popcorn popping experience",
+        "year": "2023",
+        "type": "interactive experiment",
+        "url": "/playground/popcorn/",
+        "featured": false,
+        "visible": true,
+        "tags": [
+          "simulation",
+          "interactive",
+          "web experiment"
+        ]
+      }
+    ]
+  },
+  "siteConfiguration": {
+    "baseUrl": "https://milesgilbert.xyz",
+    "cdnUrl": "https://media.milesgilbert.xyz",
+    "favicon": "https://media.milesgilbert.xyz/favicon-96x96.png",
+    "faviconSizes": [
+      "16x16",
+      "32x32",
+      "96x96",
+      "192x192",
+      "512x512"
+    ],
+    "appleTouchIcon": "https://media.milesgilbert.xyz/apple-touch-icon.png",
+    "fonts": [
+      {
+        "name": "Atkinson Hyperlegible",
+        "source": "Google Fonts",
+        "usage": "Primary body text"
+      },
+      {
+        "name": "Instrument Sans",
+        "source": "Google Fonts",
+        "usage": "Headings and UI"
+      },
+      {
+        "name": "Material Symbols",
+        "source": "Google Fonts",
+        "usage": "Icons"
+      }
+    ],
+    "colorScheme": {
+      "primary": "beige",
+      "accent": "green",
+      "style": "minimalist"
+    },
+    "navigation": {
+      "sections": [
+        {
+          "name": "Creative Technology",
+          "url": "/creative-technology/",
+          "emoji": "📁"
+        },
+        {
+          "name": "Software",
+          "url": "/software/",
+          "emoji": "📁"
+        },
+        {
+          "name": "Creative Direction & Design",
+          "url": "/design/",
+          "emoji": "📁"
+        },
+        {
+          "name": "Writing and thinking",
+          "url": "/thinking/",
+          "emoji": "📁"
+        },
+        {
+          "name": "Work",
+          "url": "/work/",
+          "emoji": "💼"
+        },
+        {
+          "name": "Resume",
+          "url": "/resume/",
+          "emoji": "📄"
+        }
+      ]
+    },
+    "components": {
+      "videoPlayer": "/components/video-player.js",
+      "lightbox": "/components/lightbox.js",
+      "carousel": "/components/carousel.js",
+      "mouseTrail": "/components/mouse-trail.js",
+      "header": "/components/header.html"
+    },
+    "externalApis": {
+      "arena": {
+        "baseUrl": "https://api.are.na/v2",
+        "channel": "creative-technology-now"
+      },
+      "radioBrowser": {
+        "usage": "Not My First Radio project"
+      }
+    }
+  },
+  "mediaAssets": {
+    "images": {
+      "headshot": "https://media.milesgilbert.xyz/images/headshot.png"
+    },
+    "videos": {
+      "reel": "https://media.milesgilbert.xyz/mg-reel-2025-v2_720p.mp4"
+    },
+    "thumbnails": {
+      "creativeTechnology": "https://media.milesgilbert.xyz/creative-technology/thumbs/",
+      "software": "https://media.milesgilbert.xyz/software/thumbs/",
+      "design": "https://media.milesgilbert.xyz/design/thumbs/",
+      "thinking": "https://media.milesgilbert.xyz/thinking/thumbs/"
+    }
+  },
+  "statistics": {
+    "totalProjects": 41,
+    "categories": {
+      "creativeTechnology": 4,
+      "software": 6,
+      "design": 14,
+      "thinking": 4,
+      "playground": 3
+    },
+    "yearsOfExperience": 17,
+    "companiesWorkedWith": [
+      "Indeed",
+      "R/GA Austin",
+      "T3",
+      "BBDO",
+      "Ogilvy & Mather"
+    ],
+    "notableClients": [
+      "IBM",
+      "HP",
+      "Indeed",
+      "Lowe's",
+      "Mobil 1",
+      "Allstate"
+    ]
+  }
+}
