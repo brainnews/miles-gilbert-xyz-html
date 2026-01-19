@@ -18,7 +18,7 @@ class CustomVideoPlayer extends HTMLElement {
         video.play();
         bigPlayBtn.style.display = 'none';
         playbackControls.classList.add('playing');
-        playPauseBtn.innerHTML = '<span class="material-symbols-outlined">pause</span>';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
     }
 
     pausePlayback() {
@@ -30,7 +30,7 @@ class CustomVideoPlayer extends HTMLElement {
         video.pause();
         bigPlayBtn.style.display = 'flex';
         playbackControls.classList.remove('playing');
-        playPauseBtn.innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
     }
 
     togglePlayPause() {
@@ -46,9 +46,9 @@ class CustomVideoPlayer extends HTMLElement {
         const video = this.shadowRoot.querySelector('video');
         const volumeBtn = this.shadowRoot.querySelector('.volume-btn');
         video.muted = !video.muted;
-        volumeBtn.innerHTML = video.muted ? 
-            '<span class="material-symbols-outlined">volume_off</span>' : 
-            '<span class="material-symbols-outlined">volume_up</span>';
+        volumeBtn.innerHTML = video.muted ?
+            '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>' :
+            '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
     }
 
     updateTimeDisplay() {
@@ -272,8 +272,14 @@ class CustomVideoPlayer extends HTMLElement {
                 video::-webkit-media-controls {
                     display: none;
                 }
+
+                .control-btn svg,
+                .close-pip-button svg {
+                    width: 24px;
+                    height: 24px;
+                    fill: currentColor;
+                }
             </style>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
             <div class="video-container">
                 <video>
                     <source type="video/mp4">
@@ -287,10 +293,10 @@ class CustomVideoPlayer extends HTMLElement {
 
                 <div class="playback-controls">
                     <button class="control-btn play-pause-btn">
-                        <span class="material-symbols-outlined">pause</span>
+                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
                     <button class="control-btn volume-btn">
-                        <span class="material-symbols-outlined">volume_off</span>
+                        <svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
                     </button>
                     <span class="timecode">0:00 / 0:00</span>
                     <div class="progress-container">
@@ -298,7 +304,7 @@ class CustomVideoPlayer extends HTMLElement {
                     </div>
                 </div>
                 <button class="close-pip-button">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                 </button>
             </div>
         `;
@@ -327,9 +333,9 @@ class CustomVideoPlayer extends HTMLElement {
         // Set loop state
         video.loop = loop;
         if (autoplay) {
-            volumeBtn.innerHTML = '<span class="material-symbols-outlined">volume_off</span>';
+            volumeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
         } else {
-            volumeBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>';
+            volumeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
         }
 
         video.load();
@@ -338,14 +344,14 @@ class CustomVideoPlayer extends HTMLElement {
             video.play();
             bigPlayBtn.style.display = 'none';
             playbackControls.classList.add('playing');
-            playPauseBtn.innerHTML = '<span class="material-symbols-outlined">pause</span>';
+            playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
         };
 
         const pausePlayback = () => {
             video.pause();
             bigPlayBtn.style.display = 'flex';
             playbackControls.classList.remove('playing');
-            playPauseBtn.innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+            playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
         };
 
         const togglePlayPause = () => {
@@ -358,9 +364,9 @@ class CustomVideoPlayer extends HTMLElement {
 
         const toggleMute = () => {
             video.muted = !video.muted;
-            volumeBtn.innerHTML = video.muted ? 
-                '<span class="material-symbols-outlined">volume_off</span>' : 
-                '<span class="material-symbols-outlined">volume_up</span>';
+            volumeBtn.innerHTML = video.muted ?
+                '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>' :
+                '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
         };
 
         const formatTime = (seconds) => {
