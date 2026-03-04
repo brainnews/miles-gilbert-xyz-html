@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miles Gilbert | Links Admin</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="icon" type="image/x-icon" href="https://media.milesgilbert.xyz/favicon-96x96.png">
+    <style>
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .admin-form input {
+            font-family: inherit;
+            font-size: 15px;
+            padding: 10px 14px;
+            background: var(--inset-bg);
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            border-radius: 4px;
+            width: 100%;
+        }
+        .admin-form input:focus {
+            outline: none;
+            border-color: var(--link-underline);
+        }
+        .admin-form button {
+            font-family: inherit;
+            font-size: 15px;
+            padding: 10px 20px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+        .admin-form button:hover {
+            opacity: 0.8;
+        }
+        .admin-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        .admin-item:last-child {
+            border-bottom: none;
+        }
+        .admin-item-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            border: 1px solid var(--divider-color);
+        }
+        .admin-item-thumb-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: var(--secondary-bg);
+        }
+        .admin-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .admin-item-title {
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .admin-item-url {
+            font-size: 13px;
+            opacity: 0.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .delete-btn {
+            font-family: 'Atkinson Hyperlegible Mono', monospace;
+            font-size: 12px;
+            padding: 4px 10px;
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+        .delete-btn:hover {
+            opacity: 1;
+            border-color: #c0392b;
+            color: #c0392b;
+        }
+        #key-prompt {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 300px;
+        }
+        #key-prompt input {
+            font-family: inherit;
+            font-size: 15px;
+            padding: 10px 14px;
+            background: var(--inset-bg);
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            border-radius: 4px;
+        }
+        #key-prompt input:focus {
+            outline: none;
+            border-color: var(--link-underline);
+        }
+        #key-prompt button {
+            font-family: inherit;
+            font-size: 15px;
+            padding: 10px 20px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+        .status-msg {
+            font-size: 13px;
+            padding: 8px 0;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumbs">
+                <a href="/">Miles Gilbert</a><span> / </span><a href="/links/">Links</a><span> / </span><span>Admin</span>
+            </div>
+        </header>
+
+        <h1>Links Admin</h1>
+
+        <div id="key-prompt-section" style="margin-top: 32px; display: none;">
+            <p style="margin-bottom: 16px; opacity: 0.7;">Enter your admin key to continue.</p>
+            <div id="key-prompt">
+                <input type="password" id="key-input" placeholder="Admin key" />
+                <button onclick="submitKey()">Continue</button>
+            </div>
+        </div>
+
+        <div id="admin-section" style="display: none;">
+            <h2 style="margin-top: 32px; margin-bottom: 16px;">Add a link</h2>
+            <div class="admin-form">
+                <input type="text" id="new-title" placeholder="Title" />
+                <input type="url" id="new-url" placeholder="URL" />
+                <input type="url" id="new-thumb" placeholder="Thumbnail URL (optional)" />
+                <button onclick="addLink()">Add link</button>
+                <span id="add-status" class="status-msg"></span>
+            </div>
+
+            <h2 style="margin-bottom: 16px;">Current links</h2>
+            <div id="links-list">
+                <p style="opacity: 0.5;">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let adminKey = '';
+
+        function getKeyFromUrl() {
+            return new URLSearchParams(window.location.search).get('key') || '';
+        }
+
+        function init() {
+            adminKey = getKeyFromUrl();
+            if (adminKey) {
+                document.getElementById('key-prompt-section').style.display = 'none';
+                document.getElementById('admin-section').style.display = 'block';
+                loadLinks();
+            } else {
+                document.getElementById('key-prompt-section').style.display = 'block';
+            }
+        }
+
+        function submitKey() {
+            const val = document.getElementById('key-input').value.trim();
+            if (!val) return;
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('key', val);
+            window.location.href = newUrl.toString();
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && document.activeElement === document.getElementById('key-input')) {
+                submitKey();
+            }
+        });
+
+        async function loadLinks() {
+            const container = document.getElementById('links-list');
+            try {
+                const res = await fetch('/api/links');
+                const links = await res.json();
+
+                if (!links.length) {
+                    container.innerHTML = '<p style="opacity: 0.5;">No links yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                links.forEach(link => {
+                    const item = document.createElement('div');
+                    item.className = 'admin-item';
+
+                    if (link.thumbnail) {
+                        const img = document.createElement('img');
+                        img.src = link.thumbnail;
+                        img.alt = '';
+                        img.className = 'admin-item-thumb';
+                        item.appendChild(img);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'admin-item-thumb-placeholder';
+                        item.appendChild(placeholder);
+                    }
+
+                    const info = document.createElement('div');
+                    info.className = 'admin-item-info';
+                    info.innerHTML = `<div class="admin-item-title">${escapeHtml(link.title)}</div><div class="admin-item-url">${escapeHtml(link.url)}</div>`;
+                    item.appendChild(info);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'delete-btn';
+                    btn.textContent = 'Delete';
+                    btn.onclick = () => deleteLink(link.id, item);
+                    item.appendChild(btn);
+
+                    container.appendChild(item);
+                });
+            } catch (err) {
+                container.innerHTML = '<p style="opacity: 0.5;">Failed to load links.</p>';
+            }
+        }
+
+        async function addLink() {
+            const title = document.getElementById('new-title').value.trim();
+            const url = document.getElementById('new-url').value.trim();
+            const thumbnail = document.getElementById('new-thumb').value.trim();
+            const status = document.getElementById('add-status');
+
+            if (!title || !url) {
+                status.textContent = 'Title and URL are required.';
+                return;
+            }
+
+            status.textContent = 'Adding...';
+            try {
+                const res = await fetch(`/api/links?key=${encodeURIComponent(adminKey)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, url, thumbnail }),
+                });
+                if (res.status === 401) {
+                    status.textContent = 'Wrong key.';
+                    return;
+                }
+                if (!res.ok) {
+                    status.textContent = 'Error adding link.';
+                    return;
+                }
+                document.getElementById('new-title').value = '';
+                document.getElementById('new-url').value = '';
+                document.getElementById('new-thumb').value = '';
+                status.textContent = 'Added!';
+                setTimeout(() => { status.textContent = ''; }, 2000);
+                loadLinks();
+            } catch (err) {
+                status.textContent = 'Failed to add link.';
+            }
+        }
+
+        async function deleteLink(id, itemEl) {
+            if (!confirm('Delete this link?')) return;
+            itemEl.style.opacity = '0.4';
+            try {
+                const res = await fetch(`/api/links?id=${encodeURIComponent(id)}&key=${encodeURIComponent(adminKey)}`, {
+                    method: 'DELETE',
+                });
+                if (res.status === 401) {
+                    alert('Wrong key.');
+                    itemEl.style.opacity = '1';
+                    return;
+                }
+                itemEl.remove();
+                const container = document.getElementById('links-list');
+                if (!container.children.length) {
+                    container.innerHTML = '<p style="opacity: 0.5;">No links yet.</p>';
+                }
+            } catch (err) {
+                alert('Failed to delete.');
+                itemEl.style.opacity = '1';
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        init();
+    </script>
+</body>
+</html>
