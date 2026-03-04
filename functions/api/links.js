@@ -24,7 +24,15 @@ export async function onRequest(context) {
     // Auth required for mutations
     const key = url.searchParams.get('key');
     if (!key || key !== env.ADMIN_KEY) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        return new Response(JSON.stringify({
+            error: 'Unauthorized',
+            debug: {
+                keyProvided: !!key,
+                keyLength: key ? key.length : 0,
+                adminKeySet: !!env.ADMIN_KEY,
+                adminKeyLength: env.ADMIN_KEY ? env.ADMIN_KEY.length : 0,
+            }
+        }), {
             status: 401,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
