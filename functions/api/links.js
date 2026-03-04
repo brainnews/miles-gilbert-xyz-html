@@ -14,11 +14,18 @@ export async function onRequest(context) {
     }
 
     if (method === 'GET') {
-        const raw = await env.LINKS_KV.get('links');
-        const links = raw ? JSON.parse(raw) : [];
-        return new Response(JSON.stringify(links), {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        try {
+            const raw = await env.LINKS_KV.get('links');
+            const links = raw ? JSON.parse(raw) : [];
+            return new Response(JSON.stringify({ v: 2, links }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        } catch (e) {
+            return new Response(JSON.stringify({ v: 2, error: e.message, kvSet: !!env.LINKS_KV }), {
+                status: 500,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
     }
 
     // Auth required for mutations
