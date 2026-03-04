@@ -173,10 +173,10 @@ style.textContent = `
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        background: rgba(232, 230, 225, 0.9);
+        background: var(--component-bg, rgba(232, 230, 225, 0.9));
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(26, 26, 26, 0.1);
+        border: 1px solid var(--border-subtle, rgba(26, 26, 26, 0.1));
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -203,7 +203,7 @@ style.textContent = `
     .carousel-prev:hover:not(:disabled),
     .carousel-next:hover:not(:disabled) {
         border-color: var(--link-underline, #4a7c59);
-        background: rgba(232, 230, 225, 1);
+        background: var(--component-bg-solid, rgba(232, 230, 225, 1));
     }
 
     .carousel-prev:disabled,

@@ -154,7 +154,7 @@ style.textContent = `
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(232, 230, 225, 0.95);
+        background-color: var(--overlay-bg, rgba(232, 230, 225, 0.95));
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         display: flex;
