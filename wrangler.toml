@@ -1,0 +1,6 @@
+name = "miles-gilbert-xyz-html"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "LINKS_KV"
+id = "7aa7e76a3048439bbda838147d11e81f"
