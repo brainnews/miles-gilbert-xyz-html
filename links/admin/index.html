@@ -47,10 +47,111 @@
             gap: 16px;
             padding: 12px 0;
             border-bottom: 1px solid var(--divider-color);
+            cursor: grab;
         }
         .admin-item:last-child {
             border-bottom: none;
         }
+        .admin-item.dragging {
+            opacity: 0.4;
+            cursor: grabbing;
+        }
+        .admin-item.drag-over {
+            border-top: 2px solid var(--link-underline);
+        }
+        .drag-handle {
+            font-size: 16px;
+            opacity: 0.3;
+            flex-shrink: 0;
+            cursor: grab;
+            user-select: none;
+            line-height: 1;
+        }
+        .admin-item.pinned {
+            background: var(--hover-accent);
+            margin: 0 -8px;
+            padding: 12px 8px;
+            border-radius: 4px;
+        }
+        .pin-btn {
+            font-family: 'Atkinson Hyperlegible Mono', monospace;
+            font-size: 12px;
+            padding: 4px 10px;
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+        .pin-btn:hover, .pin-btn.active {
+            opacity: 1;
+            border-color: var(--link-underline);
+            color: var(--link-underline);
+        }
+        .edit-btn {
+            font-family: 'Atkinson Hyperlegible Mono', monospace;
+            font-size: 12px;
+            padding: 4px 10px;
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+        .edit-btn:hover {
+            opacity: 1;
+        }
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px 0 12px 36px;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        .edit-form input {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: var(--inset-bg);
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            border-radius: 4px;
+            width: 100%;
+        }
+        .edit-form input:focus {
+            outline: none;
+            border-color: var(--link-underline);
+        }
+        .edit-form-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .edit-save-btn {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 6px 16px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .edit-save-btn:hover { opacity: 0.8; }
+        .edit-cancel-btn {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 6px 16px;
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .edit-cancel-btn:hover { opacity: 0.7; }
         .admin-item-thumb {
             width: 60px;
             height: 60px;
@@ -205,50 +306,124 @@
             }
         });
 
+        let currentLinks = [];
+        let dragSrc = null;
+
         async function loadLinks() {
             const container = document.getElementById('links-list');
             try {
                 const res = await fetch('/api/links');
-                const links = await res.json();
-
-                if (!links.length) {
-                    container.innerHTML = '<p style="opacity: 0.5;">No links yet.</p>';
-                    return;
-                }
-
-                container.innerHTML = '';
-                links.forEach(link => {
-                    const item = document.createElement('div');
-                    item.className = 'admin-item';
-
-                    if (link.thumbnail) {
-                        const img = document.createElement('img');
-                        img.src = link.thumbnail;
-                        img.alt = '';
-                        img.className = 'admin-item-thumb';
-                        item.appendChild(img);
-                    } else {
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'admin-item-thumb-placeholder';
-                        item.appendChild(placeholder);
-                    }
-
-                    const info = document.createElement('div');
-                    info.className = 'admin-item-info';
-                    info.innerHTML = `<div class="admin-item-title">${escapeHtml(link.title)}</div><div class="admin-item-url">${escapeHtml(link.url)}</div>`;
-                    item.appendChild(info);
-
-                    const btn = document.createElement('button');
-                    btn.className = 'delete-btn';
-                    btn.textContent = 'Delete';
-                    btn.onclick = () => deleteLink(link.id, item);
-                    item.appendChild(btn);
-
-                    container.appendChild(item);
-                });
+                currentLinks = await res.json();
+                renderLinks();
             } catch (err) {
                 container.innerHTML = '<p style="opacity: 0.5;">Failed to load links.</p>';
             }
+        }
+
+        function renderLinks() {
+            const container = document.getElementById('links-list');
+            if (!currentLinks.length) {
+                container.innerHTML = '<p style="opacity: 0.5;">No links yet.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            currentLinks.forEach(link => {
+                const item = document.createElement('div');
+                item.className = 'admin-item' + (link.pinned ? ' pinned' : '');
+                item.draggable = true;
+                item.dataset.id = link.id;
+
+                const handle = document.createElement('span');
+                handle.className = 'drag-handle';
+                handle.textContent = '⠿';
+                item.appendChild(handle);
+
+                if (link.thumbnail) {
+                    const img = document.createElement('img');
+                    img.src = link.thumbnail;
+                    img.alt = '';
+                    img.className = 'admin-item-thumb';
+                    item.appendChild(img);
+                } else {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'admin-item-thumb-placeholder';
+                    item.appendChild(placeholder);
+                }
+
+                const info = document.createElement('div');
+                info.className = 'admin-item-info';
+                info.innerHTML = `<div class="admin-item-title">${escapeHtml(link.title)}</div><div class="admin-item-url">${escapeHtml(link.url)}</div>`;
+                item.appendChild(info);
+
+                const pinBtn = document.createElement('button');
+                pinBtn.className = 'pin-btn' + (link.pinned ? ' active' : '');
+                pinBtn.textContent = link.pinned ? 'Pinned' : 'Pin';
+                pinBtn.onclick = () => togglePin(link.id);
+                item.appendChild(pinBtn);
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.textContent = 'Edit';
+                editBtn.onclick = () => toggleEditForm(link, item);
+                item.appendChild(editBtn);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteLink(link.id, item);
+                item.appendChild(deleteBtn);
+
+                // Drag events
+                item.addEventListener('dragstart', e => {
+                    dragSrc = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    container.querySelectorAll('.admin-item').forEach(el => el.classList.remove('drag-over'));
+                });
+                item.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (item !== dragSrc) {
+                        container.querySelectorAll('.admin-item').forEach(el => el.classList.remove('drag-over'));
+                        item.classList.add('drag-over');
+                    }
+                });
+                item.addEventListener('drop', e => {
+                    e.preventDefault();
+                    if (dragSrc && dragSrc !== item) {
+                        const ids = [...container.querySelectorAll('.admin-item')].map(el => el.dataset.id);
+                        const fromIdx = ids.indexOf(dragSrc.dataset.id);
+                        const toIdx = ids.indexOf(item.dataset.id);
+                        currentLinks.splice(toIdx, 0, currentLinks.splice(fromIdx, 1)[0]);
+                        renderLinks();
+                        saveOrder();
+                    }
+                });
+
+                container.appendChild(item);
+            });
+        }
+
+        async function saveOrder() {
+            await fetch(`/api/links?key=${encodeURIComponent(adminKey)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentLinks),
+            });
+        }
+
+        async function togglePin(id) {
+            currentLinks = currentLinks.map(l => l.id === id ? { ...l, pinned: !l.pinned } : l);
+            // Pinned items float to top, unpinned stay in place
+            const pinned = currentLinks.filter(l => l.pinned);
+            const unpinned = currentLinks.filter(l => !l.pinned);
+            currentLinks = [...pinned, ...unpinned];
+            renderLinks();
+            saveOrder();
         }
 
         async function addLink() {
@@ -308,6 +483,74 @@
             } catch (err) {
                 alert('Failed to delete.');
                 itemEl.style.opacity = '1';
+            }
+        }
+
+        function toggleEditForm(link, item) {
+            const existing = item.nextSibling;
+            if (existing && existing.classList && existing.classList.contains('edit-form')) {
+                existing.remove();
+                return;
+            }
+
+            const form = document.createElement('div');
+            form.className = 'edit-form';
+
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.value = link.title;
+            titleInput.placeholder = 'Title';
+            form.appendChild(titleInput);
+
+            const urlInput = document.createElement('input');
+            urlInput.type = 'url';
+            urlInput.value = link.url;
+            urlInput.placeholder = 'URL';
+            form.appendChild(urlInput);
+
+            const thumbInput = document.createElement('input');
+            thumbInput.type = 'url';
+            thumbInput.value = link.thumbnail || '';
+            thumbInput.placeholder = 'Thumbnail URL (optional)';
+            form.appendChild(thumbInput);
+
+            const actions = document.createElement('div');
+            actions.className = 'edit-form-actions';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'edit-save-btn';
+            saveBtn.textContent = 'Save';
+            saveBtn.onclick = () => saveEdit(link.id, titleInput.value.trim(), urlInput.value.trim(), thumbInput.value.trim(), form);
+            actions.appendChild(saveBtn);
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'edit-cancel-btn';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.onclick = () => form.remove();
+            actions.appendChild(cancelBtn);
+
+            form.appendChild(actions);
+            item.insertAdjacentElement('afterend', form);
+            titleInput.focus();
+        }
+
+        async function saveEdit(id, title, url, thumbnail, form) {
+            if (!title || !url) return;
+            form.style.opacity = '0.5';
+            try {
+                const res = await fetch(`/api/links?key=${encodeURIComponent(adminKey)}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, title, url, thumbnail }),
+                });
+                if (!res.ok) { form.style.opacity = '1'; return; }
+                const updated = await res.json();
+                const idx = currentLinks.findIndex(l => l.id === id);
+                if (idx !== -1) currentLinks[idx] = { ...currentLinks[idx], ...updated };
+                form.remove();
+                renderLinks();
+            } catch (err) {
+                form.style.opacity = '1';
             }
         }
 
